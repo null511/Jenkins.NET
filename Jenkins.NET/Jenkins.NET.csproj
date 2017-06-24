@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C77BD3BC-08AB-4026-89A9-CE3666EC8647}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JenkinsNET</RootNamespace>
+    <AssemblyName>Jenkins.NET</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Debug\Jenkins.NET.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\JobDeleteCommand.cs" />
+    <Compile Include="Commands\JobBuildWithParametersCommand.cs" />
+    <Compile Include="Commands\JobGetBuildCommand.cs" />
+    <Compile Include="Commands\QueueGetItemCommand.cs" />
+    <Compile Include="Commands\JobGetLastBuildCommand.cs" />
+    <Compile Include="Commands\JobBuildCommand.cs" />
+    <Compile Include="Exceptions\JenkinsJobDeleteException.cs" />
+    <Compile Include="Exceptions\JenkinsQueueGetItemException.cs" />
+    <Compile Include="Exceptions\JenkinsJobGetBuildException.cs" />
+    <Compile Include="Exceptions\JenkinsJobBuildException.cs" />
+    <Compile Include="IJenkinsContext.cs" />
+    <Compile Include="Internal\JenkinsHttpCommand.cs" />
+    <Compile Include="Internal\NetPath.cs" />
+    <Compile Include="Internal\StringUtils.cs" />
+    <Compile Include="Internal\XmlUtils.cs" />
+    <Compile Include="JenkinsBuildResult.cs" />
+    <Compile Include="JenkinsClient.cs" />
+    <Compile Include="JenkinsJobRunner.cs" />
+    <Compile Include="JenkinsJobStatus.cs" />
+    <Compile Include="JenkinsQueue.cs" />
+    <Compile Include="JenkinsJobs.cs" />
+    <Compile Include="Models\Jenkins.cs" />
+    <Compile Include="Models\JenkinsExecutable.cs" />
+    <Compile Include="Models\JenkinsJob.cs" />
+    <Compile Include="Models\JenkinsView.cs" />
+    <Compile Include="Models\JenkinsTask.cs" />
+    <Compile Include="Models\JenkinsAction.cs" />
+    <Compile Include="Models\JenkinsBuild.cs" />
+    <Compile Include="Models\JenkinsArtifact.cs" />
+    <Compile Include="Models\JenkinsCause.cs" />
+    <Compile Include="Models\JenkinsParameter.cs" />
+    <Compile Include="Models\JenkinsPreviousBuild.cs" />
+    <Compile Include="Models\JenkinsQueueItem.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
