@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyVersion("0.0.3")]
-[assembly: AssemblyFileVersion("0.0.3")]
+[assembly: AssemblyVersion("0.0.5")]
+[assembly: AssemblyFileVersion("0.0.5")]
 [assembly: AssemblyTitle("Jenkins.NET")]
 [assembly: AssemblyDescription("C# .NET wrapper for Jenkins HTTP/REST API.")]
 [assembly: AssemblyConfiguration("")]

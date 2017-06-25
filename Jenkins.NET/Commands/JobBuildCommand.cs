@@ -9,7 +9,7 @@ namespace JenkinsNET.Commands
 
         public JobBuildCommand(IJenkinsContext context, string jobName)
         {
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "build");
+            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "build?delay=0sec");
             UserName = context.UserName;
             Password = context.Password;
 

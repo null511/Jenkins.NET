@@ -16,7 +16,7 @@ namespace JenkinsNET.Internal
 
         public void Run()
         {
-            var request = (HttpWebRequest)WebRequest.Create(Url);
+            var request = CreateRequest();
 
             OnWrite?.Invoke(request);
 
@@ -27,16 +27,7 @@ namespace JenkinsNET.Internal
 
         public async Task RunAsync()
         {
-            var request = WebRequest.CreateHttp(Url);
-
-            if (!string.IsNullOrEmpty(UserName) || !string.IsNullOrEmpty(Password)) {
-                request.PreAuthenticate = true;
-                request.UseDefaultCredentials = false;
-
-                var data = Encoding.UTF8.GetBytes($"{UserName}:{Password}");
-                var basicAuthToken = Convert.ToBase64String(data);
-                request.Headers["Authorization"] = $"Basic {basicAuthToken}";
-            }
+            var request = CreateRequest();
 
             if (OnWrite != null) {
                 await Task.Run(() => OnWrite(request));
@@ -47,6 +38,25 @@ namespace JenkinsNET.Internal
                     await Task.Run(() => OnRead(response));
                 }
             }
+        }
+
+        private HttpWebRequest CreateRequest()
+        {
+            var request = WebRequest.CreateHttp(Url);
+            request.UserAgent = "Jenkins.NET Client";
+            request.AllowAutoRedirect = true;
+            request.KeepAlive = true;
+
+            if (!string.IsNullOrEmpty(UserName) || !string.IsNullOrEmpty(Password)) {
+                request.PreAuthenticate = true;
+                request.UseDefaultCredentials = false;
+
+                var data = Encoding.UTF8.GetBytes($"{UserName}:{Password}");
+                var basicAuthToken = Convert.ToBase64String(data);
+                request.Headers["Authorization"] = $"Basic {basicAuthToken}";
+            }
+
+            return request;
         }
     }
 }

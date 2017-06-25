@@ -14,7 +14,7 @@ namespace JenkinsNET.Commands
 
         public JobBuildWithParametersCommand(IJenkinsContext context, string jobName, IDictionary<string, string> jobParameters)
         {
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "buildWithParameters");
+            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "buildWithParameters?delay=0sec");
             UserName = context.UserName;
             Password = context.Password;
 
