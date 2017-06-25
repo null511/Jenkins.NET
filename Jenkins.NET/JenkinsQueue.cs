@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace JenkinsNET
 {
+    /// <summary>
+    /// A collection of methods used for interacting with the Jenkins Job-Queue.
+    /// </summary>
+    /// <remarks>
+    /// Used internally by <seealso cref="JenkinsClient"/>
+    /// </remarks>
     public class JenkinsQueue
     {
         private readonly IJenkinsContext context;
@@ -16,6 +22,10 @@ namespace JenkinsNET
             this.context = context;
         }
 
+        /// <summary>
+        /// Retrieves an item from the Job-Queue.
+        /// </summary>
+        /// <param name="itemNumber">The ID of the queue-item.</param>
         public JenkinsQueueItem GetItem(int itemNumber)
         {
             try {
@@ -28,6 +38,10 @@ namespace JenkinsNET
             }
         }
 
+        /// <summary>
+        /// Retrieves an item from the Job-Queue.
+        /// </summary>
+        /// <param name="itemNumber">The ID of the queue-item.</param>
         public async Task<JenkinsQueueItem> GetItemAsync(int itemNumber)
         {
             try {

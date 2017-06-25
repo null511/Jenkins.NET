@@ -29,7 +29,7 @@ namespace Jenkins.NET.Tests
             };
 
             var startTime = DateTime.Now;
-            var build = await jobRunner.StartAndWait(jobName);
+            var build = await jobRunner.RunAsync(jobName);
             var duration = DateTime.Now.Subtract(startTime);
 
             TestContext.Out.WriteLine();

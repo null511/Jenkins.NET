@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace JenkinsNET
 {
+    /// <summary>
+    /// A collection of methods used for interacting with Jenkins Jobs API.
+    /// </summary>
+    /// <remarks>
+    /// Used internally by <seealso cref="JenkinsClient"/>
+    /// </remarks>
     public class JenkinsJobs
     {
         private readonly IJenkinsContext context;
@@ -17,6 +23,10 @@ namespace JenkinsNET
             this.context = context;
         }
 
+        /// <summary>
+        /// Enqueues a Job to be built.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
         public JenkinsBuildResult Build(string jobName)
         {
             try {
@@ -29,6 +39,10 @@ namespace JenkinsNET
             }
         }
 
+        /// <summary>
+        /// Enqueues a Job to be built.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
         public async Task<JenkinsBuildResult> BuildAsync(string jobName)
         {
             try {
@@ -41,6 +55,11 @@ namespace JenkinsNET
             }
         }
 
+        /// <summary>
+        /// Enqueues a Job with parameters to be built.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        /// <param name="jobParameters">The collection of parameters for building the job.</param>
         public JenkinsBuildResult BuildWithParameters(string jobName, IDictionary<string, string> jobParameters)
         {
             try {
@@ -53,6 +72,11 @@ namespace JenkinsNET
             }
         }
 
+        /// <summary>
+        /// Enqueues a Job with parameters to be built.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        /// <param name="jobParameters">The collection of parameters for building the job.</param>
         public async Task<JenkinsBuildResult> BuildWithParametersAsync(string jobName, IDictionary<string, string> jobParameters)
         {
             try {
