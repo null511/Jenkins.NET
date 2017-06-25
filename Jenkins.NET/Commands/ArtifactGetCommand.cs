@@ -33,8 +33,15 @@ namespace JenkinsNET.Commands
                 using (var stream = response.GetResponseStream()) {
                     if (stream == null) return;
 
-                    Result = new MemoryStream();
-                    stream.CopyTo(Result);
+                    try {
+                        Result = new MemoryStream();
+                        stream.CopyTo(Result);
+                        Result.Seek(0, SeekOrigin.Begin);
+                    }
+                    catch {
+                        Result?.Dispose();
+                        throw;
+                    }
                 }
             };
         }
