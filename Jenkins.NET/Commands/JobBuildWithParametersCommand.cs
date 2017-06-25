@@ -1,5 +1,6 @@
 ﻿using JenkinsNET.Exceptions;
 using JenkinsNET.Internal;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,12 @@ namespace JenkinsNET.Commands
 
         public JobBuildWithParametersCommand(IJenkinsContext context, string jobName, IDictionary<string, string> jobParameters)
         {
+            if (string.IsNullOrEmpty(jobName))
+                throw new ArgumentException("'jobName' cannot be empty!");
+
+            if (jobParameters == null)
+                throw new ArgumentNullException(nameof(jobParameters));
+
             Url = NetPath.Combine(context.BaseUrl, "job", jobName, "buildWithParameters?delay=0sec");
             UserName = context.UserName;
             Password = context.Password;

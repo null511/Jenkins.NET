@@ -2,7 +2,7 @@
 
 namespace JenkinsNET.Internal
 {
-    internal static class StringUtils
+    internal static class StringExtensions
     {
         public static T To<T>(this string value)
         {

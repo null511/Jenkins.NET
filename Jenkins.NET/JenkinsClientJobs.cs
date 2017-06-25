@@ -13,12 +13,12 @@ namespace JenkinsNET
     /// <remarks>
     /// Used internally by <seealso cref="JenkinsClient"/>
     /// </remarks>
-    public class JenkinsJobs
+    public class JenkinsClientJobs
     {
         private readonly IJenkinsContext context;
 
 
-        internal JenkinsJobs(IJenkinsContext context)
+        internal JenkinsClientJobs(IJenkinsContext context)
         {
             this.context = context;
         }
@@ -86,54 +86,6 @@ namespace JenkinsNET
             }
             catch (Exception error) {
                 throw new JenkinsJobBuildException($"Failed to build Jenkins Job '{jobName}'!", error);
-            }
-        }
-
-        public JenkinsBuild GetBuild(string jobName, int buildNumber)
-        {
-            try {
-                var cmd = new JobGetBuildCommand(context, jobName, buildNumber);
-                cmd.Run();
-                return cmd.Result;
-            }
-            catch (Exception error) {
-                throw new JenkinsJobGetBuildException($"Failed to retrieve build #{buildNumber} of Jenkins Job '{jobName}'!", error);
-            }
-        }
-
-        public async Task<JenkinsBuild> GetBuildAsync(string jobName, int buildNumber)
-        {
-            try {
-                var cmd = new JobGetBuildCommand(context, jobName, buildNumber);
-                await cmd.RunAsync();
-                return cmd.Result;
-            }
-            catch (Exception error) {
-                throw new JenkinsJobGetBuildException($"Failed to retrieve build #{buildNumber} of Jenkins Job '{jobName}'!", error);
-            }
-        }
-
-        public JenkinsBuild GetLastBuild(string jobName)
-        {
-            try {
-                var cmd = new JobGetLastBuildCommand(context, jobName);
-                cmd.Run();
-                return cmd.Result;
-            }
-            catch (Exception error) {
-                throw new JenkinsJobGetBuildException($"Failed to retrieve last build of Jenkins Job '{jobName}'!", error);
-            }
-        }
-
-        public async Task<JenkinsBuild> GetLastBuildAsync(string jobName)
-        {
-            try {
-                var cmd = new JobGetLastBuildCommand(context, jobName);
-                await cmd.RunAsync();
-                return cmd.Result;
-            }
-            catch (Exception error) {
-                throw new JenkinsJobGetBuildException($"Failed to retrieve last build of Jenkins Job '{jobName}'!", error);
             }
         }
 

@@ -5,14 +5,20 @@ using System.Xml.Linq;
 
 namespace JenkinsNET.Commands
 {
-    internal class JobGetLastBuildCommand : JenkinsHttpCommand
+    internal class BuildGetCommand : JenkinsHttpCommand
     {
         public JenkinsBuild Result {get; private set;}
 
 
-        public JobGetLastBuildCommand(IJenkinsContext context, string jobName)
+        public BuildGetCommand(IJenkinsContext context, string jobName, string buildNumber)
         {
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "lastBuild/api/xml");
+            if (string.IsNullOrEmpty(jobName))
+                throw new ArgumentException("'jobName' cannot be empty!");
+
+            if (string.IsNullOrEmpty(buildNumber))
+                throw new ArgumentException("'buildNumber' cannot be empty!");
+
+            Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "api/xml");
             UserName = context.UserName;
             Password = context.Password;
 

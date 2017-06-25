@@ -79,7 +79,7 @@ namespace JenkinsNET
 
             JenkinsBuild buildItem = null;
             while (string.IsNullOrEmpty(buildItem?.Result)) {
-                buildItem = client.Jobs.GetBuild(jobName, buildNumber.Value);
+                buildItem = client.Builds.Get(jobName, buildNumber.Value.ToString());
 
                 if (string.IsNullOrEmpty(buildItem?.Result)) {
                     if (DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
@@ -130,7 +130,7 @@ namespace JenkinsNET
 
             JenkinsBuild buildItem = null;
             while (string.IsNullOrEmpty(buildItem?.Result)) {
-                buildItem = await client.Jobs.GetBuildAsync(jobName, buildNumber.Value);
+                buildItem = await client.Builds.GetAsync(jobName, buildNumber.Value.ToString());
 
                 if (string.IsNullOrEmpty(buildItem?.Result)) {
                     if (DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
@@ -181,7 +181,7 @@ namespace JenkinsNET
 
             JenkinsBuild buildItem = null;
             while (string.IsNullOrEmpty(buildItem?.Result)) {
-                buildItem = client.Jobs.GetBuild(jobName, buildNumber.Value);
+                buildItem = client.Builds.Get(jobName, buildNumber.Value.ToString());
 
                 if (string.IsNullOrEmpty(buildItem?.Result)) {
                     if (DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
@@ -232,7 +232,7 @@ namespace JenkinsNET
 
             JenkinsBuild buildItem = null;
             while (string.IsNullOrEmpty(buildItem?.Result)) {
-                buildItem = await client.Jobs.GetBuildAsync(jobName, buildNumber.Value);
+                buildItem = await client.Builds.GetAsync(jobName, buildNumber.Value.ToString());
 
                 if (string.IsNullOrEmpty(buildItem?.Result)) {
                     if (DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)

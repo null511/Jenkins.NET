@@ -24,12 +24,22 @@
         /// <summary>
         /// Group of methods for interacting with Jenkins Jobs.
         /// </summary>
-        public JenkinsJobs Jobs {get;}
+        public JenkinsClientJobs Jobs {get;}
+
+        /// <summary>
+        /// Group of methods for interacting with Jenkins Builds.
+        /// </summary>
+        public JenkinsClientBuilds Builds {get;}
 
         /// <summary>
         /// Group of methods for interacting with the Jenkins Job-Queue.
         /// </summary>
-        public JenkinsQueue Queue {get;}
+        public JenkinsClientQueue Queue {get;}
+
+        /// <summary>
+        /// Group of methods for interacting with Jenkins Artifacts.
+        /// </summary>
+        public JenkinsClientArtifacts Artifacts {get;}
 
 
         /// <summary>
@@ -37,8 +47,10 @@
         /// </summary>
         public JenkinsClient()
         {
-            Jobs = new JenkinsJobs(this);
-            Queue = new JenkinsQueue(this);
+            Jobs = new JenkinsClientJobs(this);
+            Builds = new JenkinsClientBuilds(this);
+            Queue = new JenkinsClientQueue(this);
+            Artifacts = new JenkinsClientArtifacts(this);
         }
     }
 }

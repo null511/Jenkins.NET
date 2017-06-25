@@ -7,7 +7,7 @@ using System.Xml.XPath;
 
 namespace JenkinsNET.Internal
 {
-    internal static class XmlUtils
+    internal static class XNodeExtensions
     {
         public static T GetValue<T>(this XNode parentNode, string expression)
         {

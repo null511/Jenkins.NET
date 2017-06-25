@@ -12,12 +12,12 @@ namespace JenkinsNET
     /// <remarks>
     /// Used internally by <seealso cref="JenkinsClient"/>
     /// </remarks>
-    public class JenkinsQueue
+    public class JenkinsClientQueue
     {
         private readonly IJenkinsContext context;
 
 
-        internal JenkinsQueue(IJenkinsContext context)
+        internal JenkinsClientQueue(IJenkinsContext context)
         {
             this.context = context;
         }
