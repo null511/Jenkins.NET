@@ -2,7 +2,7 @@
 
 namespace JenkinsNET.Exceptions
 {
-    public class JenkinsJobGetBuildException : ApplicationException
+    public class JenkinsJobGetBuildException : JenkinsNetException
     {
         internal JenkinsJobGetBuildException(string message, Exception innerException) : base(message, innerException) {}
     }

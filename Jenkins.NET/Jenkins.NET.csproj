@@ -49,6 +49,7 @@
     <Compile Include="Commands\ArtifactGetCommand.cs" />
     <Compile Include="Commands\QueueGetItemCommand.cs" />
     <Compile Include="Commands\JobBuildCommand.cs" />
+    <Compile Include="Exceptions\JenkinsNetException.cs" />
     <Compile Include="Exceptions\JenkinsJobDeleteException.cs" />
     <Compile Include="Exceptions\JenkinsArtifactGetException.cs" />
     <Compile Include="Exceptions\JenkinsQueueGetItemException.cs" />

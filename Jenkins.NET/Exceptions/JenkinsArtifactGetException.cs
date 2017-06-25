@@ -2,7 +2,7 @@
 
 namespace JenkinsNET.Exceptions
 {
-    public class JenkinsArtifactGetException : ApplicationException
+    public class JenkinsArtifactGetException : JenkinsNetException
     {
         internal JenkinsArtifactGetException(string message, Exception innerException) : base(message, innerException) {}
     }
