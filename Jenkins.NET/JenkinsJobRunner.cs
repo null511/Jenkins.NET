@@ -51,9 +51,7 @@ namespace JenkinsNET
             Status = JenkinsJobStatus.Pending;
             StatusChanged?.Invoke();
 
-            var buildResult = client.Jobs.BuildWithParameters(jobName, new Dictionary<string, string> {
-                ["Integration_Test"] = "false",
-            });
+            var buildResult = client.Jobs.Build(jobName);
 
             var queueItemNumber = buildResult.GetQueueItemNumber();
             if (!queueItemNumber.HasValue) throw new ApplicationException("Queue-Item number not found!");
@@ -104,9 +102,109 @@ namespace JenkinsNET
             Status = JenkinsJobStatus.Pending;
             StatusChanged?.Invoke();
 
-            var buildResult = await client.Jobs.BuildWithParametersAsync(jobName, new Dictionary<string, string> {
-                ["Integration_Test"] = "false",
-            });
+            var buildResult = await client.Jobs.BuildAsync(jobName);
+
+            var queueItemNumber = buildResult.GetQueueItemNumber();
+            if (!queueItemNumber.HasValue) throw new ApplicationException("Queue-Item number not found!");
+
+            Status = JenkinsJobStatus.Queued;
+            StatusChanged?.Invoke();
+
+            int? buildNumber = null;
+            while (!buildNumber.HasValue) {
+                var queueItem = await client.Queue.GetItemAsync(queueItemNumber.Value);
+                buildNumber = queueItem.Executable?.Number;
+
+                if (!buildNumber.HasValue) {
+                    if (DateTime.Now.Subtract(queueStartTime).TotalSeconds > QueueTimeout)
+                        throw new ApplicationException("Timeout occurred while waiting for build to start!");
+
+                    await Task.Delay(PollInterval);
+                }
+            }
+
+            Status = JenkinsJobStatus.Building;
+            StatusChanged?.Invoke();
+
+            var buildStartTime = DateTime.Now;
+
+            JenkinsBuild buildItem = null;
+            while (string.IsNullOrEmpty(buildItem?.Result)) {
+                buildItem = await client.Jobs.GetBuildAsync(jobName, buildNumber.Value);
+
+                if (string.IsNullOrEmpty(buildItem?.Result)) {
+                    if (DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
+                        throw new ApplicationException("Timeout occurred while waiting for build to complete!");
+
+                    await Task.Delay(PollInterval);
+                }
+            }
+
+            Status = JenkinsJobStatus.Complete;
+            StatusChanged?.Invoke();
+
+            return buildItem;
+        }
+
+        public JenkinsBuild RunWithParameters(string jobName, IDictionary<string, string> jobParameters)
+        {
+            var queueStartTime = DateTime.Now;
+
+            Status = JenkinsJobStatus.Pending;
+            StatusChanged?.Invoke();
+
+            var buildResult = client.Jobs.BuildWithParameters(jobName, jobParameters);
+
+            var queueItemNumber = buildResult.GetQueueItemNumber();
+            if (!queueItemNumber.HasValue) throw new ApplicationException("Queue-Item number not found!");
+
+            Status = JenkinsJobStatus.Queued;
+            StatusChanged?.Invoke();
+
+            int? buildNumber = null;
+            while (!buildNumber.HasValue) {
+                var queueItem = client.Queue.GetItem(queueItemNumber.Value);
+                buildNumber = queueItem.Executable?.Number;
+
+                if (!buildNumber.HasValue) {
+                    if (DateTime.Now.Subtract(queueStartTime).TotalSeconds > QueueTimeout)
+                        throw new ApplicationException("Timeout occurred while waiting for build to start!");
+
+                    Thread.Sleep(PollInterval);
+                }
+            }
+
+            Status = JenkinsJobStatus.Building;
+            StatusChanged?.Invoke();
+
+            var buildStartTime = DateTime.Now;
+
+            JenkinsBuild buildItem = null;
+            while (string.IsNullOrEmpty(buildItem?.Result)) {
+                buildItem = client.Jobs.GetBuild(jobName, buildNumber.Value);
+
+                if (string.IsNullOrEmpty(buildItem?.Result)) {
+                    if (DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
+                        throw new ApplicationException("Timeout occurred while waiting for build to complete!");
+
+                    Thread.Sleep(PollInterval);
+                }
+            }
+
+            Status = JenkinsJobStatus.Complete;
+            StatusChanged?.Invoke();
+
+            return buildItem;
+        }
+
+        public async Task<JenkinsBuild> RunWithParametersAsync(string jobName, IDictionary<string, string> jobParameters)
+        {
+            var queueStartTime = DateTime.Now;
+
+            Status = JenkinsJobStatus.Pending;
+            StatusChanged?.Invoke();
+
+            var buildResult = await client.Jobs.BuildWithParametersAsync(jobName, jobParameters);
 
             var queueItemNumber = buildResult.GetQueueItemNumber();
             if (!queueItemNumber.HasValue) throw new ApplicationException("Queue-Item number not found!");
