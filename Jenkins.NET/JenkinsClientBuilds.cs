@@ -1,5 +1,5 @@
-﻿using JenkinsNET.Commands;
-using JenkinsNET.Exceptions;
+﻿using JenkinsNET.Exceptions;
+using JenkinsNET.Internal.Commands;
 using JenkinsNET.Models;
 using System;
 using System.Threading.Tasks;
@@ -12,7 +12,7 @@ namespace JenkinsNET
     /// <remarks>
     /// Used internally by <seealso cref="JenkinsClient"/>
     /// </remarks>
-    public class JenkinsClientBuilds
+    public sealed class JenkinsClientBuilds
     {
         private readonly IJenkinsContext context;
 
@@ -22,6 +22,11 @@ namespace JenkinsNET
             this.context = context;
         }
 
+        /// <summary>
+        /// Gets information describing a Jenkins Job Build.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        /// <param name="buildNumber">The number of the build.</param>
         public JenkinsBuild Get(string jobName, string buildNumber = "lastSuccessfulBuild")
         {
             try {
@@ -34,6 +39,11 @@ namespace JenkinsNET
             }
         }
 
+        /// <summary>
+        /// Gets information describing a Jenkins Job Build asynchronously.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        /// <param name="buildNumber">The number of the build.</param>
         public async Task<JenkinsBuild> GetAsync(string jobName, string buildNumber = "lastSuccessfulBuild")
         {
             try {
@@ -44,6 +54,24 @@ namespace JenkinsNET
             catch (Exception error) {
                 throw new JenkinsJobGetBuildException($"Failed to retrieve build #{buildNumber} of Jenkins Job '{jobName}'!", error);
             }
+        }
+
+        /// <summary>
+        /// Gets information describing the last successful Build of a Jenkins Job.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        public JenkinsBuild GetLastSuccessful(string jobName)
+        {
+            return Get(jobName, "lastSuccessfulBuild");
+        }
+
+        /// <summary>
+        /// Gets information describing the last successful Build of a Jenkins Job asynchronously.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        public async Task<JenkinsBuild> GetLastSuccessfulAsync(string jobName)
+        {
+            return await GetAsync("lastSuccessfulBuild");
         }
     }
 }

@@ -4,7 +4,10 @@ using System.Xml.Linq;
 
 namespace JenkinsNET.Models
 {
-    public class JenkinsQueueItem
+    /// <summary>
+    /// Describes an item in the Jenkins Build Queue.
+    /// </summary>
+    public sealed class JenkinsQueueItem
     {
         private readonly XNode node;
 

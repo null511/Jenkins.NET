@@ -1,8 +1,7 @@
 ﻿using JenkinsNET.Exceptions;
-using JenkinsNET.Internal;
 using System;
 
-namespace JenkinsNET.Commands
+namespace JenkinsNET.Internal.Commands
 {
     internal class JobBuildCommand : JenkinsHttpCommand
     {

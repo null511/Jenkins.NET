@@ -1,8 +1,7 @@
-﻿using JenkinsNET.Internal;
-using System;
+﻿using System;
 using System.IO;
 
-namespace JenkinsNET.Commands
+namespace JenkinsNET.Internal.Commands
 {
     internal class ArtifactGetCommand : JenkinsHttpCommand
     {

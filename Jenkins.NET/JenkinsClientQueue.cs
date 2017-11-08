@@ -1,5 +1,5 @@
-﻿using JenkinsNET.Commands;
-using JenkinsNET.Exceptions;
+﻿using JenkinsNET.Exceptions;
+using JenkinsNET.Internal.Commands;
 using JenkinsNET.Models;
 using System;
 using System.Threading.Tasks;
@@ -12,7 +12,7 @@ namespace JenkinsNET
     /// <remarks>
     /// Used internally by <seealso cref="JenkinsClient"/>
     /// </remarks>
-    public class JenkinsClientQueue
+    public sealed class JenkinsClientQueue
     {
         private readonly IJenkinsContext context;
 

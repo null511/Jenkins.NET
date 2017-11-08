@@ -12,4 +12,7 @@
     <copyright>Copyright 2017</copyright>
     <tags>jenkins</tags>
   </metadata>
+  <files>
+    <file src="bin\$config$\Jenkins.NET.xml" target="" />
+  </files>
 </package>

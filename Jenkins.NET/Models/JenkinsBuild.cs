@@ -4,7 +4,10 @@ using System.Xml.Linq;
 
 namespace JenkinsNET.Models
 {
-    public class JenkinsBuild
+    /// <summary>
+    /// Describes a Jenkins build.
+    /// </summary>
+    public sealed class JenkinsBuild
     {
         private readonly XNode node;
 

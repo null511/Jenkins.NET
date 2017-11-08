@@ -1,6 +1,5 @@
-﻿using JenkinsNET.Commands;
-using JenkinsNET.Exceptions;
-using JenkinsNET.Models;
+﻿using JenkinsNET.Exceptions;
+using JenkinsNET.Internal.Commands;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,7 +12,7 @@ namespace JenkinsNET
     /// <remarks>
     /// Used internally by <seealso cref="JenkinsClient"/>
     /// </remarks>
-    public class JenkinsClientJobs
+    public sealed class JenkinsClientJobs
     {
         private readonly IJenkinsContext context;
 
@@ -89,6 +88,10 @@ namespace JenkinsNET
             }
         }
 
+        /// <summary>
+        /// Deletes a Job from Jenkins.
+        /// </summary>
+        /// <param name="jobName">The name of the Job to delete.</param>
         public void Delete(string jobName)
         {
             try {
@@ -99,6 +102,10 @@ namespace JenkinsNET
             }
         }
 
+        /// <summary>
+        /// Deletes a Job from Jenkins asynchronously.
+        /// </summary>
+        /// <param name="jobName">The name of the Job to delete.</param>
         public async Task DeleteAsync(string jobName)
         {
             try {

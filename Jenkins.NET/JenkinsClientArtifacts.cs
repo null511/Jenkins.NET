@@ -1,5 +1,5 @@
-﻿using JenkinsNET.Commands;
-using JenkinsNET.Exceptions;
+﻿using JenkinsNET.Exceptions;
+using JenkinsNET.Internal.Commands;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -12,7 +12,7 @@ namespace JenkinsNET
     /// <remarks>
     /// Used internally by <seealso cref="JenkinsClient"/>
     /// </remarks>
-    public class JenkinsClientArtifacts
+    public sealed class JenkinsClientArtifacts
     {
         private readonly IJenkinsContext context;
 
@@ -42,7 +42,7 @@ namespace JenkinsNET
         }
 
         /// <summary>
-        /// Retrieves an artifact from a completed Job.
+        /// Retrieves an artifact from a completed Job asynchronously.
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The build number of the Job.</param>

@@ -12,12 +12,12 @@
         public string BaseUrl {get; set;}
 
         /// <summary>
-        /// [optional] Jenkins Username
+        /// [optional] Jenkins Username.
         /// </summary>
         public string UserName {get; set;}
 
         /// <summary>
-        /// [optional] Jenkins Password
+        /// [optional] Jenkins Password.
         /// </summary>
         public string Password {get; set;}
 

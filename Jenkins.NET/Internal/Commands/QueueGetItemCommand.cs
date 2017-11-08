@@ -1,9 +1,8 @@
-﻿using JenkinsNET.Internal;
-using JenkinsNET.Models;
+﻿using JenkinsNET.Models;
 using System;
 using System.Xml.Linq;
 
-namespace JenkinsNET.Commands
+namespace JenkinsNET.Internal.Commands
 {
     internal class QueueGetItemCommand : JenkinsHttpCommand
     {

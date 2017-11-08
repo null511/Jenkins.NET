@@ -32,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\Jenkins.NET.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -43,12 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\JobDeleteCommand.cs" />
-    <Compile Include="Commands\JobBuildWithParametersCommand.cs" />
-    <Compile Include="Commands\BuildGetCommand.cs" />
-    <Compile Include="Commands\ArtifactGetCommand.cs" />
-    <Compile Include="Commands\QueueGetItemCommand.cs" />
-    <Compile Include="Commands\JobBuildCommand.cs" />
+    <Compile Include="Internal\Commands\JobDeleteCommand.cs" />
+    <Compile Include="Internal\Commands\JobBuildWithParametersCommand.cs" />
+    <Compile Include="Internal\Commands\BuildGetCommand.cs" />
+    <Compile Include="Internal\Commands\ArtifactGetCommand.cs" />
+    <Compile Include="Internal\Commands\QueueGetItemCommand.cs" />
+    <Compile Include="Internal\Commands\JobBuildCommand.cs" />
     <Compile Include="Exceptions\JenkinsNetException.cs" />
     <Compile Include="Exceptions\JenkinsJobDeleteException.cs" />
     <Compile Include="Exceptions\JenkinsArtifactGetException.cs" />

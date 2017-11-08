@@ -3,7 +3,10 @@ using System.Xml.Linq;
 
 namespace JenkinsNET.Models
 {
-    public class JenkinsArtifact
+    /// <summary>
+    /// Describes a Jenkins Artifact.
+    /// </summary>
+    public sealed class JenkinsArtifact
     {
         private readonly XNode node;
 

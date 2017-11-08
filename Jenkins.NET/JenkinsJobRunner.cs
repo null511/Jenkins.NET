@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace JenkinsNET
 {
+    /// <summary>
+    /// Represents the method that will handle an
+    /// event when the job status has changed.
+    /// </summary>
     public delegate void StatusChangedEventHandler();
 
     /// <summary>
@@ -22,20 +26,26 @@ namespace JenkinsNET
 
         private readonly JenkinsClient client;
 
+        /// <summary>
+        /// The status of the Job.
+        /// </summary>
         public JenkinsJobStatus Status {get; private set;}
 
         /// <summary>
         /// Time in milliseconds to wait between requests.
+        /// Default value is 500.
         /// </summary>
         public int PollInterval {get; set;} = 500;
 
         /// <summary>
         /// Maximum time in seconds to wait for job to be queued.
+        /// Default value is 30.
         /// </summary>
         public int QueueTimeout {get; set;} = 30;
 
         /// <summary>
         /// Maximum time in seconds to wait for job to complete.
+        /// Default value is 60.
         /// </summary>
         public int BuildTimeout {get; set;} = 60;
 
@@ -48,16 +58,10 @@ namespace JenkinsNET
             this.client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        private void SetStatus(JenkinsJobStatus newStatus)
-        {
-            Status = newStatus;
-
-            try {
-                StatusChanged?.Invoke();
-            }
-            catch {}
-        }
-
+        /// <summary>
+        /// Run the Job.
+        /// </summary>
+        /// <param name="jobName">The name of the Job to run.</param>
         public JenkinsBuild Run(string jobName)
         {
             SetStatus(JenkinsJobStatus.Pending);
@@ -105,6 +109,10 @@ namespace JenkinsNET
             return buildItem;
         }
 
+        /// <summary>
+        /// Run the Job asynchronously.
+        /// </summary>
+        /// <param name="jobName">The name of the Job to run.</param>
         public async Task<JenkinsBuild> RunAsync(string jobName)
         {
             SetStatus(JenkinsJobStatus.Pending);
@@ -152,6 +160,11 @@ namespace JenkinsNET
             return buildItem;
         }
 
+        /// <summary>
+        /// Run the Job with parameters.
+        /// </summary>
+        /// <param name="jobName">The name of the Job to run.</param>
+        /// <param name="jobParameters">The parameters used to start the Job.</param>
         public JenkinsBuild RunWithParameters(string jobName, IDictionary<string, string> jobParameters)
         {
             SetStatus(JenkinsJobStatus.Pending);
@@ -199,6 +212,11 @@ namespace JenkinsNET
             return buildItem;
         }
 
+        /// <summary>
+        /// Run the Job asynchronously with parameters.
+        /// </summary>
+        /// <param name="jobName">The name of the Job to run.</param>
+        /// <param name="jobParameters">The parameters used to start the Job.</param>
         public async Task<JenkinsBuild> RunWithParametersAsync(string jobName, IDictionary<string, string> jobParameters)
         {
             SetStatus(JenkinsJobStatus.Pending);
@@ -244,6 +262,16 @@ namespace JenkinsNET
 
             SetStatus(JenkinsJobStatus.Complete);
             return buildItem;
+        }
+
+        private void SetStatus(JenkinsJobStatus newStatus)
+        {
+            Status = newStatus;
+
+            try {
+                StatusChanged?.Invoke();
+            }
+            catch {}
         }
     }
 }
