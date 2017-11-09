@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jenkins.NET", "Jenkins.NET\Jenkins.NET.csproj", "{C77BD3BC-08AB-4026-89A9-CE3666EC8647}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jenkins.NET.Tests", "Jenkins.NET.Tests\Jenkins.NET.Tests.csproj", "{04A910D7-C02F-433F-8B4E-53DF2DB89908}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jenkins.NET.IntegrationTests", "Jenkins.NET.Tests\Jenkins.NET.IntegrationTests.csproj", "{04A910D7-C02F-433F-8B4E-53DF2DB89908}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EB41DF00-B39B-43FD-A0A8-C884CB6E6FD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jenkins.NET.UnitTests", "Jenkins.NET.UnitTests\Jenkins.NET.UnitTests.csproj", "{8109301D-44AB-4BD1-9605-212B3FDA2BC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +25,19 @@ Global
 		{04A910D7-C02F-433F-8B4E-53DF2DB89908}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04A910D7-C02F-433F-8B4E-53DF2DB89908}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04A910D7-C02F-433F-8B4E-53DF2DB89908}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8109301D-44AB-4BD1-9605-212B3FDA2BC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8109301D-44AB-4BD1-9605-212B3FDA2BC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8109301D-44AB-4BD1-9605-212B3FDA2BC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8109301D-44AB-4BD1-9605-212B3FDA2BC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{04A910D7-C02F-433F-8B4E-53DF2DB89908} = {EB41DF00-B39B-43FD-A0A8-C884CB6E6FD9}
+		{8109301D-44AB-4BD1-9605-212B3FDA2BC7} = {EB41DF00-B39B-43FD-A0A8-C884CB6E6FD9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CC697981-A7DC-4718-B5D0-213540DCE6DE}
 	EndGlobalSection
 EndGlobal

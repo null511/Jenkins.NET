@@ -1,9 +1,8 @@
-﻿using JenkinsNET;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
 
-namespace Jenkins.NET.Tests
+namespace JenkinsNET.IntegrationTests
 {
     [TestFixture]
     public class ClientTests

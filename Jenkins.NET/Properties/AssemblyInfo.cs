@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyVersion("0.1.1")]
-[assembly: AssemblyFileVersion("0.1.1")]
+[assembly: AssemblyVersion("0.1.2")]
+[assembly: AssemblyFileVersion("0.1.2")]
 [assembly: AssemblyTitle("Jenkins.NET")]
 [assembly: AssemblyDescription("C# .NET wrapper for Jenkins HTTP/REST API.")]
 [assembly: AssemblyConfiguration("")]
@@ -14,3 +15,6 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("c77bd3bc-08ab-4026-89a9-ce3666ec8647")]
 [assembly: ComVisible(false)]
+
+[assembly: InternalsVisibleTo("Jenkins.NET.UnitTests")]
+[assembly: InternalsVisibleTo("Jenkins.NET.IntegrationTests")]
