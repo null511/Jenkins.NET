@@ -26,6 +26,7 @@ namespace JenkinsNET.Internal.Commands
 
             OnWrite = request => {
                 request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
 
                 if (jobParameters?.Any() ?? false) { 
                     using (var stream = request.GetRequestStream())
