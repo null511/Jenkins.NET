@@ -20,32 +20,32 @@ namespace JenkinsNET.Internal.Commands
             if (jobParameters == null)
                 throw new ArgumentNullException(nameof(jobParameters));
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "buildWithParameters?delay=0sec");
+            var _params = new Dictionary<string, string>(jobParameters) {
+                ["delay"] = "0sec",
+            };
+
+            var query = new StringWriter();
+            WriteJobParameters(query, _params);
+
+            Url = NetPath.Combine(context.BaseUrl, "job", jobName, $"buildWithParameters?{query}");
             UserName = context.UserName;
             Password = context.Password;
 
             OnWrite = request => {
                 request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-
-                if (jobParameters?.Any() ?? false) { 
-                    using (var stream = request.GetRequestStream())
-                    using (var writer = new StreamWriter(stream, Encoding.UTF8)) {
-                        WriteJobParameters(writer, jobParameters);
-                    }
-                }
             };
 
             OnRead = response => {
                 if (response.StatusCode != System.Net.HttpStatusCode.Created)
                     throw new JenkinsJobBuildException($"Expected HTTP status code 201 but found {(int)response.StatusCode}!");
 
-                Result = new JenkinsBuildResult();
-                Result.QueueItemUrl = response.GetResponseHeader("Location");
+                Result = new JenkinsBuildResult {
+                    QueueItemUrl = response.GetResponseHeader("Location"),
+                };
             };
         }
 
-        private void WriteJobParameters(StreamWriter writer, IDictionary<string, string> jobParameters)
+        private void WriteJobParameters(TextWriter writer, IDictionary<string, string> jobParameters)
         {
             var isFirst = true;
             foreach (var pair in jobParameters) {
