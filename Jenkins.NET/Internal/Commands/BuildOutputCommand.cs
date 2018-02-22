@@ -20,7 +20,7 @@ namespace JenkinsNET.Internal.Commands
             UserName = context.UserName;
             Password = context.Password;
 
-            OnRead = async response => {
+            OnReadAsync = async response => {
                 using (var stream = response.GetResponseStream()) {
                     if (stream == null) return;
 
