@@ -31,7 +31,7 @@ namespace JenkinsNET
         {
             try {
                 var cmd = new BuildGetCommand(context, jobName, buildNumber);
-                cmd.Run();
+                cmd.RunAsync().GetAwaiter().GetResult();
                 return cmd.Result;
             }
             catch (Exception error) {
@@ -72,6 +72,40 @@ namespace JenkinsNET
         public async Task<JenkinsBuild> GetLastSuccessfulAsync(string jobName)
         {
             return await GetAsync("lastSuccessfulBuild");
+        }
+
+        /// <summary>
+        /// Gets the console output from a Jenkins Job Build.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        /// <param name="buildNumber">The number of the build.</param>
+        public string GetConsoleOutput(string jobName, string buildNumber = "lastSuccessfulBuild")
+        {
+            try {
+                var cmd = new BuildOutputCommand(context, jobName, buildNumber);
+                cmd.Run();
+                return cmd.Result;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to retrieve console output from build #{buildNumber} of Jenkins Job '{jobName}'!", error);
+            }
+        }
+
+        /// <summary>
+        /// Gets the console output from a Jenkins Job Build asynchronously.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        /// <param name="buildNumber">The number of the build.</param>
+        public async Task<string> GetConsoleOutputAsync(string jobName, string buildNumber = "lastSuccessfulBuild")
+        {
+            try {
+                var cmd = new BuildOutputCommand(context, jobName, buildNumber);
+                await cmd.RunAsync();
+                return cmd.Result;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to retrieve console output from build #{buildNumber} of Jenkins Job '{jobName}'!", error);
+            }
         }
     }
 }

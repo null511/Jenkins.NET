@@ -12,16 +12,20 @@ namespace JenkinsNET.Internal
         public string Password {get; set;}
         public Action<HttpWebRequest> OnWrite {get; set;}
         public Action<HttpWebResponse> OnRead {get; set;}
+        public Func<HttpWebRequest, Task> OnWriteAsync {get; set;}
+        public Func<HttpWebResponse, Task> OnReadAsync {get; set;}
 
 
         public void Run()
         {
             var request = CreateRequest();
 
-            OnWrite?.Invoke(request);
+            if (OnWrite != null) OnWrite.Invoke(request);
+            if (OnWriteAsync != null) OnWriteAsync.Invoke(request).GetAwaiter().GetResult();
 
             using (var response = (HttpWebResponse)request.GetResponse()) {
-                OnRead?.Invoke(response);
+                if (OnRead != null) OnRead?.Invoke(response);
+                if (OnReadAsync != null) OnReadAsync.Invoke(response).GetAwaiter().GetResult();
             }
         }
 
@@ -29,14 +33,12 @@ namespace JenkinsNET.Internal
         {
             var request = CreateRequest();
 
-            if (OnWrite != null) {
-                await Task.Run(() => OnWrite(request));
-            }
+            if (OnWrite != null) OnWrite.Invoke(request);
+            if (OnWriteAsync != null) await OnWriteAsync.Invoke(request);
 
             using (var response = (HttpWebResponse)await request.GetResponseAsync()) {
-                if (OnRead != null) {
-                    await Task.Run(() => OnRead(response));
-                }
+                if (OnRead != null) OnRead?.Invoke(response);
+                if (OnReadAsync != null) await OnReadAsync.Invoke(response);
             }
         }
 

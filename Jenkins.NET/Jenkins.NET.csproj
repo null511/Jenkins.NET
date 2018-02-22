@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internal\Commands\BuildOutputCommand.cs" />
     <Compile Include="Internal\Commands\JobDeleteCommand.cs" />
     <Compile Include="Internal\Commands\JobBuildWithParametersCommand.cs" />
     <Compile Include="Internal\Commands\BuildGetCommand.cs" />
