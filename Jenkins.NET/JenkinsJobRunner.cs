@@ -31,7 +31,9 @@ namespace JenkinsNET
         public event StatusChangedEventHandler StatusChanged;
 
         /// <summary>
-        /// Fired when the console output of the Job changes.
+        /// <para>Fired when the console output of the Job changes.</para>
+        /// Requires <seealso cref="MonitorConsoleOutput"/>
+        /// to be enabled.
         /// </summary>
         public event ConsoleOutputChangedEventHandler ConsoleOutputChanged;
 
@@ -43,7 +45,15 @@ namespace JenkinsNET
         public JenkinsJobStatus Status {get; private set;}
 
         /// <summary>
-        /// Gets the console output of the running Job.
+        /// Gets or sets whether the Jobs Console Output
+        /// should be monitored. Default value is false.
+        /// </summary>
+        public bool MonitorConsoleOutput {get; set;}
+
+        /// <summary>
+        /// <para>Gets the console output of the running Job.</para>
+        /// Requires <see cref="MonitorConsoleOutput"/>
+        /// to be enabled.
         /// </summary>
         public string ConsoleOutput {get; private set;}
 
@@ -55,15 +65,15 @@ namespace JenkinsNET
 
         /// <summary>
         /// Maximum time in seconds to wait for job to be queued.
-        /// Default value is 30.
+        /// Default value is 60 (one minute).
         /// </summary>
-        public int QueueTimeout {get; set;} = 30;
+        public int QueueTimeout {get; set;} = 60;
 
         /// <summary>
         /// Maximum time in seconds to wait for job to complete.
-        /// Default value is 60.
+        /// Default value is 600 (10 minutes).
         /// </summary>
-        public int BuildTimeout {get; set;} = 60;
+        public int BuildTimeout {get; set;} = 600;
 
 
         /// <summary>
@@ -157,7 +167,7 @@ namespace JenkinsNET
                 buildNumber = queueItem?.Executable?.Number;
                 if (buildNumber.HasValue) break;
 
-                if (DateTime.Now.Subtract(queueStartTime).TotalSeconds > QueueTimeout)
+                if (QueueTimeout > 0 && DateTime.Now.Subtract(queueStartTime).TotalSeconds > QueueTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to start!");
 
                 Thread.Sleep(PollInterval);
@@ -171,7 +181,7 @@ namespace JenkinsNET
                 buildItem = client.Builds.Get(jobName, buildNumber.Value.ToString());
                 if (!string.IsNullOrEmpty(buildItem?.Result)) break;
 
-                if (DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
+                if (BuildTimeout > 0 && DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to complete!");
 
                 UpdateConsoleOutput(jobName, buildNumber.Value.ToString());
@@ -198,7 +208,7 @@ namespace JenkinsNET
                 buildNumber = queueItem?.Executable?.Number;
                 if (buildNumber.HasValue) break;
 
-                if (DateTime.Now.Subtract(queueStartTime).TotalSeconds > QueueTimeout)
+                if (QueueTimeout > 0 && DateTime.Now.Subtract(queueStartTime).TotalSeconds > QueueTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to start!");
 
                 await Task.Delay(PollInterval);
@@ -212,7 +222,7 @@ namespace JenkinsNET
                 buildItem = await client.Builds.GetAsync(jobName, buildNumber.Value.ToString());
                 if (!string.IsNullOrEmpty(buildItem?.Result)) break;
 
-                if (DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
+                if (BuildTimeout > 0 && DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to complete!");
 
                 UpdateConsoleOutput(jobName, buildNumber.Value.ToString());
@@ -228,6 +238,8 @@ namespace JenkinsNET
 
         private void UpdateConsoleOutput(string jobName, string buildNumber)
         {
+            if (!MonitorConsoleOutput) return;
+
             var text = client.Builds.GetConsoleOutput(jobName, buildNumber);
 
             var lenPrev = ConsoleOutput?.Length ?? 0;
