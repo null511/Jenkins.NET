@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Web;
 
 namespace JenkinsNET.Internal.Commands
@@ -14,6 +12,9 @@ namespace JenkinsNET.Internal.Commands
 
         public JobBuildWithParametersCommand(IJenkinsContext context, string jobName, IDictionary<string, string> jobParameters)
         {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("'jobName' cannot be empty!");
 

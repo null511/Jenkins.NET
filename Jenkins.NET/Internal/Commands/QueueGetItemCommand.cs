@@ -11,6 +11,9 @@ namespace JenkinsNET.Internal.Commands
 
         public QueueGetItemCommand(IJenkinsContext context, int itemNumber)
         {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
             Url = NetPath.Combine(context.BaseUrl, "queue/item", itemNumber.ToString(), "api/xml");
             UserName = context.UserName;
             Password = context.Password;

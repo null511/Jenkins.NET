@@ -6,6 +6,9 @@ namespace JenkinsNET.Internal.Commands
     {
         public JobDeleteCommand(IJenkinsContext context, string jobName)
         {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("'jobName' cannot be empty!");
 

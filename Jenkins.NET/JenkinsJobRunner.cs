@@ -25,6 +25,10 @@ namespace JenkinsNET
     /// </summary>
     public class JenkinsJobRunner
     {
+        private int readPos;
+        private bool isJobStarted;
+        private bool hasOutputComplete;
+
         /// <summary>
         /// Fired when the status of the JobRunner changes.
         /// </summary>
@@ -90,6 +94,9 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job to run.</param>
         public JenkinsBuild Run(string jobName)
         {
+            if (isJobStarted) throw new JenkinsNetException("This JobRunner instance has already been started! Separate JenkinsJobRunner instances are required to run multiple jobs.");
+            isJobStarted = true;
+
             SetStatus(JenkinsJobStatus.Pending);
             var queueStartTime = DateTime.Now;
 
@@ -107,6 +114,9 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job to run.</param>
         public async Task<JenkinsBuild> RunAsync(string jobName)
         {
+            if (isJobStarted) throw new JenkinsNetException("This JobRunner instance has already been started! Separate JenkinsJobRunner instances are required to run multiple jobs.");
+            isJobStarted = true;
+
             SetStatus(JenkinsJobStatus.Pending);
             var queueStartTime = DateTime.Now;
 
@@ -125,6 +135,9 @@ namespace JenkinsNET
         /// <param name="jobParameters">The parameters used to start the Job.</param>
         public JenkinsBuild RunWithParameters(string jobName, IDictionary<string, string> jobParameters)
         {
+            if (isJobStarted) throw new JenkinsNetException("This JobRunner instance has already been started! Separate JenkinsJobRunner instances are required to run multiple jobs.");
+            isJobStarted = true;
+
             SetStatus(JenkinsJobStatus.Pending);
             var queueStartTime = DateTime.Now;
 
@@ -143,6 +156,9 @@ namespace JenkinsNET
         /// <param name="jobParameters">The parameters used to start the Job.</param>
         public async Task<JenkinsBuild> RunWithParametersAsync(string jobName, IDictionary<string, string> jobParameters)
         {
+            if (isJobStarted) throw new JenkinsNetException("This JobRunner instance has already been started! Separate JenkinsJobRunner instances are required to run multiple jobs.");
+            isJobStarted = true;
+
             SetStatus(JenkinsJobStatus.Pending);
             var queueStartTime = DateTime.Now;
 
@@ -189,7 +205,9 @@ namespace JenkinsNET
                 Thread.Sleep(PollInterval);
             }
 
-            UpdateConsoleOutput(jobName, buildNumber.Value.ToString());
+            while (MonitorConsoleOutput && !hasOutputComplete) {
+                UpdateConsoleOutput(jobName, buildNumber.Value.ToString());
+            }
 
             SetStatus(JenkinsJobStatus.Complete);
             return buildItem;
@@ -225,12 +243,14 @@ namespace JenkinsNET
                 if (BuildTimeout > 0 && DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to complete!");
 
-                UpdateConsoleOutput(jobName, buildNumber.Value.ToString());
+                await UpdateConsoleOutputAsync(jobName, buildNumber.Value.ToString());
 
                 await Task.Delay(PollInterval);
             }
 
-            UpdateConsoleOutput(jobName, buildNumber.Value.ToString());
+            while (MonitorConsoleOutput && !hasOutputComplete) {
+                await UpdateConsoleOutputAsync(jobName, buildNumber.Value.ToString());
+            }
 
             SetStatus(JenkinsJobStatus.Complete);
             return buildItem;
@@ -238,19 +258,34 @@ namespace JenkinsNET
 
         private void UpdateConsoleOutput(string jobName, string buildNumber)
         {
-            if (!MonitorConsoleOutput) return;
+            if (!MonitorConsoleOutput || hasOutputComplete) return;
 
-            var text = client.Builds.GetConsoleOutput(jobName, buildNumber);
+            var result = client.Builds.GetProgressiveText(jobName, buildNumber, readPos);
 
-            var lenPrev = ConsoleOutput?.Length ?? 0;
-            var lenNew = text?.Length ?? 0;
-
-            if (lenNew > lenPrev) {
-                var newText = text.Substring(lenPrev);
-
-                ConsoleOutput = text;
-                ConsoleOutputChanged?.Invoke(newText);
+            if (result.Size > 0) {
+                ConsoleOutput += result.Text;
+                ConsoleOutputChanged?.Invoke(result.Text);
+                readPos = result.Size;
             }
+
+            if (!result.MoreData)
+                hasOutputComplete = true;
+        }
+
+        private async Task UpdateConsoleOutputAsync(string jobName, string buildNumber)
+        {
+            if (!MonitorConsoleOutput || hasOutputComplete) return;
+
+            var result = await client.Builds.GetProgressiveTextAsync(jobName, buildNumber, readPos);
+
+            if (result.Size > 0) {
+                ConsoleOutput += result.Text;
+                ConsoleOutputChanged?.Invoke(result.Text);
+                readPos = result.Size;
+            }
+
+            if (!result.MoreData)
+                hasOutputComplete = true;
         }
 
         private void SetStatus(JenkinsJobStatus newStatus)

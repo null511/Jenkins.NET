@@ -14,21 +14,23 @@ namespace JenkinsNET.IntegrationTests
 
 
         [Test]
-        public async Task Run()
+        public void Run()
         {
-            var client = new JenkinsClient {
-                BaseUrl = jenkinsUrl,
-                UserName = username,
-                Password = password,
-            };
+            var jobRunner = CreateRunner();
 
-            var jobRunner = new JenkinsJobRunner(client);
-            jobRunner.StatusChanged += () => {
-                TestContext.Out.WriteLine($"[{DateTime.Now}] Status: '{jobRunner.Status}'");
-            };
-            jobRunner.ConsoleOutputChanged += newText => {
-                TestContext.Out.Write(newText);
-            };
+            var startTime = DateTime.Now;
+            var build = jobRunner.Run(jobName);
+            var duration = DateTime.Now.Subtract(startTime);
+
+            TestContext.Out.WriteLine();
+            TestContext.Out.WriteLine($"Result: {build.Result}");
+            TestContext.Out.WriteLine($"Duration: {duration}");
+        }
+
+        [Test]
+        public async Task RunAsync()
+        {
+            var jobRunner = CreateRunner();
 
             var startTime = DateTime.Now;
             var build = await jobRunner.RunAsync(jobName);
@@ -37,6 +39,29 @@ namespace JenkinsNET.IntegrationTests
             TestContext.Out.WriteLine();
             TestContext.Out.WriteLine($"Result: {build.Result}");
             TestContext.Out.WriteLine($"Duration: {duration}");
+        }
+
+        private JenkinsJobRunner CreateRunner()
+        {
+            var client = new JenkinsClient {
+                BaseUrl = jenkinsUrl,
+                UserName = username,
+                Password = password,
+            };
+
+            var jobRunner = new JenkinsJobRunner(client) {
+                MonitorConsoleOutput = true,
+            };
+
+            jobRunner.StatusChanged += () => {
+                TestContext.Out.WriteLine($"[{DateTime.Now}] Status: '{jobRunner.Status}'");
+            };
+
+            jobRunner.ConsoleOutputChanged += newText => {
+                TestContext.Out.Write(newText);
+            };
+
+            return jobRunner;
         }
     }
 }

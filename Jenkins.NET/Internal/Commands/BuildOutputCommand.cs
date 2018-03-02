@@ -10,6 +10,9 @@ namespace JenkinsNET.Internal.Commands
 
         public BuildOutputCommand(IJenkinsContext context, string jobName, string buildNumber)
         {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("'jobName' cannot be empty!");
 
