@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using JenkinsNET.Utilities;
+using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ namespace JenkinsNET.IntegrationTests
         private const string jenkinsUrl = "http://localhost:8080";
         private const string jobName = "Test Job";
         private const string username = "guest";
-        private const string password = "bcb954a77ab47750201a9f188b1b25e8";
+        private const string apiToken = "bcb954a77ab47750201a9f188b1b25e8";
 
 
         [Test]
@@ -46,7 +47,7 @@ namespace JenkinsNET.IntegrationTests
             var client = new JenkinsClient {
                 BaseUrl = jenkinsUrl,
                 UserName = username,
-                Password = password,
+                ApiToken = apiToken,
             };
 
             var jobRunner = new JenkinsJobRunner(client) {

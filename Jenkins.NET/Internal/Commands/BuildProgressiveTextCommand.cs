@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JenkinsNET.Models;
+using System;
 using System.IO;
 
 namespace JenkinsNET.Internal.Commands

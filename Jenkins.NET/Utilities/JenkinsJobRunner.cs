@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace JenkinsNET
+namespace JenkinsNET.Utilities
 {
     /// <summary>
     /// Represents the method that will handle an
@@ -14,7 +14,7 @@ namespace JenkinsNET
     public delegate void StatusChangedEventHandler();
 
     /// <summary>
-    /// Represents the method that will handle an
+    /// Represents a method that will handle an
     /// event when the job console output has changed.
     /// </summary>
     public delegate void ConsoleOutputChangedEventHandler(string newText);
@@ -25,26 +25,23 @@ namespace JenkinsNET
     /// </summary>
     public class JenkinsJobRunner
     {
-        private int readPos;
+        private readonly JenkinsClient client;
+        private ProgressiveTextReader textReader;
         private bool isJobStarted;
-        private bool hasOutputComplete;
 
         /// <summary>
-        /// Fired when the status of the JobRunner changes.
+        /// Occurs when the status of the running Jenkins Job changes.
         /// </summary>
         public event StatusChangedEventHandler StatusChanged;
 
         /// <summary>
-        /// <para>Fired when the console output of the Job changes.</para>
-        /// Requires <seealso cref="MonitorConsoleOutput"/>
-        /// to be enabled.
+        /// Occurs when the Console Output of the
+        /// running Jenkins Job has changed.
         /// </summary>
         public event ConsoleOutputChangedEventHandler ConsoleOutputChanged;
 
-        private readonly JenkinsClient client;
-
         /// <summary>
-        /// Gets the status of the running Job.
+        /// Gets the status of the running Jenkins Job.
         /// </summary>
         public JenkinsJobStatus Status {get; private set;}
 
@@ -53,13 +50,6 @@ namespace JenkinsNET
         /// should be monitored. Default value is false.
         /// </summary>
         public bool MonitorConsoleOutput {get; set;}
-
-        /// <summary>
-        /// <para>Gets the console output of the running Job.</para>
-        /// Requires <see cref="MonitorConsoleOutput"/>
-        /// to be enabled.
-        /// </summary>
-        public string ConsoleOutput {get; private set;}
 
         /// <summary>
         /// Time in milliseconds to wait between requests.
@@ -78,6 +68,11 @@ namespace JenkinsNET
         /// Default value is 600 (10 minutes).
         /// </summary>
         public int BuildTimeout {get; set;} = 600;
+
+        /// <summary>
+        /// Returns the Console Output of the currently running Jenkins Job.
+        /// </summary>
+        public string ConsoleOutput => textReader?.Text;
 
 
         /// <summary>
@@ -192,6 +187,9 @@ namespace JenkinsNET
             SetStatus(JenkinsJobStatus.Building);
             var buildStartTime = DateTime.Now;
 
+            textReader = new ProgressiveTextReader(client, jobName, buildNumber.ToString());
+            textReader.TextChanged += TextReader_TextChanged;
+
             JenkinsBuild buildItem = null;
             while (string.IsNullOrEmpty(buildItem?.Result)) {
                 buildItem = client.Builds.Get(jobName, buildNumber.Value.ToString());
@@ -200,13 +198,14 @@ namespace JenkinsNET
                 if (BuildTimeout > 0 && DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to complete!");
 
-                UpdateConsoleOutput(jobName, buildNumber.Value.ToString());
+                if (MonitorConsoleOutput && !textReader.IsComplete)
+                    textReader.Update();
 
                 Thread.Sleep(PollInterval);
             }
 
-            while (MonitorConsoleOutput && !hasOutputComplete) {
-                UpdateConsoleOutput(jobName, buildNumber.Value.ToString());
+            while (MonitorConsoleOutput && !textReader.IsComplete) {
+                textReader.Update();
             }
 
             SetStatus(JenkinsJobStatus.Complete);
@@ -235,6 +234,9 @@ namespace JenkinsNET
             SetStatus(JenkinsJobStatus.Building);
             var buildStartTime = DateTime.Now;
 
+            textReader = new ProgressiveTextReader(client, jobName, buildNumber.ToString());
+            textReader.TextChanged += TextReader_TextChanged;
+
             JenkinsBuild buildItem = null;
             while (string.IsNullOrEmpty(buildItem?.Result)) {
                 buildItem = await client.Builds.GetAsync(jobName, buildNumber.Value.ToString());
@@ -243,49 +245,23 @@ namespace JenkinsNET
                 if (BuildTimeout > 0 && DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to complete!");
 
-                await UpdateConsoleOutputAsync(jobName, buildNumber.Value.ToString());
+                if (MonitorConsoleOutput && !textReader.IsComplete)
+                    await textReader.UpdateAsync();
 
                 await Task.Delay(PollInterval);
             }
 
-            while (MonitorConsoleOutput && !hasOutputComplete) {
-                await UpdateConsoleOutputAsync(jobName, buildNumber.Value.ToString());
+            while (MonitorConsoleOutput && !textReader.IsComplete) {
+                await textReader.UpdateAsync();
             }
 
             SetStatus(JenkinsJobStatus.Complete);
             return buildItem;
         }
 
-        private void UpdateConsoleOutput(string jobName, string buildNumber)
+        private void TextReader_TextChanged(string newText)
         {
-            if (!MonitorConsoleOutput || hasOutputComplete) return;
-
-            var result = client.Builds.GetProgressiveText(jobName, buildNumber, readPos);
-
-            if (result.Size > 0) {
-                ConsoleOutput += result.Text;
-                ConsoleOutputChanged?.Invoke(result.Text);
-                readPos = result.Size;
-            }
-
-            if (!result.MoreData)
-                hasOutputComplete = true;
-        }
-
-        private async Task UpdateConsoleOutputAsync(string jobName, string buildNumber)
-        {
-            if (!MonitorConsoleOutput || hasOutputComplete) return;
-
-            var result = await client.Builds.GetProgressiveTextAsync(jobName, buildNumber, readPos);
-
-            if (result.Size > 0) {
-                ConsoleOutput += result.Text;
-                ConsoleOutputChanged?.Invoke(result.Text);
-                readPos = result.Size;
-            }
-
-            if (!result.MoreData)
-                hasOutputComplete = true;
+            ConsoleOutputChanged?.Invoke(newText);
         }
 
         private void SetStatus(JenkinsJobStatus newStatus)

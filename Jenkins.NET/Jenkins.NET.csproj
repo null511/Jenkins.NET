@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildNumber.cs" />
     <Compile Include="Internal\Commands\BuildProgressiveTextCommand.cs" />
     <Compile Include="Internal\Commands\BuildProgressiveHtmlCommand.cs" />
     <Compile Include="Internal\Commands\BuildOutputCommand.cs" />
@@ -61,15 +62,15 @@
     <Compile Include="Exceptions\JenkinsJobBuildException.cs" />
     <Compile Include="IJenkinsContext.cs" />
     <Compile Include="Internal\JenkinsHttpCommand.cs" />
-    <Compile Include="Internal\JenkinsProgressiveTextResponse.cs" />
-    <Compile Include="Internal\JenkinsProgressiveHtmlResponse.cs" />
+    <Compile Include="Models\JenkinsProgressiveTextResponse.cs" />
+    <Compile Include="Models\JenkinsProgressiveHtmlResponse.cs" />
     <Compile Include="Internal\NetPath.cs" />
     <Compile Include="Internal\StringExtensions.cs" />
     <Compile Include="Internal\XNodeExtensions.cs" />
     <Compile Include="JenkinsBuildResult.cs" />
     <Compile Include="JenkinsClient.cs" />
     <Compile Include="JenkinsClientBuilds.cs" />
-    <Compile Include="JenkinsJobRunner.cs" />
+    <Compile Include="Utilities\JenkinsJobRunner.cs" />
     <Compile Include="JenkinsJobStatus.cs" />
     <Compile Include="JenkinsClientArtifacts.cs" />
     <Compile Include="JenkinsClientQueue.cs" />
@@ -87,6 +88,8 @@
     <Compile Include="Models\JenkinsPreviousBuild.cs" />
     <Compile Include="Models\JenkinsQueueItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\ProgressiveHtmlReader.cs" />
+    <Compile Include="Utilities\ProgressiveTextReader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

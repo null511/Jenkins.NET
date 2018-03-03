@@ -28,7 +28,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
-        public JenkinsBuild Get(string jobName, string buildNumber = "lastSuccessfulBuild")
+        public JenkinsBuild Get(string jobName, string buildNumber)
         {
             try {
                 var cmd = new BuildGetCommand(context, jobName, buildNumber);
@@ -45,7 +45,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
-        public async Task<JenkinsBuild> GetAsync(string jobName, string buildNumber = "lastSuccessfulBuild")
+        public async Task<JenkinsBuild> GetAsync(string jobName, string buildNumber)
         {
             try {
                 var cmd = new BuildGetCommand(context, jobName, buildNumber);
@@ -61,18 +61,20 @@ namespace JenkinsNET
         /// Gets information describing the last successful Build of a Jenkins Job.
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
+        [Obsolete("This method will be removed in future versions; please use `Get(BuildNumber.LastSuccessful)`.")]
         public JenkinsBuild GetLastSuccessful(string jobName)
         {
-            return Get(jobName, "lastSuccessfulBuild");
+            return Get(jobName, BuildNumber.LastSuccessful);
         }
 
         /// <summary>
         /// Gets information describing the last successful Build of a Jenkins Job asynchronously.
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
+        [Obsolete("This method will be removed in future versions; please use `GetAsync(BuildNumber.LastSuccessful)`.")]
         public async Task<JenkinsBuild> GetLastSuccessfulAsync(string jobName)
         {
-            return await GetAsync("lastSuccessfulBuild");
+            return await GetAsync(jobName, BuildNumber.LastSuccessful);
         }
 
         /// <summary>
@@ -80,7 +82,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
-        public string GetConsoleOutput(string jobName, string buildNumber = "lastSuccessfulBuild")
+        public string GetConsoleOutput(string jobName, string buildNumber)
         {
             try {
                 var cmd = new BuildOutputCommand(context, jobName, buildNumber);
@@ -97,7 +99,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
-        public async Task<string> GetConsoleOutputAsync(string jobName, string buildNumber = "lastSuccessfulBuild")
+        public async Task<string> GetConsoleOutputAsync(string jobName, string buildNumber)
         {
             try {
                 var cmd = new BuildOutputCommand(context, jobName, buildNumber);

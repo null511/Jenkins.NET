@@ -11,7 +11,9 @@ namespace JenkinsNET.Models
         private readonly XNode node;
 
         public string DisplayPath => node?.TryGetValue<string>("displayPath");
+
         public string RelativePath => node?.TryGetValue<string>("relativePath");
+
         public string FileName => node?.TryGetValue<string>("fileName");
 
 
