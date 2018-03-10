@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Web;
 
 namespace JenkinsNET.Internal
 {
@@ -26,9 +28,15 @@ namespace JenkinsNET.Internal
                 builder.Append(i > 0 ? "&" : "?");
                 i++;
 
-                builder.Append(arg.Key);
+                var eKey = HttpUtility.UrlEncode(arg.Key);
+                var eValue = string.Empty;
+
+                if (arg.Value != null)
+                    eValue = HttpUtility.UrlEncode(arg.Value.ToString());
+
+                builder.Append(eKey);
                 builder.Append("=");
-                builder.Append(arg.Value);
+                builder.Append(eValue);
             }
 
             return builder.ToString();
@@ -40,7 +48,7 @@ namespace JenkinsNET.Internal
                 return dictionary;
 
             return arguments.GetType()
-                .GetProperties(System.Reflection.BindingFlags.Public)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Select(x => new KeyValuePair<string, object>(x.Name, x.GetValue(arguments)));
         }
     }

@@ -12,6 +12,9 @@
     <copyright>Copyright 2018</copyright>
     <tags>jenkins net automation</tags>
     <releaseNotes>
+      0.2.3
+      - Add support for getting existing Jobs.
+      
       0.2.2
       - Add support for creating new Jobs.
       - Expose underlying XML Node on all Jenkins class models.

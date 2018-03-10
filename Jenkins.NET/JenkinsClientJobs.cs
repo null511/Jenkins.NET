@@ -90,6 +90,38 @@ namespace JenkinsNET
         }
 
         /// <summary>
+        /// Gets a Job description from Jenkins.
+        /// </summary>
+        /// <param name="jobName">The Name of the Job to retrieve.</param>
+        public JenkinsJob Get(string jobName)
+        {
+            try {
+                var cmd = new JobGetCommand(context, jobName);
+                cmd.Run();
+                return cmd.Result;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to get Jenkins Job '{jobName}'!", error);
+            }
+        }
+
+        /// <summary>
+        /// Gets a Job description from Jenkins asynchronously.
+        /// </summary>
+        /// <param name="jobName">The Name of the Job to retrieve.</param>
+        public async Task<JenkinsJob> GetAsync(string jobName)
+        {
+            try {
+                var cmd = new JobGetCommand(context, jobName);
+                await cmd.RunAsync();
+                return cmd.Result;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to get Jenkins Job '{jobName}'!", error);
+            }
+        }
+
+        /// <summary>
         /// Creates a new Job in Jenkins.
         /// </summary>
         /// <param name="jobName">The name of the Job to create.</param>

@@ -1,6 +1,6 @@
 ﻿using JenkinsNET.IntegrationTests.Internal;
+using JenkinsNET.Models;
 using NUnit.Framework;
-using System;
 using System.Threading.Tasks;
 
 namespace JenkinsNET.IntegrationTests
@@ -8,13 +8,16 @@ namespace JenkinsNET.IntegrationTests
     [TestFixture]
     public class CrumbTests
     {
-        private const string jobName = "Test Job";
-
-
         [Test]
         public async Task DeleteTest_WithoutCrumb()
         {
             var client = DefaultClient.Create();
+
+            var createJob = await client.Jobs.GetAsync("Test Job");
+
+            var deleteJob = new JenkinsJob(createJob.Node);
+
+            await client.Jobs.CreateAsync("Delete Job", deleteJob);
 
             await client.Jobs.DeleteAsync("Delete Job");
         }
@@ -25,6 +28,12 @@ namespace JenkinsNET.IntegrationTests
             var client = DefaultClient.Create();
 
             var crumb = await client.GetSecurityCrumbAsync();
+
+            var createJob = await client.Jobs.GetAsync("Test Job");
+
+            var deleteJob = new JenkinsJob(createJob.Node);
+
+            await client.Jobs.CreateAsync("Delete Job", deleteJob);
 
             await client.Jobs.DeleteAsync("Delete Job");
         }

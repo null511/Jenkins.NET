@@ -2,8 +2,8 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyVersion("0.2.2")]
-[assembly: AssemblyFileVersion("0.2.2")]
+[assembly: AssemblyVersion("0.2.3")]
+[assembly: AssemblyFileVersion("0.2.3")]
 [assembly: AssemblyTitle("Jenkins.NET")]
 [assembly: AssemblyDescription("C# .NET wrapper for Jenkins HTTP/REST API.")]
 [assembly: AssemblyConfiguration("")]

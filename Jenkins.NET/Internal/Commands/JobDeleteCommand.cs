@@ -19,6 +19,7 @@ namespace JenkinsNET.Internal.Commands
 
             OnWrite = request => {
                 request.Method = "POST";
+                request.ContentLength = 0;
             };
         }
     }

@@ -49,6 +49,7 @@
     <Compile Include="Internal\Commands\BuildProgressiveTextCommand.cs" />
     <Compile Include="Internal\Commands\BuildProgressiveHtmlCommand.cs" />
     <Compile Include="Internal\Commands\BuildOutputCommand.cs" />
+    <Compile Include="Internal\Commands\JobGetCommand.cs" />
     <Compile Include="Internal\Commands\JobCreateCommand.cs" />
     <Compile Include="Internal\Commands\JobDeleteCommand.cs" />
     <Compile Include="Internal\Commands\JobBuildWithParametersCommand.cs" />

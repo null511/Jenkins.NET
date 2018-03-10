@@ -12,7 +12,10 @@ namespace JenkinsNET.Internal.Commands
                 throw new ArgumentNullException(nameof(context));
 
             if (string.IsNullOrEmpty(jobName))
-                throw new ArgumentException("'jobName' cannot be empty!");
+                throw new ArgumentException("Value cannot be empty!", nameof(jobName));
+
+            if (job == null)
+                throw new ArgumentNullException(nameof(job));
 
             Url = NetPath.Combine(context.BaseUrl, "createItem")
                 + NetPath.Query(new {name = jobName});
@@ -23,8 +26,9 @@ namespace JenkinsNET.Internal.Commands
 
             OnWriteAsync = async request => {
                 request.Method = "POST";
+                request.ContentType = "application/xml";
 
-                var xmlSettings = new XmlWriterSettings() {
+                var xmlSettings = new XmlWriterSettings {
                     ConformanceLevel = ConformanceLevel.Fragment,
                     Indent = false,
                 };
