@@ -8,22 +8,25 @@ namespace JenkinsNET.Models
     /// </summary>
     public class JenkinsView
     {
-        private readonly XNode node;
+        /// <summary>
+        /// Gets the base XML node.
+        /// </summary>
+        public XNode Node {get;}
 
         /// <summary>
         /// The name of the Jenkins View.
         /// </summary>
-        public string Name => node?.TryGetValue<string>("name");
+        public string Name => Node?.TryGetValue<string>("name");
 
         /// <summary>
         /// The URL of the Jenkins View.
         /// </summary>
-        public string Url => node?.TryGetValue<string>("url");
+        public string Url => Node?.TryGetValue<string>("url");
 
 
         internal JenkinsView(XNode node)
         {
-            this.node = node;
+            this.Node = node;
         }
     }
 }

@@ -3,19 +3,38 @@ using System.Xml.Linq;
 
 namespace JenkinsNET.Models
 {
+    /// <summary>
+    /// Describes a Jenkins Cause.
+    /// Used to identify why a Jenkins Build was started.
+    /// </summary>
     public class JenkinsCause
     {
-        private readonly XNode node;
+        /// <summary>
+        /// Gets the base XML node.
+        /// </summary>
+        public XNode Node {get;}
 
-        public string Class => node?.TryGetValue<string>("@_class");
-        public string ShortDescription => node?.TryGetValue<string>("shortDescription");
-        public string UserId => node?.TryGetValue<string>("userId");
-        public string UserName => node?.TryGetValue<string>("userName");
+        public string Class => Node?.TryGetValue<string>("@_class");
+
+        /// <summary>
+        /// Gets the Short Description describing why the Build was started.
+        /// </summary>
+        public string ShortDescription => Node?.TryGetValue<string>("shortDescription");
+
+        /// <summary>
+        /// Gets the ID of the User that started the Build.
+        /// </summary>
+        public string UserId => Node?.TryGetValue<string>("userId");
+
+        /// <summary>
+        /// Gets the Name of the User that started the Build.
+        /// </summary>
+        public string UserName => Node?.TryGetValue<string>("userName");
 
 
         internal JenkinsCause(XNode node)
         {
-            this.node = node;
+            this.Node = node;
         }
     }
 }

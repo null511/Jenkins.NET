@@ -23,6 +23,7 @@ namespace JenkinsNET.Internal.Commands
             Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "logText/progressiveHtml");
             UserName = context.UserName;
             Password = context.Password;
+            Crumb = context.Crumb;
 
             OnWriteAsync = async (request) => {
                 request.Method = "POST";

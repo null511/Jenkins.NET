@@ -1,22 +1,26 @@
 ﻿using JenkinsNET.Internal;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace JenkinsNET.Models
 {
-    public class JenkinsAction
+    /// <summary>
+    /// Describes a Jenkins Crumb.
+    /// </summary>
+    public class JenkinsCrumb
     {
         /// <summary>
         /// Gets the base XML node.
         /// </summary>
         public XNode Node {get;}
 
-        public IEnumerable<JenkinsParameter> Parameters => Node.WrapGroup("parameter", n => new JenkinsParameter(n));
-
         public string Class => Node?.TryGetValue<string>("@_class");
 
+        public string Crumb => Node?.TryGetValue<string>("crumb");
 
-        internal JenkinsAction(XNode node)
+        public string CrumbRequestField => Node?.TryGetValue<string>("crumbRequestField");
+
+
+        internal JenkinsCrumb(XNode node)
         {
             this.Node = node;
         }

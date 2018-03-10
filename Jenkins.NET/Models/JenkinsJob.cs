@@ -6,31 +6,38 @@ namespace JenkinsNET.Models
     /// <summary>
     /// Describes a Jenkins Job.
     /// </summary>
-    public sealed class JenkinsJob
+    public class JenkinsJob
     {
-        private readonly XNode node;
+        /// <summary>
+        /// Gets the base XML node.
+        /// </summary>
+        public XNode Node {get;}
 
-        public string Class => node?.TryGetValue<string>("@_class");
+        public string Class => Node?.TryGetValue<string>("@_class");
 
         /// <summary>
         /// Gets the name of the Job.
         /// </summary>
-        public string Name => node?.TryGetValue<string>("name");
+        public string Name => Node?.TryGetValue<string>("name");
 
         /// <summary>
         /// Gets the full URL of the Job description.
         /// </summary>
-        public string Url => node?.TryGetValue<string>("url");
+        public string Url => Node?.TryGetValue<string>("url");
 
         /// <summary>
         /// Gets the status color of the Job.
         /// </summary>
-        public string Color => node?.TryGetValue<string>("color");
+        public string Color => Node?.TryGetValue<string>("color");
 
 
-        internal JenkinsJob(XNode node)
+        /// <summary>
+        /// Creates a new Job using the provided XML node.
+        /// </summary>
+        /// <param name="node">An XML node describing the Jenkins Job.</param>
+        public JenkinsJob(XNode node)
         {
-            this.node = node;
+            this.Node = node;
         }
     }
 }

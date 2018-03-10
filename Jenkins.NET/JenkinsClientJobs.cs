@@ -1,5 +1,6 @@
 ﻿using JenkinsNET.Exceptions;
 using JenkinsNET.Internal.Commands;
+using JenkinsNET.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -85,6 +86,36 @@ namespace JenkinsNET
             }
             catch (Exception error) {
                 throw new JenkinsJobBuildException($"Failed to build Jenkins Job '{jobName}'!", error);
+            }
+        }
+
+        /// <summary>
+        /// Creates a new Job in Jenkins.
+        /// </summary>
+        /// <param name="jobName">The name of the Job to create.</param>
+        /// <param name="job">The description of the Job to create.</param>
+        public void Create(string jobName, JenkinsJob job)
+        {
+            try {
+                new JobCreateCommand(context, jobName, job).Run();
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to create Jenkins Job '{jobName}'!", error);
+            }
+        }
+
+        /// <summary>
+        /// Creates a new Job in Jenkins asynchronously.
+        /// </summary>
+        /// <param name="jobName">The name of the Job to create.</param>
+        /// <param name="job">The description of the Job to create.</param>
+        public async Task CreateAsync(string jobName, JenkinsJob job)
+        {
+            try {
+                await new JobCreateCommand(context, jobName, job).RunAsync();
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to create Jenkins Job '{jobName}'!", error);
             }
         }
 

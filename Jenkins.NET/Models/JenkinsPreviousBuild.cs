@@ -8,22 +8,25 @@ namespace JenkinsNET.Models
     /// </summary>
     public sealed class JenkinsPreviousBuild
     {
-        private readonly XNode node;
+        /// <summary>
+        /// Gets the base XML node.
+        /// </summary>
+        public XNode Node {get;}
 
         /// <summary>
         /// The number of the Jenkins Build.
         /// </summary>
-        public int? Number => node?.TryGetValue<int?>("number");
+        public int? Number => Node?.TryGetValue<int?>("number");
 
         /// <summary>
         /// The URL of the Jenkins Build status.
         /// </summary>
-        public string Url => node?.TryGetValue<string>("url");
+        public string Url => Node?.TryGetValue<string>("url");
 
 
         internal JenkinsPreviousBuild(XNode node)
         {
-            this.node = node;
+            this.Node = node;
         }
     }
 }

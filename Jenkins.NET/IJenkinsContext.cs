@@ -1,4 +1,6 @@
-﻿namespace JenkinsNET
+﻿using JenkinsNET.Models;
+
+namespace JenkinsNET
 {
     /// <summary>
     /// Describes the context of a Jenkins.NET client.
@@ -20,5 +22,10 @@
         /// [optional] Jenkins Password.
         /// </summary>
         string Password {get;}
+
+        /// <summary>
+        /// [optional] Jenkins CSRF Crumb.
+        /// </summary>
+        JenkinsCrumb Crumb {get;}
     }
 }

@@ -2,14 +2,22 @@
 <package >
   <metadata>
     <id>jenkinsnet</id>
-    <version>$version$</version>
     <title>Jenkins.NET</title>
-    <authors>Joshua Miller</authors>
-    <owners>Joshua Miller</owners>
+    <version>$version$</version>
+    <authors>null511</authors>
     <projectUrl>http://github.com/null511/Jenkins.NET</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
-    <copyright>Copyright 2017</copyright>
-    <tags>jenkins</tags>
+    <summary>Jenkins HTTP/REST API wrapper.</summary>
+    <description>C# .NET wrapper for Jenkins HTTP/REST API.</description>
+    <copyright>Copyright 2018</copyright>
+    <tags>jenkins net automation</tags>
+    <releaseNotes>
+      0.2.2
+      - Add support for creating new Jobs.
+      - Expose underlying XML Node on all Jenkins class models.
+
+      0.2.1
+      - Add CSRF crumb support.
+    </releaseNotes>
   </metadata>
 </package>

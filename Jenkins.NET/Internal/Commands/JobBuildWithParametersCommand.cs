@@ -31,6 +31,7 @@ namespace JenkinsNET.Internal.Commands
             Url = NetPath.Combine(context.BaseUrl, "job", jobName, $"buildWithParameters?{query}");
             UserName = context.UserName;
             Password = context.Password;
+            Crumb = context.Crumb;
 
             OnWrite = request => {
                 request.Method = "POST";

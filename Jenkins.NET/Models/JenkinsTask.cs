@@ -3,19 +3,37 @@ using System.Xml.Linq;
 
 namespace JenkinsNET.Models
 {
+    /// <summary>
+    /// Describes a Jenkins Task.
+    /// </summary>
     public class JenkinsTask
     {
-        private readonly XNode node;
+        /// <summary>
+        /// Gets the base XML node.
+        /// </summary>
+        public XNode Node {get;}
 
-        public string Class => node?.TryGetValue<string>("@_class");
-        public string Name => node?.TryGetValue<string>("name");
-        public string Url => node?.TryGetValue<string>("url");
-        public string Color => node?.TryGetValue<string>("color");
+        public string Class => Node?.TryGetValue<string>("@_class");
+
+        /// <summary>
+        /// Gets the Name of the Task.
+        /// </summary>
+        public string Name => Node?.TryGetValue<string>("name");
+
+        /// <summary>
+        /// Gets the URL of the Task.
+        /// </summary>
+        public string Url => Node?.TryGetValue<string>("url");
+
+        /// <summary>
+        /// Gets the Color used when displaying the Task.
+        /// </summary>
+        public string Color => Node?.TryGetValue<string>("color");
 
 
         internal JenkinsTask(XNode node)
         {
-            this.node = node;
+            this.Node = node;
         }
     }
 }

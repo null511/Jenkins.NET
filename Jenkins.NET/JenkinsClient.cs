@@ -1,4 +1,8 @@
-﻿using System;
+﻿using JenkinsNET.Exceptions;
+using JenkinsNET.Internal.Commands;
+using JenkinsNET.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace JenkinsNET
 {
@@ -22,6 +26,11 @@ namespace JenkinsNET
         /// [optional] Jenkins ApiToken for the <see cref="UserName"/>.
         /// </summary>
         public string ApiToken {get; set;}
+
+        /// <summary>
+        /// Gets or sets the security Crumb to use on API requests.
+        /// </summary>
+        public JenkinsCrumb Crumb {get; set;}
 
         /// <summary>
         /// [optional] Jenkins Password.
@@ -62,6 +71,34 @@ namespace JenkinsNET
             Builds = new JenkinsClientBuilds(this);
             Queue = new JenkinsClientQueue(this);
             Artifacts = new JenkinsClientArtifacts(this);
+        }
+
+        public JenkinsCrumb GetSecurityCrumb()
+        {
+            try {
+                var cmd = new CrumbGetCommand(this);
+                cmd.Run();
+                var crumbResult = cmd.Result;
+                Crumb = crumbResult;
+                return crumbResult;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException("Failed to retrieve crumb!", error);
+            }
+        }
+
+        public async Task<JenkinsCrumb> GetSecurityCrumbAsync()
+        {
+            try {
+                var cmd = new CrumbGetCommand(this);
+                await cmd.RunAsync();
+                var crumbResult = cmd.Result;
+                Crumb = crumbResult;
+                return crumbResult;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException("Failed to retrieve crumb!", error);
+            }
         }
     }
 }

@@ -8,18 +8,30 @@ namespace JenkinsNET.Models
     /// </summary>
     public sealed class JenkinsArtifact
     {
-        private readonly XNode node;
+        /// <summary>
+        /// Gets the base XML node.
+        /// </summary>
+        public XNode Node {get;}
 
-        public string DisplayPath => node?.TryGetValue<string>("displayPath");
+        /// <summary>
+        /// Gets the Display Path of the Jenkins Artifact.
+        /// </summary>
+        public string DisplayPath => Node?.TryGetValue<string>("displayPath");
 
-        public string RelativePath => node?.TryGetValue<string>("relativePath");
+        /// <summary>
+        /// Gets the Relative Path of the Jenkins Artifact.
+        /// </summary>
+        public string RelativePath => Node?.TryGetValue<string>("relativePath");
 
-        public string FileName => node?.TryGetValue<string>("fileName");
+        /// <summary>
+        /// Gets the File Name of the Jenkins Artifact.
+        /// </summary>
+        public string FileName => Node?.TryGetValue<string>("fileName");
 
 
         internal JenkinsArtifact(XNode node)
         {
-            this.node = node;
+            this.Node = node;
         }
     }
 }

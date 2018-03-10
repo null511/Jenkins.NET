@@ -9,46 +9,68 @@ namespace JenkinsNET.Models
     /// </summary>
     public class Jenkins
     {
-        private readonly XNode node;
+        /// <summary>
+        /// Gets the base XML node.
+        /// </summary>
+        public XNode Node {get;}
 
         /// <summary>
         /// Gets a collection of all Jobs available on the Jenkins instance.
         /// </summary>
-        public IEnumerable<JenkinsJob> Jobs => node.WrapGroup("job", n => new JenkinsJob(n));
+        public IEnumerable<JenkinsJob> Jobs => Node.WrapGroup("job", n => new JenkinsJob(n));
 
         /// <summary>
         /// Gets a collection of all Views available on the Jenkins instance.
         /// </summary>
-        public IEnumerable<JenkinsView> Views => node.WrapGroup("view", n => new JenkinsView(n));
+        public IEnumerable<JenkinsView> Views => Node.WrapGroup("view", n => new JenkinsView(n));
 
-        public string Class => node?.TryGetValue<string>("@_class");
+        public string Class => Node?.TryGetValue<string>("@_class");
 
-        public string Mode => node?.TryGetValue<string>("mode");
+        /// <summary>
+        /// Gets the Mode of the Jenkins instance.
+        /// See <see cref="JenkinsMode"/>.
+        /// </summary>
+        public string Mode => Node?.TryGetValue<string>("mode");
 
-        public string NodeName => node?.TryGetValue<string>("nodeName");
+        /// <summary>
+        /// Gets the name of the Jenkins node.
+        /// </summary>
+        public string NodeName => Node?.TryGetValue<string>("nodeName");
 
-        public string NodeDescription => node?.TryGetValue<string>("nodeDescription");
+        /// <summary>
+        /// Gets the description of the Jenkins node.
+        /// </summary>
+        public string NodeDescription => Node?.TryGetValue<string>("nodeDescription");
 
         /// <summary>
         /// Gets the number of available executors on the Jenkins instance.
         /// </summary>
-        public int? NumExecutors => node?.TryGetValue<int?>("numExecutors");
+        public int? NumExecutors => Node?.TryGetValue<int?>("numExecutors");
 
-        public bool? QuietingDown => node?.TryGetValue<bool?>("quietingDown");
+        /// <summary>
+        /// Gets whether the Jenkins instance is in 'Quiet Down' mode.
+        /// </summary>
+        public bool? QuietingDown => Node?.TryGetValue<bool?>("quietingDown");
 
-        public int? SlaveAgentPort => node?.TryGetValue<int?>("slaveAgentPort");
+        /// <summary>
+        /// Gets the port number used for Slave Agents on the Jenkins instance.
+        /// </summary>
+        public int? SlaveAgentPort => Node?.TryGetValue<int?>("slaveAgentPort");
 
-        public bool? UseCrumbs => node?.TryGetValue<bool?>("useCrumbs");
+        /// <summary>
+        /// Gets whether Crumb Validation is enabled on the Jenkins instance.
+        /// </summary>
+        public bool? UseCrumbs => Node?.TryGetValue<bool?>("useCrumbs");
 
         /// <summary>
         /// Gets whether security is enabled on the Jenkins instance.
         /// </summary>
-        public bool? UseSecurity => node?.TryGetValue<bool?>("useSecurity");
+        public bool? UseSecurity => Node?.TryGetValue<bool?>("useSecurity");
 
 
         internal Jenkins(XNode node)
         {
-            this.node = node;
+            this.Node = node;
         }
     }
 }

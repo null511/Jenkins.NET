@@ -4,29 +4,22 @@ using System.Xml.Linq;
 
 namespace JenkinsNET.Internal.Commands
 {
-    internal class BuildGetCommand : JenkinsHttpCommand
+    internal class CrumbGetCommand : JenkinsHttpCommand
     {
-        public JenkinsBuild Result {get; private set;}
+        public JenkinsCrumb Result {get; private set;}
 
 
-        public BuildGetCommand(IJenkinsContext context, string jobName, string buildNumber)
+        public CrumbGetCommand(IJenkinsContext context)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            if (string.IsNullOrEmpty(jobName))
-                throw new ArgumentException("'jobName' cannot be empty!");
-
-            if (string.IsNullOrEmpty(buildNumber))
-                throw new ArgumentException("'buildNumber' cannot be empty!");
-
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "api/xml");
+            Url = NetPath.Combine(context.BaseUrl, "crumbIssuer/api/xml");
             UserName = context.UserName;
             Password = context.Password;
-            Crumb = context.Crumb;
 
             OnWrite = request => {
-                request.Method = "POST";
+                request.Method = "GET";
             };
 
             OnRead = response => {
@@ -36,7 +29,7 @@ namespace JenkinsNET.Internal.Commands
                     var document = XDocument.Load(stream);
                     if (document.Root == null) throw new ApplicationException("An empty response was returned!");
 
-                    Result = new JenkinsBuild(document.Root);
+                    Result = new JenkinsCrumb(document.Root);
                 }
             };
         }

@@ -47,6 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientTests.cs" />
+    <Compile Include="CrumbTests.cs" />
+    <Compile Include="Internal\DefaultClient.cs" />
+    <Compile Include="Internal\DefaultRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

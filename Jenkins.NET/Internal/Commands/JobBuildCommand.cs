@@ -18,6 +18,7 @@ namespace JenkinsNET.Internal.Commands
             Url = NetPath.Combine(context.BaseUrl, "job", jobName, "build?delay=0sec");
             UserName = context.UserName;
             Password = context.Password;
+            Crumb = context.Crumb;
 
             OnWrite = request => {
                 request.Method = "POST";

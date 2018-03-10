@@ -45,9 +45,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildNumber.cs" />
+    <Compile Include="Internal\Commands\CrumbGetCommand.cs" />
     <Compile Include="Internal\Commands\BuildProgressiveTextCommand.cs" />
     <Compile Include="Internal\Commands\BuildProgressiveHtmlCommand.cs" />
     <Compile Include="Internal\Commands\BuildOutputCommand.cs" />
+    <Compile Include="Internal\Commands\JobCreateCommand.cs" />
     <Compile Include="Internal\Commands\JobDeleteCommand.cs" />
     <Compile Include="Internal\Commands\JobBuildWithParametersCommand.cs" />
     <Compile Include="Internal\Commands\BuildGetCommand.cs" />
@@ -62,6 +64,9 @@
     <Compile Include="Exceptions\JenkinsJobBuildException.cs" />
     <Compile Include="IJenkinsContext.cs" />
     <Compile Include="Internal\JenkinsHttpCommand.cs" />
+    <Compile Include="Models\JenkinsBallColor.cs" />
+    <Compile Include="Models\JenkinsCrumb.cs" />
+    <Compile Include="Models\JenkinsMode.cs" />
     <Compile Include="Models\JenkinsProgressiveTextResponse.cs" />
     <Compile Include="Models\JenkinsProgressiveHtmlResponse.cs" />
     <Compile Include="Internal\NetPath.cs" />

@@ -22,6 +22,7 @@ namespace JenkinsNET.Internal.Commands
             Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "consoleText");
             UserName = context.UserName;
             Password = context.Password;
+            Crumb = context.Crumb;
 
             OnReadAsync = async response => {
                 using (var stream = response.GetResponseStream()) {

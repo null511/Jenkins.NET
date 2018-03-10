@@ -5,16 +5,21 @@ namespace JenkinsNET.Models
 {
     public class JenkinsExecutable
     {
-        private readonly XNode node;
+        /// <summary>
+        /// Gets the base XML node.
+        /// </summary>
+        public XNode Node {get;}
 
-        public string Class => node?.TryGetValue<string>("@_class");
-        public int? Number => node?.TryGetValue<int?>("number");
-        public string Url => node?.TryGetValue<string>("url");
+        public string Class => Node?.TryGetValue<string>("@_class");
+
+        public int? Number => Node?.TryGetValue<int?>("number");
+
+        public string Url => Node?.TryGetValue<string>("url");
 
 
         internal JenkinsExecutable(XNode node)
         {
-            this.node = node;
+            this.Node = node;
         }
     }
 }
