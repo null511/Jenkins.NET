@@ -14,8 +14,14 @@ namespace JenkinsNET.Models
         /// </summary>
         public XNode Node {get;}
 
+        /// <summary>
+        /// Gets the full Java class name.
+        /// </summary>
         public string Class => Node?.TryGetValue<string>("@_class");
 
+        /// <summary>
+        /// Gets the unique ID of the Build.
+        /// </summary>
         public int? Id => Node?.TryGetValue<int?>("id");
 
         /// <summary>

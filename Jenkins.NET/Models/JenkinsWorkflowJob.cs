@@ -9,6 +9,9 @@ namespace JenkinsNET.Models
     /// </summary>
     public class JenkinsWorkflowJob : JenkinsJobBase
     {
+        /// <summary>
+        /// Gets the Job Description.
+        /// </summary>
         public string Description => Node?.TryGetValue<string>("description");
 
         public bool? Buildable => Node?.TryGetValue<bool?>("buildable");

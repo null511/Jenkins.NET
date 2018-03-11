@@ -20,6 +20,9 @@ namespace JenkinsNET.Models
 
         public JenkinsExecutable Executable => Node.Wrap("executable", n => new JenkinsExecutable(n));
 
+        /// <summary>
+        /// Gets the full Java class name.
+        /// </summary>
         public string Class => Node?.TryGetValue<string>("@_class");
 
         public int? Id => Node?.TryGetValue<int?>("id");

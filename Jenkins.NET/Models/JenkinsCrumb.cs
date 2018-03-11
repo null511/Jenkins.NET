@@ -13,10 +13,19 @@ namespace JenkinsNET.Models
         /// </summary>
         public XNode Node {get;}
 
+        /// <summary>
+        /// Gets the full Java class name.
+        /// </summary>
         public string Class => Node?.TryGetValue<string>("@_class");
 
+        /// <summary>
+        /// Gets the security crumb token.
+        /// </summary>
         public string Crumb => Node?.TryGetValue<string>("crumb");
 
+        /// <summary>
+        /// Gets the name of the HTTP request header to be used when sending crumbs.
+        /// </summary>
         public string CrumbRequestField => Node?.TryGetValue<string>("crumbRequestField");
 
 
