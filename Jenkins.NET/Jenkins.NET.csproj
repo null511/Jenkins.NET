@@ -23,6 +23,8 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <DocumentationFile>bin\Debug\Jenkins.NET.XML</DocumentationFile>
+    <NoWarn>
+    </NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -72,6 +74,7 @@
     <Compile Include="Models\IJenkinsBuild.cs" />
     <Compile Include="Models\JenkinsBuildDescription.cs" />
     <Compile Include="Models\JenkinsCrumb.cs" />
+    <Compile Include="Models\IJenkinsJob.cs" />
     <Compile Include="Models\JenkinsJobBase.cs" />
     <Compile Include="Models\JenkinsProperty.cs" />
     <Compile Include="Models\JenkinsOrganizationFolder.cs" />

@@ -93,7 +93,7 @@ namespace JenkinsNET
         /// Gets a Job description from Jenkins.
         /// </summary>
         /// <param name="jobName">The Name of the Job to retrieve.</param>
-        public T Get<T>(string jobName) where T : JenkinsJobBase
+        public T Get<T>(string jobName) where T : class, IJenkinsJob
         {
             try {
                 var cmd = new JobGetCommand<T>(context, jobName);
@@ -109,7 +109,7 @@ namespace JenkinsNET
         /// Gets a Job description from Jenkins asynchronously.
         /// </summary>
         /// <param name="jobName">The Name of the Job to retrieve.</param>
-        public async Task<T> GetAsync<T>(string jobName) where T : JenkinsJobBase
+        public async Task<T> GetAsync<T>(string jobName) where T : class, IJenkinsJob
         {
             try {
                 var cmd = new JobGetCommand<T>(context, jobName);

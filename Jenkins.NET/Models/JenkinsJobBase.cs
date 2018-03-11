@@ -7,7 +7,7 @@ namespace JenkinsNET.Models
     /// <summary>
     /// Describes the base of a Jenkins Job.
     /// </summary>
-    public class JenkinsJobBase
+    public class JenkinsJobBase : IJenkinsJob
     {
         /// <summary>
         /// Gets the base XML node.

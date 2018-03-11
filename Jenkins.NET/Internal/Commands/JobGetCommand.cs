@@ -3,7 +3,7 @@ using System;
 
 namespace JenkinsNET.Internal.Commands
 {
-    internal class JobGetCommand<T> : JenkinsHttpCommand where T : JenkinsJobBase
+    internal class JobGetCommand<T> : JenkinsHttpCommand where T : class, IJenkinsJob
     {
         public T Result {get; private set;}
 
