@@ -6,8 +6,6 @@ Visit the [Wiki](https://github.com/null511/Jenkins.NET/wiki) for Code Examples.
 
 -----
 
-# API Summary
-
 ## JenkinsClient
 - **Get** - Returns the description of the Jenkins node.
 
