@@ -7,7 +7,7 @@ namespace JenkinsNET.Models
     /// <summary>
     /// Describes a Jenkins build.
     /// </summary>
-    public sealed class JenkinsBuild
+    public class JenkinsBuildBase : IJenkinsBuild
     {
         /// <summary>
         /// Gets the base XML node.
@@ -15,45 +15,14 @@ namespace JenkinsNET.Models
         public XNode Node {get;}
 
         /// <summary>
-        /// Gets a collection of actions attached to the Jenkins Job Build.
+        /// Gets the full Java class name.
         /// </summary>
-        public IEnumerable<JenkinsAction> Actions => Node.WrapGroup("action", n => new JenkinsAction(n));
-
-        /// <summary>
-        /// Gets a collection of artifacts attached to the Jenkins Job Build.
-        /// </summary>
-        public IEnumerable<JenkinsArtifact> Artifacts => Node.WrapGroup("artifact", n => new JenkinsArtifact(n));
-
-        /// <summary>
-        /// Gets the previously run Build of the Jenkins Job, if any.
-        /// </summary>
-        public JenkinsPreviousBuild PreviousBuild => Node.Wrap("previousBuild", n => new JenkinsPreviousBuild(n));
-
         public string Class => Node?.TryGetValue<string>("@_class");
 
+        /// <summary>
+        /// Gets the unique ID of the Build.
+        /// </summary>
         public int? Id => Node?.TryGetValue<int?>("id");
-
-        /// <summary>
-        /// Gets the Number of the Jenkins Build.
-        /// </summary>
-        public int? Number => Node?.TryGetValue<int?>("number");
-
-        /// <summary>
-        /// Gets the Queue ID of the Jenkins Build.
-        /// </summary>
-        public int? QueueId => Node?.TryGetValue<int?>("queueId");
-
-        public bool? KeepLog => Node?.TryGetValue<bool?>("keepLog");
-
-        /// <summary>
-        /// Gets whether the Jenkins Build is currently in-progress.
-        /// </summary>
-        public bool? Building => Node?.TryGetValue<bool?>("building");
-
-        /// <summary>
-        /// Gets the URL of the Jenkins Build.
-        /// </summary>
-        public string Url => Node?.TryGetValue<string>("url");
 
         /// <summary>
         /// Gets the Display Name of the Jenkins Build.
@@ -66,9 +35,36 @@ namespace JenkinsNET.Models
         public string FullDisplayName => Node?.TryGetValue<string>("fullDisplayName");
 
         /// <summary>
-        /// Gets the result of the Jenkins Build.
+        /// Gets the Number of the Jenkins Build.
         /// </summary>
-        public string Result => Node?.TryGetValue<string>("result");
+        public int? Number => Node?.TryGetValue<int?>("number");
+
+        /// <summary>
+        /// Gets the Queue ID of the Jenkins Build.
+        /// </summary>
+        public int? QueueId => Node?.TryGetValue<int?>("queueId");
+
+        /// <summary>
+        /// Gets the URL of the Jenkins Build.
+        /// </summary>
+        public string Url => Node?.TryGetValue<string>("url");
+
+        /// <summary>
+        /// Gets a collection of actions attached to the Jenkins Job Build.
+        /// </summary>
+        public IEnumerable<JenkinsAction> Actions => Node?.WrapGroup("action", n => new JenkinsAction(n));
+
+        /// <summary>
+        /// Gets a collection of artifacts attached to the Jenkins Job Build.
+        /// </summary>
+        public IEnumerable<JenkinsArtifact> Artifacts => Node?.WrapGroup("artifact", n => new JenkinsArtifact(n));
+
+        public bool? KeepLog => Node?.TryGetValue<bool?>("keepLog");
+
+        /// <summary>
+        /// Gets whether the Jenkins Build is currently in-progress.
+        /// </summary>
+        public bool? Building => Node?.TryGetValue<bool?>("building");
 
         /// <summary>
         /// Gets the duration of the Jenkins Build, in milliseconds.
@@ -85,8 +81,13 @@ namespace JenkinsNET.Models
         /// </summary>
         public long? TimeStamp => Node?.TryGetValue<long?>("timestamp");
 
+        /// <summary>
+        /// Gets the result of the Jenkins Build.
+        /// </summary>
+        public string Result => Node?.TryGetValue<string>("result");
 
-        internal JenkinsBuild(XNode node)
+
+        public JenkinsBuildBase(XNode node)
         {
             this.Node = node;
         }

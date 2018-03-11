@@ -4,6 +4,9 @@ using System.Xml.Linq;
 
 namespace JenkinsNET.Models
 {
+    /// <summary>
+    /// Describes a Jenkins Action.
+    /// </summary>
     public class JenkinsAction
     {
         /// <summary>
@@ -11,9 +14,12 @@ namespace JenkinsNET.Models
         /// </summary>
         public XNode Node {get;}
 
-        public IEnumerable<JenkinsParameter> Parameters => Node.WrapGroup("parameter", n => new JenkinsParameter(n));
-
+        /// <summary>
+        /// Gets the full Java class name.
+        /// </summary>
         public string Class => Node?.TryGetValue<string>("@_class");
+
+        public IEnumerable<JenkinsParameter> Parameters => Node.WrapGroup("parameter", n => new JenkinsParameter(n));
 
 
         internal JenkinsAction(XNode node)

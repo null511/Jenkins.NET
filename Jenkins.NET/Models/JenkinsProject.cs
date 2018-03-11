@@ -4,15 +4,18 @@ using System.Xml.Linq;
 namespace JenkinsNET.Models
 {
     /// <summary>
-    /// Describes a Jenkins Job.
+    /// Describes a Jenkins Project.
     /// </summary>
-    public class JenkinsJob
+    public class JenkinsProject
     {
         /// <summary>
         /// Gets the base XML node.
         /// </summary>
         public XNode Node {get;}
 
+        /// <summary>
+        /// Gets the full Java class name.
+        /// </summary>
         public string Class => Node?.TryGetValue<string>("@_class");
 
         /// <summary>
@@ -35,7 +38,7 @@ namespace JenkinsNET.Models
         /// Creates a new Job using the provided XML node.
         /// </summary>
         /// <param name="node">An XML node describing the Jenkins Job.</param>
-        public JenkinsJob(XNode node)
+        public JenkinsProject(XNode node)
         {
             this.Node = node;
         }

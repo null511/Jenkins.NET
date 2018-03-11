@@ -73,31 +73,63 @@ namespace JenkinsNET
             Artifacts = new JenkinsClientArtifacts(this);
         }
 
-        public JenkinsCrumb GetSecurityCrumb()
+        /// <summary>
+        /// Updates the security Crumb attached to this client.
+        /// </summary>
+        public void UpdateSecurityCrumb()
         {
             try {
                 var cmd = new CrumbGetCommand(this);
                 cmd.Run();
-                var crumbResult = cmd.Result;
-                Crumb = crumbResult;
-                return crumbResult;
+                Crumb = cmd.Result;
             }
             catch (Exception error) {
                 throw new JenkinsNetException("Failed to retrieve crumb!", error);
             }
         }
 
-        public async Task<JenkinsCrumb> GetSecurityCrumbAsync()
+        /// <summary>
+        /// Updates the security Crumb attached to this client asynchronously.
+        /// </summary>
+        public async Task UpdateSecurityCrumbAsync()
         {
             try {
                 var cmd = new CrumbGetCommand(this);
                 await cmd.RunAsync();
-                var crumbResult = cmd.Result;
-                Crumb = crumbResult;
-                return crumbResult;
+                Crumb = cmd.Result;
             }
             catch (Exception error) {
                 throw new JenkinsNetException("Failed to retrieve crumb!", error);
+            }
+        }
+
+        /// <summary>
+        /// Gets the root description of the Jenkins node.
+        /// </summary>
+        public Jenkins Get()
+        {
+            try {
+                var cmd = new JenkinsGetCommand(this);
+                cmd.Run();
+                return cmd.Result;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException("Failed to retrieve Jenkins description!", error);
+            }
+        }
+
+        /// <summary>
+        /// Gets the root description of the Jenkins node asynchronously.
+        /// </summary>
+        public async Task<Jenkins> GetAsync()
+        {
+            try {
+                var cmd = new JenkinsGetCommand(this);
+                await cmd.RunAsync();
+                return cmd.Result;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException("Failed to retrieve Jenkins description!", error);
             }
         }
     }

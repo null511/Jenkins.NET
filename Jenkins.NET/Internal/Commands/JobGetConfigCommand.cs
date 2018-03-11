@@ -3,12 +3,12 @@ using System;
 
 namespace JenkinsNET.Internal.Commands
 {
-    internal class JobGetCommand<T> : JenkinsHttpCommand where T : class, IJenkinsJob
+    internal class JobGetConfigCommand : JenkinsHttpCommand
     {
-        public T Result {get; private set;}
+        public JenkinsProject Result {get; private set;}
 
 
-        public JobGetCommand(IJenkinsContext context, string jobName)
+        public JobGetConfigCommand(IJenkinsContext context, string jobName)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -16,7 +16,7 @@ namespace JenkinsNET.Internal.Commands
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("Value cannot be empty!", nameof(jobName));
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "api/xml");
+            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "config.xml");
 
             UserName = context.UserName;
             Password = context.Password;
@@ -28,8 +28,7 @@ namespace JenkinsNET.Internal.Commands
 
             OnReadAsync = async response => {
                 var document = await ReadXmlAsync(response);
-
-                Result = Activator.CreateInstance(typeof(T), new[] {document.Root}) as T;
+                Result = new JenkinsProject(document.Root);
             };
         }
     }

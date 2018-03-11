@@ -15,16 +15,19 @@ namespace JenkinsNET.Models
         public XNode Node {get;}
 
         /// <summary>
+        /// Gets the full Java class name.
+        /// </summary>
+        public string Class => Node?.TryGetValue<string>("@_class");
+
+        /// <summary>
         /// Gets a collection of all Jobs available on the Jenkins instance.
         /// </summary>
-        public IEnumerable<JenkinsJob> Jobs => Node.WrapGroup("job", n => new JenkinsJob(n));
+        public IEnumerable<JenkinsProject> Jobs => Node.WrapGroup("job", n => new JenkinsProject(n));
 
         /// <summary>
         /// Gets a collection of all Views available on the Jenkins instance.
         /// </summary>
         public IEnumerable<JenkinsView> Views => Node.WrapGroup("view", n => new JenkinsView(n));
-
-        public string Class => Node?.TryGetValue<string>("@_class");
 
         /// <summary>
         /// Gets the Mode of the Jenkins instance.
