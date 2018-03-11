@@ -93,10 +93,10 @@ namespace JenkinsNET
         /// Gets a Job description from Jenkins.
         /// </summary>
         /// <param name="jobName">The Name of the Job to retrieve.</param>
-        public JenkinsJob Get(string jobName)
+        public T Get<T>(string jobName) where T : JenkinsJobBase
         {
             try {
-                var cmd = new JobGetCommand(context, jobName);
+                var cmd = new JobGetCommand<T>(context, jobName);
                 cmd.Run();
                 return cmd.Result;
             }
@@ -109,10 +109,10 @@ namespace JenkinsNET
         /// Gets a Job description from Jenkins asynchronously.
         /// </summary>
         /// <param name="jobName">The Name of the Job to retrieve.</param>
-        public async Task<JenkinsJob> GetAsync(string jobName)
+        public async Task<T> GetAsync<T>(string jobName) where T : JenkinsJobBase
         {
             try {
-                var cmd = new JobGetCommand(context, jobName);
+                var cmd = new JobGetCommand<T>(context, jobName);
                 await cmd.RunAsync();
                 return cmd.Result;
             }
@@ -122,11 +122,43 @@ namespace JenkinsNET
         }
 
         /// <summary>
+        /// Gets a Job configuration from Jenkins.
+        /// </summary>
+        /// <param name="jobName">The Name of the Job to retrieve.</param>
+        public JenkinsProject GetConfiguration(string jobName)
+        {
+            try {
+                var cmd = new JobGetConfigCommand(context, jobName);
+                cmd.Run();
+                return cmd.Result;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to get Jenkins Job Configuration '{jobName}'!", error);
+            }
+        }
+
+        /// <summary>
+        /// Gets a Job configuration from Jenkins asynchronously.
+        /// </summary>
+        /// <param name="jobName">The Name of the Job to retrieve.</param>
+        public async Task<JenkinsProject> GetConfigurationAsync(string jobName)
+        {
+            try {
+                var cmd = new JobGetConfigCommand(context, jobName);
+                await cmd.RunAsync();
+                return cmd.Result;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to get Jenkins Job Configuration '{jobName}'!", error);
+            }
+        }
+
+        /// <summary>
         /// Creates a new Job in Jenkins.
         /// </summary>
         /// <param name="jobName">The name of the Job to create.</param>
         /// <param name="job">The description of the Job to create.</param>
-        public void Create(string jobName, JenkinsJob job)
+        public void Create(string jobName, JenkinsProject job)
         {
             try {
                 new JobCreateCommand(context, jobName, job).Run();
@@ -141,13 +173,43 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job to create.</param>
         /// <param name="job">The description of the Job to create.</param>
-        public async Task CreateAsync(string jobName, JenkinsJob job)
+        public async Task CreateAsync(string jobName, JenkinsProject job)
         {
             try {
                 await new JobCreateCommand(context, jobName, job).RunAsync();
             }
             catch (Exception error) {
                 throw new JenkinsNetException($"Failed to create Jenkins Job '{jobName}'!", error);
+            }
+        }
+
+        /// <summary>
+        /// Updates the configuration on an existing Job in Jenkins.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        /// <param name="job">The updated description of the Job.</param>
+        public void UpdateConfiguration(string jobName, JenkinsProject job)
+        {
+            try {
+                new JobUpdateConfigurationCommand(context, jobName, job).Run();
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to update Jenkins Job configuration '{jobName}'!", error);
+            }
+        }
+
+        /// <summary>
+        /// Updates the configuration on an existing Job in Jenkins asynchronously.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        /// <param name="job">The updated description of the Job.</param>
+        public async Task UpdateConfigurationAsync(string jobName, JenkinsProject job)
+        {
+            try {
+                await new JobUpdateConfigurationCommand(context, jobName, job).RunAsync();
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to update Jenkins Job configuration '{jobName}'!", error);
             }
         }
 

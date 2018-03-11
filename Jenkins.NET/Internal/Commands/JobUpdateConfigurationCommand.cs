@@ -4,9 +4,9 @@ using System.Xml;
 
 namespace JenkinsNET.Internal.Commands
 {
-    internal class JobCreateCommand : JenkinsHttpCommand
+    internal class JobUpdateConfigurationCommand : JenkinsHttpCommand
     {
-        public JobCreateCommand(IJenkinsContext context, string jobName, JenkinsProject job)
+        public JobUpdateConfigurationCommand(IJenkinsContext context, string jobName, JenkinsProject job)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -17,8 +17,7 @@ namespace JenkinsNET.Internal.Commands
             if (job == null)
                 throw new ArgumentNullException(nameof(job));
 
-            Url = NetPath.Combine(context.BaseUrl, "createItem")
-                + NetPath.Query(new {name = jobName});
+            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "config.xml");
 
             UserName = context.UserName;
             Password = context.Password;

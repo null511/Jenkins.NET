@@ -1,6 +1,7 @@
 ﻿using JenkinsNET.IntegrationTests.Internal;
 using JenkinsNET.Models;
 using NUnit.Framework;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace JenkinsNET.IntegrationTests
@@ -13,11 +14,7 @@ namespace JenkinsNET.IntegrationTests
         {
             var client = DefaultClient.Create();
 
-            var createJob = await client.Jobs.GetAsync("Test Job");
-
-            var deleteJob = new JenkinsJob(createJob.Node);
-
-            await client.Jobs.CreateAsync("Delete Job", deleteJob);
+            await SetupDeleteJob(client);
 
             await client.Jobs.DeleteAsync("Delete Job");
         }
@@ -27,15 +24,25 @@ namespace JenkinsNET.IntegrationTests
         {
             var client = DefaultClient.Create();
 
-            var crumb = await client.GetSecurityCrumbAsync();
+            await client.UpdateSecurityCrumbAsync();
 
-            var createJob = await client.Jobs.GetAsync("Test Job");
-
-            var deleteJob = new JenkinsJob(createJob.Node);
-
-            await client.Jobs.CreateAsync("Delete Job", deleteJob);
+            await SetupDeleteJob(client);
 
             await client.Jobs.DeleteAsync("Delete Job");
+        }
+
+        private async Task SetupDeleteJob(JenkinsClient client)
+        {
+            var jenkins = await client.GetAsync();
+
+            if (jenkins.Jobs.Any(x => string.Equals(x.Name, "Delete Job", System.StringComparison.OrdinalIgnoreCase)))
+                return;
+
+            var createJob = await client.Jobs.GetConfigurationAsync("Test Job");
+
+            var deleteJob = new JenkinsProject(createJob.Node);
+
+            await client.Jobs.CreateAsync("Delete Job", deleteJob);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using JenkinsNET.IntegrationTests.Internal;
+using JenkinsNET.Models;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
@@ -10,6 +11,22 @@ namespace JenkinsNET.IntegrationTests
     {
         private const string jobName = "Test Job";
 
+
+        [Test]
+        public async Task ListAllJobsAsync()
+        {
+            var client = DefaultClient.Create();
+
+            var jenkins = await client.GetAsync();
+
+            foreach (var job in jenkins.Jobs) {
+                TestContext.Out.WriteLine($"{job.Name} [{job.Class}]");
+
+                var jobBase = await client.Jobs.GetAsync<JenkinsJobBase>(job.Name);
+                TestContext.Out.WriteLine($"  {jobBase.FullDisplayName}");
+                TestContext.Out.WriteLine($"  {jobBase.Url}");
+            }
+        }
 
         [Test]
         public void Run()

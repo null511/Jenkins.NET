@@ -1,12 +1,11 @@
 ﻿using JenkinsNET.Models;
 using System;
-using System.Xml.Linq;
 
 namespace JenkinsNET.Internal.Commands
 {
-    internal class BuildGetCommand : JenkinsHttpCommand
+    internal class BuildGetCommand<T> : JenkinsHttpCommand where T : class, IJenkinsBuild
     {
-        public JenkinsBuild Result {get; private set;}
+        public T Result {get; private set;}
 
 
         public BuildGetCommand(IJenkinsContext context, string jobName, string buildNumber)
@@ -29,15 +28,11 @@ namespace JenkinsNET.Internal.Commands
                 request.Method = "POST";
             };
 
-            OnRead = response => {
-                using (var stream = response.GetResponseStream()) {
-                    if (stream == null) return;
+            OnReadAsync = async response => {
+                var document = await ReadXmlAsync(response);
 
-                    var document = XDocument.Load(stream);
-                    if (document.Root == null) throw new ApplicationException("An empty response was returned!");
-
-                    Result = new JenkinsBuild(document.Root);
-                }
+                var args = new object[] {document.Root};
+                Result = Activator.CreateInstance(typeof(T), args) as T;
             };
         }
     }

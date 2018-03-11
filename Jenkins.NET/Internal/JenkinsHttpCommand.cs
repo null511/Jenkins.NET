@@ -1,8 +1,12 @@
 ﻿using JenkinsNET.Models;
 using System;
+using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace JenkinsNET.Internal
 {
@@ -68,6 +72,34 @@ namespace JenkinsNET.Internal
             }
 
             return request;
+        }
+
+        protected async Task<XDocument> ReadXmlAsync(HttpWebResponse response)
+        {
+            string xml;
+            using (var stream = response.GetResponseStream())
+            using (var reader = new StreamReader(stream)) {
+                xml = await reader.ReadToEndAsync();
+            }
+
+            // Remove Decleration
+            var pattern = @"<\?xml[^\>]*\?>";
+            xml = Regex.Replace(xml, pattern, string.Empty);
+
+            return XDocument.Parse(xml);
+        }
+
+        protected async Task WriteXmlAsync(HttpWebRequest request, XNode node)
+        {
+            var xmlSettings = new XmlWriterSettings {
+                ConformanceLevel = ConformanceLevel.Fragment,
+                Indent = false,
+            };
+
+            using (var stream = await request.GetRequestStreamAsync())
+            using (var writer = XmlWriter.Create(stream, xmlSettings)) {
+                node.WriteTo(writer);
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using JenkinsNET.Exceptions;
-using JenkinsNET.Internal;
 using JenkinsNET.Internal.Commands;
 using JenkinsNET.Models;
 using System;
@@ -28,10 +27,10 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
-        public JenkinsBuild Get(string jobName, string buildNumber)
+        public T Get<T>(string jobName, string buildNumber) where T : class, IJenkinsBuild
         {
             try {
-                var cmd = new BuildGetCommand(context, jobName, buildNumber);
+                var cmd = new BuildGetCommand<T>(context, jobName, buildNumber);
                 cmd.RunAsync().GetAwaiter().GetResult();
                 return cmd.Result;
             }
@@ -45,10 +44,10 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
-        public async Task<JenkinsBuild> GetAsync(string jobName, string buildNumber)
+        public async Task<T> GetAsync<T>(string jobName, string buildNumber) where T : class, IJenkinsBuild
         {
             try {
-                var cmd = new BuildGetCommand(context, jobName, buildNumber);
+                var cmd = new BuildGetCommand<T>(context, jobName, buildNumber);
                 await cmd.RunAsync();
                 return cmd.Result;
             }
@@ -62,9 +61,9 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         [Obsolete("This method will be removed in future versions; please use `Get(BuildNumber.LastSuccessful)`.")]
-        public JenkinsBuild GetLastSuccessful(string jobName)
+        public T GetLastSuccessful<T>(string jobName) where T : class, IJenkinsBuild
         {
-            return Get(jobName, BuildNumber.LastSuccessful);
+            return Get<T>(jobName, BuildNumber.LastSuccessful);
         }
 
         /// <summary>
@@ -72,9 +71,9 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         [Obsolete("This method will be removed in future versions; please use `GetAsync(BuildNumber.LastSuccessful)`.")]
-        public async Task<JenkinsBuild> GetLastSuccessfulAsync(string jobName)
+        public async Task<T> GetLastSuccessfulAsync<T>(string jobName) where T : class, IJenkinsBuild
         {
-            return await GetAsync(jobName, BuildNumber.LastSuccessful);
+            return await GetAsync<T>(jobName, BuildNumber.LastSuccessful);
         }
 
         /// <summary>
