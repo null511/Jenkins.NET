@@ -6,29 +6,28 @@ C# .NET wrapper for Jenkins HTTP/REST API. Supports asynchronous programming mod
 Visit the [Wiki](https://github.com/null511/Jenkins.NET/wiki) for Code Examples.
 
 
-API
-======
+# API
 
-## Jenkins
-- Get
+## JenkinsClient
+- **Get** - Returns the description of the Jenkins node.
 
-## Jobs
-- Build
-- BuildWithParameters
-- Get
-- GetConfiguration
-- UpdateConfiguration
-- Create
-- Delete
+## JenkinsClient.Jobs
+- **Build** - Queues a Job to be built.
+- **BuildWithParameters** - Queues a Job to be built with parameters.
+- **Get** - Returns the description of a Job.
+- **GetConfiguration** - Returns the configuration of the Job.
+- **UpdateConfiguration** - Updates the configuration of an existing Job.
+- **Create** - Creates a new Job using the provided Job configuration.
+- **Delete** - Deletes an existing Job.
 
-## Builds
-- Get
-- GetConsoleOutput
-- GetProgressiveText
-- GetProgressiveHtml
+## JenkinsClient.Builds
+- **Get** - Returns a Build description.
+- **GetConsoleOutput** - Returns the console output of a Build. _May be truncated_.
+- **GetProgressiveText** - Returns the progressive text output of a Build, starting from the specified index.
+- **GetProgressiveHtml** - Returns the progressive HTML output of a Build, starting from the specified index.
 
 ## Queue
-- GetItem
+- **GetItem** - Returns a Queue item representing a pending Build.
 
 ## Artifacts
-- Get
+- **Get** - Returns an Artifact from a specified Build.
