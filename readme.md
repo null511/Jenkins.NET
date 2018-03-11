@@ -1,12 +1,12 @@
-Jenkins.NET
-===========
+## Jenkins.NET
 
 C# .NET wrapper for Jenkins HTTP/REST API. Supports asynchronous programming model. Package available on [NuGet](https://www.nuget.org/packages/jenkinsnet).
 
 Visit the [Wiki](https://github.com/null511/Jenkins.NET/wiki) for Code Examples.
 
+-----
 
-# API
+# API Summary
 
 ## JenkinsClient
 - **Get** - Returns the description of the Jenkins node.
@@ -26,8 +26,8 @@ Visit the [Wiki](https://github.com/null511/Jenkins.NET/wiki) for Code Examples.
 - **GetProgressiveText** - Returns the progressive text output of a Build, starting from the specified index.
 - **GetProgressiveHtml** - Returns the progressive HTML output of a Build, starting from the specified index.
 
-## Queue
+## JenkinsClient.Queue
 - **GetItem** - Returns a Queue item representing a pending Build.
 
-## Artifacts
+## JenkinsClient.Artifacts
 - **Get** - Returns an Artifact from a specified Build.
