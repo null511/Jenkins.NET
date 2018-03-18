@@ -74,6 +74,14 @@ namespace JenkinsNET
         }
 
         /// <summary>
+        /// Creates a new Jenkins Client using the provided BaseUrl.
+        /// </summary>
+        public JenkinsClient(string baseUrl) : this()
+        {
+            this.BaseUrl = baseUrl;
+        }
+
+        /// <summary>
         /// Updates the security Crumb attached to this client.
         /// </summary>
         public void UpdateSecurityCrumb()

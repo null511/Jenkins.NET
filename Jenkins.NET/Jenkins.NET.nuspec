@@ -6,7 +6,8 @@
     <version>$version$</version>
     <authors>null511</authors>
     <projectUrl>http://github.com/null511/Jenkins.NET</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>https://raw.githubusercontent.com/null511/Jenkins.NET/master/LICENSE</licenseUrl>
     <summary>Jenkins HTTP/REST API wrapper.</summary>
     <description>C# .NET wrapper for Jenkins HTTP/REST API.</description>
     <copyright>Copyright 2018</copyright>
