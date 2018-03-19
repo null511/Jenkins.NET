@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace JenkinsNET.IntegrationTests.Internal
+namespace JenkinsNET.Tests.Internal
 {
     internal static class DefaultRunner
     {

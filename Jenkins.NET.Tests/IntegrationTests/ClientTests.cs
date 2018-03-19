@@ -1,12 +1,12 @@
-﻿using JenkinsNET.IntegrationTests.Internal;
-using JenkinsNET.Models;
+﻿using JenkinsNET.Models;
+using JenkinsNET.Tests.Internal;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
 
-namespace JenkinsNET.IntegrationTests
+namespace JenkinsNET.Tests.IntegrationTests
 {
-    [TestFixture]
+    [TestFixture, Category("integration")]
     public class ClientTests
     {
         private const string jobName = "Test Job";

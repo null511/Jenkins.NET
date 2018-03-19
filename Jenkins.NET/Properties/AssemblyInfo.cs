@@ -16,5 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("c77bd3bc-08ab-4026-89a9-ce3666ec8647")]
 [assembly: ComVisible(false)]
 
-[assembly: InternalsVisibleTo("Jenkins.NET.UnitTests")]
-[assembly: InternalsVisibleTo("Jenkins.NET.IntegrationTests")]
+[assembly: InternalsVisibleTo("Jenkins.NET.Tests")]

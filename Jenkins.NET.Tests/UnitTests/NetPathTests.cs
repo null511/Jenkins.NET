@@ -1,9 +1,9 @@
 ﻿using JenkinsNET.Internal;
 using NUnit.Framework;
 
-namespace JenkinsNET.UnitTests
+namespace JenkinsNET.Tests.UnitTests
 {
-    [TestFixture]
+    [TestFixture, Category("unit")]
     public class NetPathTests
     {
         [Test]

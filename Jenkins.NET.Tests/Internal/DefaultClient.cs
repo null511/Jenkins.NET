@@ -1,4 +1,4 @@
-﻿namespace JenkinsNET.IntegrationTests.Internal
+﻿namespace JenkinsNET.Tests.Internal
 {
     internal static class DefaultClient
     {
