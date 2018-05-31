@@ -1,0 +1,8 @@
+{
+  "project": "jenkins.net",
+	"refspec": "master",
+	"task": "Build_Win",
+	"roles": [
+		"build"
+	]
+}
