@@ -53,6 +53,7 @@ namespace Jenkins.NET.Publishing
                 PackageDirectory = Path.Combine(Context.WorkDirectory, "Packages"),
                 //Configuration = "Release",
                 //Platform = "AnyCPU",
+                Version = "*",
                 PackProperties = {
                     ["configuration"] = "Release",
                     ["platform"] = "AnyCPU",
