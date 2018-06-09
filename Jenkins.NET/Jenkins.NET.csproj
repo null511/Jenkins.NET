@@ -60,6 +60,7 @@
     <Compile Include="Internal\Commands\JobBuildWithParametersCommand.cs" />
     <Compile Include="Internal\Commands\BuildGetCommand.cs" />
     <Compile Include="Internal\Commands\ArtifactGetCommand.cs" />
+    <Compile Include="Internal\Commands\QueueItemListCommand.cs" />
     <Compile Include="Internal\Commands\QueueGetItemCommand.cs" />
     <Compile Include="Internal\Commands\JobBuildCommand.cs" />
     <Compile Include="Exceptions\JenkinsNetException.cs" />

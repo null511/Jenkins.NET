@@ -2,10 +2,11 @@
 
 namespace JenkinsNET.Exceptions
 {
+    /// <inheritdoc />
     /// <summary>
-    /// Base-Class for all Jenkins.Net exceptions.
+    /// Base class for all Jenkins.Net exceptions.
     /// </summary>
-    public class JenkinsNetException : ApplicationException
+    public class JenkinsNetException : Exception
     {
         internal JenkinsNetException(string message) : base(message) {}
         internal JenkinsNetException(string message, Exception innerException) : base(message, innerException) {}

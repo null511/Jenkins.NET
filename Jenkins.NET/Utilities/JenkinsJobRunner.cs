@@ -87,6 +87,9 @@ namespace JenkinsNET.Utilities
         /// Run the Job.
         /// </summary>
         /// <param name="jobName">The name of the Job to run.</param>
+        /// <exception cref="JenkinsNetException"></exception>
+        /// <exception cref="JenkinsJobBuildException"></exception>
+        /// <exception cref="JenkinsJobGetBuildException"></exception>
         public JenkinsBuildBase Run(string jobName)
         {
             if (isJobStarted) throw new JenkinsNetException("This JobRunner instance has already been started! Separate JenkinsJobRunner instances are required to run multiple jobs.");
@@ -107,6 +110,9 @@ namespace JenkinsNET.Utilities
         /// Run the Job asynchronously.
         /// </summary>
         /// <param name="jobName">The name of the Job to run.</param>
+        /// <exception cref="JenkinsNetException"></exception>
+        /// <exception cref="JenkinsJobBuildException"></exception>
+        /// <exception cref="JenkinsJobGetBuildException"></exception>
         public async Task<JenkinsBuildBase> RunAsync(string jobName)
         {
             if (isJobStarted) throw new JenkinsNetException("This JobRunner instance has already been started! Separate JenkinsJobRunner instances are required to run multiple jobs.");
@@ -128,6 +134,9 @@ namespace JenkinsNET.Utilities
         /// </summary>
         /// <param name="jobName">The name of the Job to run.</param>
         /// <param name="jobParameters">The parameters used to start the Job.</param>
+        /// <exception cref="JenkinsNetException"></exception>
+        /// <exception cref="JenkinsJobBuildException"></exception>
+        /// <exception cref="JenkinsJobGetBuildException"></exception>
         public JenkinsBuildBase RunWithParameters(string jobName, IDictionary<string, string> jobParameters)
         {
             if (isJobStarted) throw new JenkinsNetException("This JobRunner instance has already been started! Separate JenkinsJobRunner instances are required to run multiple jobs.");
@@ -149,6 +158,9 @@ namespace JenkinsNET.Utilities
         /// </summary>
         /// <param name="jobName">The name of the Job to run.</param>
         /// <param name="jobParameters">The parameters used to start the Job.</param>
+        /// <exception cref="JenkinsNetException"></exception>
+        /// <exception cref="JenkinsJobBuildException"></exception>
+        /// <exception cref="JenkinsJobGetBuildException"></exception>
         public async Task<JenkinsBuildBase> RunWithParametersAsync(string jobName, IDictionary<string, string> jobParameters)
         {
             if (isJobStarted) throw new JenkinsNetException("This JobRunner instance has already been started! Separate JenkinsJobRunner instances are required to run multiple jobs.");
@@ -165,6 +177,9 @@ namespace JenkinsNET.Utilities
             return await ProcessAsync(jobName, buildResult, queueStartTime);
         }
 
+        /// <exception cref="JenkinsNetException"></exception>
+        /// <exception cref="JenkinsJobBuildException"></exception>
+        /// <exception cref="JenkinsJobGetBuildException"></exception>
         private JenkinsBuildBase Process(string jobName, JenkinsBuildResult buildResult, DateTime queueStartTime)
         {
             var queueItemNumber = buildResult.GetQueueItemNumber();
@@ -172,8 +187,8 @@ namespace JenkinsNET.Utilities
 
             SetStatus(JenkinsJobStatus.Queued);
 
-            int? buildNumber = null;
-            while (!buildNumber.HasValue) {
+            int? buildNumber;
+            while (true) {
                 var queueItem = client.Queue.GetItem(queueItemNumber.Value);
                 buildNumber = queueItem?.Executable?.Number;
                 if (buildNumber.HasValue) break;
@@ -212,6 +227,9 @@ namespace JenkinsNET.Utilities
             return buildItem;
         }
 
+        /// <exception cref="JenkinsNetException"></exception>
+        /// <exception cref="JenkinsJobBuildException"></exception>
+        /// <exception cref="JenkinsJobGetBuildException"></exception>
         private async Task<JenkinsBuildBase> ProcessAsync(string jobName, JenkinsBuildResult buildResult, DateTime queueStartTime)
         {
             var queueItemNumber = buildResult.GetQueueItemNumber();
@@ -219,8 +237,8 @@ namespace JenkinsNET.Utilities
 
             SetStatus(JenkinsJobStatus.Queued);
 
-            int? buildNumber = null;
-            while (!buildNumber.HasValue) {
+            int? buildNumber;
+            while (true) {
                 var queueItem = await client.Queue.GetItemAsync(queueItemNumber.Value);
                 buildNumber = queueItem?.Executable?.Number;
                 if (buildNumber.HasValue) break;

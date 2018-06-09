@@ -23,9 +23,26 @@ namespace JenkinsNET
         }
 
         /// <summary>
+        /// Retrieves all items from the Job-Queue.
+        /// </summary>
+        /// <exception cref="JenkinsNetException"></exception>
+        public JenkinsQueueItem[] GetAllItems()
+        {
+            try {
+                var cmd = new QueueItemListCommand(context);
+                cmd.Run();
+                return cmd.Result;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException("Failed to retrieve queue item list!", error);
+            }
+        }
+
+        /// <summary>
         /// Retrieves an item from the Job-Queue.
         /// </summary>
         /// <param name="itemNumber">The ID of the queue-item.</param>
+        /// <exception cref="JenkinsJobBuildException"></exception>
         public JenkinsQueueItem GetItem(int itemNumber)
         {
             try {
@@ -42,6 +59,7 @@ namespace JenkinsNET
         /// Retrieves an item from the Job-Queue.
         /// </summary>
         /// <param name="itemNumber">The ID of the queue-item.</param>
+        /// <exception cref="JenkinsJobBuildException"></exception>
         public async Task<JenkinsQueueItem> GetItemAsync(int itemNumber)
         {
             try {

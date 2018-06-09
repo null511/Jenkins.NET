@@ -27,6 +27,7 @@ namespace JenkinsNET
         /// Enqueues a Job to be built.
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
+        /// <exception cref="JenkinsJobBuildException"></exception>
         public JenkinsBuildResult Build(string jobName)
         {
             try {
@@ -43,6 +44,7 @@ namespace JenkinsNET
         /// Enqueues a Job to be built.
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
+        /// <exception cref="JenkinsJobBuildException"></exception>
         public async Task<JenkinsBuildResult> BuildAsync(string jobName)
         {
             try {
@@ -60,6 +62,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="jobParameters">The collection of parameters for building the job.</param>
+        /// <exception cref="JenkinsJobBuildException"></exception>
         public JenkinsBuildResult BuildWithParameters(string jobName, IDictionary<string, string> jobParameters)
         {
             try {
@@ -77,6 +80,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="jobParameters">The collection of parameters for building the job.</param>
+        /// <exception cref="JenkinsJobBuildException"></exception>
         public async Task<JenkinsBuildResult> BuildWithParametersAsync(string jobName, IDictionary<string, string> jobParameters)
         {
             try {
@@ -93,6 +97,7 @@ namespace JenkinsNET
         /// Gets a Job description from Jenkins.
         /// </summary>
         /// <param name="jobName">The Name of the Job to retrieve.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public T Get<T>(string jobName) where T : class, IJenkinsJob
         {
             try {
@@ -109,6 +114,7 @@ namespace JenkinsNET
         /// Gets a Job description from Jenkins asynchronously.
         /// </summary>
         /// <param name="jobName">The Name of the Job to retrieve.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public async Task<T> GetAsync<T>(string jobName) where T : class, IJenkinsJob
         {
             try {
@@ -125,6 +131,7 @@ namespace JenkinsNET
         /// Gets a Job configuration from Jenkins.
         /// </summary>
         /// <param name="jobName">The Name of the Job to retrieve.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public JenkinsProject GetConfiguration(string jobName)
         {
             try {
@@ -141,6 +148,7 @@ namespace JenkinsNET
         /// Gets a Job configuration from Jenkins asynchronously.
         /// </summary>
         /// <param name="jobName">The Name of the Job to retrieve.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public async Task<JenkinsProject> GetConfigurationAsync(string jobName)
         {
             try {
@@ -158,6 +166,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job to create.</param>
         /// <param name="job">The description of the Job to create.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public void Create(string jobName, JenkinsProject job)
         {
             try {
@@ -173,6 +182,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job to create.</param>
         /// <param name="job">The description of the Job to create.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public async Task CreateAsync(string jobName, JenkinsProject job)
         {
             try {
@@ -188,6 +198,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="job">The updated description of the Job.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public void UpdateConfiguration(string jobName, JenkinsProject job)
         {
             try {
@@ -203,6 +214,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="job">The updated description of the Job.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public async Task UpdateConfigurationAsync(string jobName, JenkinsProject job)
         {
             try {
@@ -217,6 +229,7 @@ namespace JenkinsNET
         /// Deletes a Job from Jenkins.
         /// </summary>
         /// <param name="jobName">The name of the Job to delete.</param>
+        /// <exception cref="JenkinsJobDeleteException"></exception>
         public void Delete(string jobName)
         {
             try {
@@ -231,6 +244,7 @@ namespace JenkinsNET
         /// Deletes a Job from Jenkins asynchronously.
         /// </summary>
         /// <param name="jobName">The name of the Job to delete.</param>
+        /// <exception cref="JenkinsJobDeleteException"></exception>
         public async Task DeleteAsync(string jobName)
         {
             try {

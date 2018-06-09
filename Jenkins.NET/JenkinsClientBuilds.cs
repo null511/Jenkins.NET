@@ -27,6 +27,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
+        /// <exception cref="JenkinsJobGetBuildException"></exception>
         public T Get<T>(string jobName, string buildNumber) where T : class, IJenkinsBuild
         {
             try {
@@ -44,6 +45,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
+        /// <exception cref="JenkinsJobGetBuildException"></exception>
         public async Task<T> GetAsync<T>(string jobName, string buildNumber) where T : class, IJenkinsBuild
         {
             try {
@@ -57,30 +59,11 @@ namespace JenkinsNET
         }
 
         /// <summary>
-        /// Gets information describing the last successful Build of a Jenkins Job.
-        /// </summary>
-        /// <param name="jobName">The name of the Job.</param>
-        [Obsolete("This method will be removed in future versions; please use `Get(BuildNumber.LastSuccessful)`.")]
-        public T GetLastSuccessful<T>(string jobName) where T : class, IJenkinsBuild
-        {
-            return Get<T>(jobName, BuildNumber.LastSuccessful);
-        }
-
-        /// <summary>
-        /// Gets information describing the last successful Build of a Jenkins Job asynchronously.
-        /// </summary>
-        /// <param name="jobName">The name of the Job.</param>
-        [Obsolete("This method will be removed in future versions; please use `GetAsync(BuildNumber.LastSuccessful)`.")]
-        public async Task<T> GetLastSuccessfulAsync<T>(string jobName) where T : class, IJenkinsBuild
-        {
-            return await GetAsync<T>(jobName, BuildNumber.LastSuccessful);
-        }
-
-        /// <summary>
         /// Gets the console output from a Jenkins Job Build.
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public string GetConsoleOutput(string jobName, string buildNumber)
         {
             try {
@@ -98,6 +81,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public async Task<string> GetConsoleOutputAsync(string jobName, string buildNumber)
         {
             try {
@@ -116,6 +100,7 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
         /// <param name="start">The character position to begin reading from.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public JenkinsProgressiveTextResponse GetProgressiveText(string jobName, string buildNumber, int start)
         {
             try {
@@ -134,6 +119,7 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
         /// <param name="start">The character position to begin reading from.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public async Task<JenkinsProgressiveTextResponse> GetProgressiveTextAsync(string jobName, string buildNumber, int start)
         {
             try {
@@ -152,6 +138,7 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
         /// <param name="start">The character position to begin reading from.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public JenkinsProgressiveHtmlResponse GetProgressiveHtml(string jobName, string buildNumber, int start)
         {
             try {
@@ -170,6 +157,7 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
         /// <param name="start">The character position to begin reading from.</param>
+        /// <exception cref="JenkinsNetException"></exception>
         public async Task<JenkinsProgressiveHtmlResponse> GetProgressiveHtmlAsync(string jobName, string buildNumber, int start)
         {
             try {

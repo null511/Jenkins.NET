@@ -29,6 +29,7 @@ namespace JenkinsNET
         /// <param name="buildNumber">The build number of the Job.</param>
         /// <param name="filename">The relative path and file name of the artifact.</param>
         /// <returns>A memory-stream containing the contents of the artifact.</returns>
+        /// <exception cref="JenkinsArtifactGetException"></exception>
         public MemoryStream Get(string jobName, string buildNumber, string filename)
         {
             try {
@@ -48,6 +49,7 @@ namespace JenkinsNET
         /// <param name="buildNumber">The build number of the Job.</param>
         /// <param name="filename">The relative path and file name of the artifact.</param>
         /// <returns>A memory-stream containing the contents of the artifact.</returns>
+        /// <exception cref="JenkinsArtifactGetException"></exception>
         public async Task<MemoryStream> GetAsync(string jobName, string buildNumber, string filename)
         {
             try {

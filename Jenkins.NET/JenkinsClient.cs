@@ -84,6 +84,7 @@ namespace JenkinsNET
         /// <summary>
         /// Updates the security Crumb attached to this client.
         /// </summary>
+        /// <exception cref="JenkinsNetException"></exception>
         public void UpdateSecurityCrumb()
         {
             try {
@@ -99,6 +100,7 @@ namespace JenkinsNET
         /// <summary>
         /// Updates the security Crumb attached to this client asynchronously.
         /// </summary>
+        /// <exception cref="JenkinsNetException"></exception>
         public async Task UpdateSecurityCrumbAsync()
         {
             try {
@@ -114,6 +116,7 @@ namespace JenkinsNET
         /// <summary>
         /// Gets the root description of the Jenkins node.
         /// </summary>
+        /// <exception cref="JenkinsNetException"></exception>
         public Jenkins Get()
         {
             try {
@@ -129,6 +132,7 @@ namespace JenkinsNET
         /// <summary>
         /// Gets the root description of the Jenkins node asynchronously.
         /// </summary>
+        /// <exception cref="JenkinsNetException"></exception>
         public async Task<Jenkins> GetAsync()
         {
             try {
