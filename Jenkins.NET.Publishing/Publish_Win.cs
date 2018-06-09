@@ -35,26 +35,28 @@ namespace Jenkins.NET.Publishing
 
         private async Task PublishPackage(CancellationToken token)
         {
+            var apiKey = Context.ServerVariables["global"]["nuget.apiKey"];
+
             var nugetTool = new NuGetPackagePublisher(Context) {
                 Mode = NugetModes.Hybrid,
                 Client = new NuGetCore {
                     EnableV3 = true,
                     Output = Context.Output,
-                    ApiKey = "?",
+                    ApiKey = apiKey,
                 },
                 CL = new NuGetCommandLine {
                     ExeFilename = Path.Combine(Context.ContentDirectory, "bin", "NuGet.exe"),
                     Output = Context.Output,
                 },
                 PackageId = "Jenkins.NET",
-                PackageDefinition = Path.Combine(Context.ContentDirectory, "Jenkins.NET", "Jenkins.NET.nuspec"),
+                PackageDefinition = Path.Combine(Context.ContentDirectory, "Jenkins.NET", "Jenkins.NET.csproj"),
                 PackageDirectory = Path.Combine(Context.WorkDirectory, "Packages"),
                 //Configuration = "Release",
                 //Platform = "AnyCPU",
                 PackProperties = {
                     ["configuration"] = "Release",
                     ["platform"] = "AnyCPU",
-                }
+                },
             };
 
             nugetTool.Client.Initialize();
