@@ -5,6 +5,7 @@ using Photon.NuGetPlugin;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Photon.Framework.Tools;
 
 namespace Jenkins.NET.Publishing
 {
@@ -35,6 +36,9 @@ namespace Jenkins.NET.Publishing
 
         private async Task PublishPackage(CancellationToken token)
         {
+            var assemblyFilename = Path.Combine(Context.ContentDirectory, "Jenkins.NET", "bin", "Release", "Jenkins.NET.dll");
+            var version = AssemblyTools.GetVersion(assemblyFilename);
+
             var apiKey = Context.ServerVariables["global"]["nuget.apiKey"];
 
             var nugetTool = new NuGetPackagePublisher(Context) {
@@ -53,7 +57,7 @@ namespace Jenkins.NET.Publishing
                 PackageDirectory = Path.Combine(Context.WorkDirectory, "Packages"),
                 //Configuration = "Release",
                 //Platform = "AnyCPU",
-                Version = "*",
+                Version = version,
                 PackProperties = {
                     ["configuration"] = "Release",
                     ["platform"] = "AnyCPU",
