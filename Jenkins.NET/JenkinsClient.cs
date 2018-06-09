@@ -2,6 +2,7 @@
 using JenkinsNET.Internal.Commands;
 using JenkinsNET.Models;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace JenkinsNET
@@ -100,12 +101,13 @@ namespace JenkinsNET
         /// <summary>
         /// Updates the security Crumb attached to this client asynchronously.
         /// </summary>
+        /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task UpdateSecurityCrumbAsync()
+        public async Task UpdateSecurityCrumbAsync(CancellationToken token = default(CancellationToken))
         {
             try {
                 var cmd = new CrumbGetCommand(this);
-                await cmd.RunAsync();
+                await cmd.RunAsync(token);
                 Crumb = cmd.Result;
             }
             catch (Exception error) {
@@ -132,12 +134,13 @@ namespace JenkinsNET
         /// <summary>
         /// Gets the root description of the Jenkins node asynchronously.
         /// </summary>
+        /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<Jenkins> GetAsync()
+        public async Task<Jenkins> GetAsync(CancellationToken token = default(CancellationToken))
         {
             try {
                 var cmd = new JenkinsGetCommand(this);
-                await cmd.RunAsync();
+                await cmd.RunAsync(token);
                 return cmd.Result;
             }
             catch (Exception error) {

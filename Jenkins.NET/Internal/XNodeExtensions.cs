@@ -40,7 +40,7 @@ namespace JenkinsNET.Internal
         {
             return parentNode
                 .XPathSelectElements(expression)
-                .Select(n => wrapFunc(n));
+                .Select(wrapFunc);
         }
 
         private static string GetNodeValue(object node)
@@ -50,10 +50,16 @@ namespace JenkinsNET.Internal
                     .Cast<object>()
                     .FirstOrDefault();
 
-            if (node == null) return null;
-            if (node is XElement) return (node as XElement).Value;
-            if (node is XAttribute) return (node as XAttribute).Value;
-            throw new ApplicationException($"Unable to retrieve value from node of type '{node.GetType().Name}'!");
+            switch (node) {
+                case null:
+                    return null;
+                case XElement _e:
+                    return _e.Value;
+                case XAttribute _a:
+                    return _a.Value;
+                default:
+                    throw new ApplicationException($"Unable to retrieve value from node of type '{node.GetType().Name}'!");
+            }
         }
     }
 }

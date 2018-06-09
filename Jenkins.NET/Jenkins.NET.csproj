@@ -71,6 +71,7 @@
     <Compile Include="Exceptions\JenkinsJobBuildException.cs" />
     <Compile Include="IJenkinsContext.cs" />
     <Compile Include="Internal\JenkinsHttpCommand.cs" />
+    <Compile Include="Internal\StreamExtensions.cs" />
     <Compile Include="Models\JenkinsBallColor.cs" />
     <Compile Include="Models\IJenkinsBuild.cs" />
     <Compile Include="Models\JenkinsBuildDescription.cs" />

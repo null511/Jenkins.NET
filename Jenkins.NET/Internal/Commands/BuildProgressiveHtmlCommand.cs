@@ -1,6 +1,7 @@
 ﻿using JenkinsNET.Models;
 using System;
 using System.IO;
+using System.Text;
 
 namespace JenkinsNET.Internal.Commands
 {
@@ -25,7 +26,7 @@ namespace JenkinsNET.Internal.Commands
             Password = context.Password;
             Crumb = context.Crumb;
 
-            OnWriteAsync = async (request) => {
+            OnWriteAsync = async (request, token) => {
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
@@ -35,7 +36,7 @@ namespace JenkinsNET.Internal.Commands
                 }
             };
 
-            OnReadAsync = async response => {
+            OnReadAsync = async (response, token) => {
                 var hSize = response.Headers["X-Text-Size"];
                 var hMoreData = response.Headers["X-More-Data"];
 
@@ -52,9 +53,8 @@ namespace JenkinsNET.Internal.Commands
                 using (var stream = response.GetResponseStream()) {
                     if (stream == null) return;
 
-                    using (var reader = new StreamReader(stream)) {
-                        Result.Html = await reader.ReadToEndAsync();
-                    }
+                    var encoding = TryGetEncoding(response.ContentEncoding, Encoding.UTF8);
+                    Result.Html = await stream.ReadToEndAsync(encoding, token);
                 }
             };
         }

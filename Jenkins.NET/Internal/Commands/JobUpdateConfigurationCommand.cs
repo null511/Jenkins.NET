@@ -23,10 +23,10 @@ namespace JenkinsNET.Internal.Commands
             Password = context.Password;
             Crumb = context.Crumb;
 
-            OnWriteAsync = async request => {
+            OnWriteAsync = async (request, token) => {
                 request.Method = "POST";
                 request.ContentType = "application/xml";
-                await WriteXmlAsync(request, job.Node);
+                await WriteXmlAsync(request, job.Node, token);
             };
         }
     }

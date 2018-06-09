@@ -28,7 +28,7 @@ namespace JenkinsNET.Internal.Commands
                 request.Method = "POST";
             };
 
-            OnReadAsync = async response => {
+            OnReadAsync = async (response, token) => {
                 var document = await ReadXmlAsync(response);
 
                 var args = new object[] {document.Root};

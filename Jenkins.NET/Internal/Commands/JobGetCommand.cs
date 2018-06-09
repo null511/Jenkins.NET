@@ -26,10 +26,10 @@ namespace JenkinsNET.Internal.Commands
                 request.Method = "GET";
             };
 
-            OnReadAsync = async response => {
+            OnReadAsync = async (response, token) => {
                 var document = await ReadXmlAsync(response);
 
-                Result = Activator.CreateInstance(typeof(T), new[] {document.Root}) as T;
+                Result = Activator.CreateInstance(typeof(T), document.Root) as T;
             };
         }
     }

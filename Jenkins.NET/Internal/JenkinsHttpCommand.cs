@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -18,8 +19,8 @@ namespace JenkinsNET.Internal
         public JenkinsCrumb Crumb {get; set;}
         public Action<HttpWebRequest> OnWrite {get; set;}
         public Action<HttpWebResponse> OnRead {get; set;}
-        public Func<HttpWebRequest, Task> OnWriteAsync {get; set;}
-        public Func<HttpWebResponse, Task> OnReadAsync {get; set;}
+        public Func<HttpWebRequest, CancellationToken, Task> OnWriteAsync {get; set;}
+        public Func<HttpWebResponse, CancellationToken, Task> OnReadAsync {get; set;}
 
 
         public void Run()
@@ -27,24 +28,27 @@ namespace JenkinsNET.Internal
             var request = CreateRequest();
 
             if (OnWrite != null) OnWrite.Invoke(request);
-            else if (OnWriteAsync != null) OnWriteAsync.Invoke(request).GetAwaiter().GetResult();
+            else OnWriteAsync?.Invoke(request, CancellationToken.None).GetAwaiter().GetResult();
 
             using (var response = (HttpWebResponse)request.GetResponse()) {
                 if (OnRead != null) OnRead?.Invoke(response);
-                else if (OnReadAsync != null) OnReadAsync.Invoke(response).GetAwaiter().GetResult();
+                else OnReadAsync?.Invoke(response, CancellationToken.None).GetAwaiter().GetResult();
             }
         }
 
-        public async Task RunAsync()
+        public async Task RunAsync(CancellationToken token = default(CancellationToken))
         {
             var request = CreateRequest();
 
-            if (OnWriteAsync != null) await OnWriteAsync.Invoke(request);
-            else if (OnWrite != null) OnWrite.Invoke(request);
+            if (OnWriteAsync != null) await OnWriteAsync.Invoke(request, token);
+            else OnWrite?.Invoke(request);
 
+            using (token.Register(() => request.Abort(), false))
             using (var response = (HttpWebResponse)await request.GetResponseAsync()) {
-                if (OnReadAsync != null) await OnReadAsync.Invoke(response);
-                else if (OnRead != null) OnRead?.Invoke(response);
+                token.ThrowIfCancellationRequested();
+
+                if (OnReadAsync != null) await OnReadAsync.Invoke(response, token);
+                else OnRead?.Invoke(response);
             }
         }
 
@@ -77,9 +81,12 @@ namespace JenkinsNET.Internal
         protected async Task<XDocument> ReadXmlAsync(HttpWebResponse response)
         {
             string xml;
-            using (var stream = response.GetResponseStream())
-            using (var reader = new StreamReader(stream)) {
-                xml = await reader.ReadToEndAsync();
+            using (var stream = response.GetResponseStream()) {
+                if (stream == null) return null;
+
+                using (var reader = new StreamReader(stream)) {
+                    xml = await reader.ReadToEndAsync();
+                }
             }
 
             // Remove Decleration
@@ -89,16 +96,29 @@ namespace JenkinsNET.Internal
             return XDocument.Parse(xml);
         }
 
-        protected async Task WriteXmlAsync(HttpWebRequest request, XNode node)
+        protected async Task WriteXmlAsync(HttpWebRequest request, XNode node, CancellationToken token = default(CancellationToken))
         {
             var xmlSettings = new XmlWriterSettings {
                 ConformanceLevel = ConformanceLevel.Fragment,
                 Indent = false,
             };
 
+            using (token.Register(request.Abort, false))
             using (var stream = await request.GetRequestStreamAsync())
             using (var writer = XmlWriter.Create(stream, xmlSettings)) {
+                token.ThrowIfCancellationRequested();
+
                 node.WriteTo(writer);
+            }
+        }
+
+        protected static Encoding TryGetEncoding(string name, Encoding fallback)
+        {
+            try {
+                return Encoding.GetEncoding(name);
+            }
+            catch {
+                return fallback;
             }
         }
     }

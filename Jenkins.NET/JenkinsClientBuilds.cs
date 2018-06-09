@@ -2,6 +2,7 @@
 using JenkinsNET.Internal.Commands;
 using JenkinsNET.Models;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace JenkinsNET
@@ -32,7 +33,7 @@ namespace JenkinsNET
         {
             try {
                 var cmd = new BuildGetCommand<T>(context, jobName, buildNumber);
-                cmd.RunAsync().GetAwaiter().GetResult();
+                cmd.Run();
                 return cmd.Result;
             }
             catch (Exception error) {
@@ -45,12 +46,13 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
+        /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsJobGetBuildException"></exception>
-        public async Task<T> GetAsync<T>(string jobName, string buildNumber) where T : class, IJenkinsBuild
+        public async Task<T> GetAsync<T>(string jobName, string buildNumber, CancellationToken token = default(CancellationToken)) where T : class, IJenkinsBuild
         {
             try {
                 var cmd = new BuildGetCommand<T>(context, jobName, buildNumber);
-                await cmd.RunAsync();
+                await cmd.RunAsync(token);
                 return cmd.Result;
             }
             catch (Exception error) {
@@ -81,12 +83,13 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
+        /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<string> GetConsoleOutputAsync(string jobName, string buildNumber)
+        public async Task<string> GetConsoleOutputAsync(string jobName, string buildNumber, CancellationToken token = default(CancellationToken))
         {
             try {
                 var cmd = new BuildOutputCommand(context, jobName, buildNumber);
-                await cmd.RunAsync();
+                await cmd.RunAsync(token);
                 return cmd.Result;
             }
             catch (Exception error) {
@@ -119,12 +122,13 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
         /// <param name="start">The character position to begin reading from.</param>
+        /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<JenkinsProgressiveTextResponse> GetProgressiveTextAsync(string jobName, string buildNumber, int start)
+        public async Task<JenkinsProgressiveTextResponse> GetProgressiveTextAsync(string jobName, string buildNumber, int start, CancellationToken token = default(CancellationToken))
         {
             try {
                 var cmd = new BuildProgressiveTextCommand(context, jobName, buildNumber, start);
-                await cmd.RunAsync();
+                await cmd.RunAsync(token);
                 return cmd.Result;
             }
             catch (Exception error) {
@@ -157,12 +161,13 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
         /// <param name="start">The character position to begin reading from.</param>
+        /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<JenkinsProgressiveHtmlResponse> GetProgressiveHtmlAsync(string jobName, string buildNumber, int start)
+        public async Task<JenkinsProgressiveHtmlResponse> GetProgressiveHtmlAsync(string jobName, string buildNumber, int start, CancellationToken token = default(CancellationToken))
         {
             try {
                 var cmd = new BuildProgressiveHtmlCommand(context, jobName, buildNumber, start);
-                await cmd.RunAsync();
+                await cmd.RunAsync(token);
                 return cmd.Result;
             }
             catch (Exception error) {

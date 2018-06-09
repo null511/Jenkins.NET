@@ -26,7 +26,7 @@ namespace JenkinsNET.Internal.Commands
                 request.Method = "GET";
             };
 
-            OnReadAsync = async response => {
+            OnReadAsync = async (response, token) => {
                 var document = await ReadXmlAsync(response);
                 Result = new JenkinsProject(document.Root);
             };

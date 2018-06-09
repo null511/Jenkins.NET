@@ -2,6 +2,7 @@
 using JenkinsNET.Internal.Commands;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace JenkinsNET
@@ -48,13 +49,14 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The build number of the Job.</param>
         /// <param name="filename">The relative path and file name of the artifact.</param>
+        /// <param name="token">An optional token for aborting the request.</param>
         /// <returns>A memory-stream containing the contents of the artifact.</returns>
         /// <exception cref="JenkinsArtifactGetException"></exception>
-        public async Task<MemoryStream> GetAsync(string jobName, string buildNumber, string filename)
+        public async Task<MemoryStream> GetAsync(string jobName, string buildNumber, string filename, CancellationToken token = default(CancellationToken))
         {
             try {
                 var cmd = new ArtifactGetCommand(context, jobName, buildNumber, filename);
-                await cmd.RunAsync();
+                await cmd.RunAsync(token);
                 return cmd.Result;
             }
             catch (Exception error) {
