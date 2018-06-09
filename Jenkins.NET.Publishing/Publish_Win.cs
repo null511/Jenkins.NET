@@ -48,7 +48,7 @@ namespace Jenkins.NET.Publishing
                     ExeFilename = Path.Combine(Context.ContentDirectory, "bin", "NuGet.exe"),
                     Output = Context.Output,
                 },
-                PackageId = "Jenkins.NET",
+                PackageId = "jenkinsnet",
                 PackageDefinition = Path.Combine(Context.ContentDirectory, "Jenkins.NET", "Jenkins.NET.csproj"),
                 PackageDirectory = Path.Combine(Context.WorkDirectory, "Packages"),
                 //Configuration = "Release",
