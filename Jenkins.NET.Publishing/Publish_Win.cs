@@ -47,10 +47,14 @@ namespace Jenkins.NET.Publishing
                     Output = Context.Output,
                 },
                 PackageId = "Jenkins.NET",
-                PackageDefinition = Path.Combine(Context.ContentDirectory, "Jenkins.NET", "Jenkins.NET.csproj"),
+                PackageDefinition = Path.Combine(Context.ContentDirectory, "Jenkins.NET", "Jenkins.NET.nuspec"),
                 PackageDirectory = Path.Combine(Context.WorkDirectory, "Packages"),
-                Configuration = "Release",
-                Platform = "AnyCPU",
+                //Configuration = "Release",
+                //Platform = "AnyCPU",
+                PackProperties = {
+                    ["configuration"] = "Release",
+                    ["platform"] = "AnyCPU",
+                }
             };
 
             nugetTool.Client.Initialize();
