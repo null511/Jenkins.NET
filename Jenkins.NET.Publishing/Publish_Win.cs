@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Jenkins.NET.Publishing
 {
-    internal class Publish_Win
+    public class Publish_Win
     {
         public IAgentBuildContext Context {get; set;}
 

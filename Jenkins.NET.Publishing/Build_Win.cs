@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Jenkins.NET.Publishing
 {
-    internal class Build_Win
+    public class Build_Win
     {
         public IAgentBuildContext Context {get; set;}
 
