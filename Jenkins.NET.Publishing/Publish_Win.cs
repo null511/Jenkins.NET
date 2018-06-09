@@ -1,5 +1,6 @@
 ﻿using Jenkins.NET.Publishing.Internal;
 using Photon.Framework.Agent;
+using Photon.Framework.Tasks;
 using Photon.NuGetPlugin;
 using System.IO;
 using System.Threading;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Jenkins.NET.Publishing
 {
-    public class Publish_Win
+    public class Publish_Win : IBuildTask
     {
         public IAgentBuildContext Context {get; set;}
 

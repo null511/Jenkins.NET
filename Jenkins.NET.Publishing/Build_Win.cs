@@ -1,11 +1,12 @@
 ﻿using Jenkins.NET.Publishing.Internal;
 using Photon.Framework.Agent;
+using Photon.Framework.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Jenkins.NET.Publishing
 {
-    public class Build_Win
+    public class Build_Win : IBuildTask
     {
         public IAgentBuildContext Context {get; set;}
 
