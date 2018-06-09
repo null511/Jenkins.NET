@@ -38,21 +38,22 @@ namespace Jenkins.NET.Publishing
             var nugetTool = new NuGetPackagePublisher(Context) {
                 Mode = NugetModes.Hybrid,
                 Client = new NuGetCore {
-                    EnableV2 = false,
                     EnableV3 = true,
                     Output = Context.Output,
-                    SourceUrl = "?",
                     ApiKey = "?",
                 },
                 CL = new NuGetCommandLine {
+                    ExeFilename = Path.Combine(Context.ContentDirectory, "bin", "NuGet.exe"),
                     Output = Context.Output,
                 },
                 PackageId = "Jenkins.NET",
                 PackageDefinition = Path.Combine(Context.ContentDirectory, "Jenkins.NET", "Jenkins.NET.csproj"),
                 PackageDirectory = Path.Combine(Context.WorkDirectory, "Packages"),
                 Configuration = "Release",
-                Platform = "Any CPU",
+                Platform = "AnyCPU",
             };
+
+            nugetTool.Client.Initialize();
 
             await nugetTool.PublishAsync(token);
         }
