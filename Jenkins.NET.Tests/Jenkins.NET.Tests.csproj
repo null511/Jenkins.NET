@@ -50,6 +50,8 @@
     <Compile Include="IntegrationTests\CrumbTests.cs" />
     <Compile Include="Internal\DefaultClient.cs" />
     <Compile Include="Internal\DefaultRunner.cs" />
+    <Compile Include="Internal\IntegrationTestFixtureAttribute.cs" />
+    <Compile Include="Internal\UnitTestFixtureAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\NetPathTests.cs" />
     <Compile Include="UnitTests\StringCastTests.cs" />

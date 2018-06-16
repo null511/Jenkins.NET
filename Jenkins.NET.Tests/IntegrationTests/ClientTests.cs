@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JenkinsNET.Tests.IntegrationTests
 {
-    [TestFixture, Category("integration")]
+    [IntegrationTestFixture]
     public class ClientTests
     {
         private const string jobName = "Test Job";

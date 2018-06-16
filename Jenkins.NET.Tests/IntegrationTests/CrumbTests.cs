@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JenkinsNET.Tests.IntegrationTests
 {
-    [TestFixture, Explicit, Category("integration")]
+    [IntegrationTestFixture, Explicit]
     public class CrumbTests
     {
         [Test]
