@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Jenkins.NET.Publishing
 {
-    public class Build_Win : IBuildTask
+    public class Build_Windows : IBuildTask
     {
         public IAgentBuildContext Context {get; set;}
 
@@ -20,8 +20,11 @@ namespace Jenkins.NET.Publishing
 
         private async Task BuildSolution()
         {
+            var msbuild_exe = Context.AgentVariables["global"]["msbuild_exe"];
+
             var msBuild = new MsBuild(Context) {
-                Exe = ".\\bin\\msbuild.cmd",
+                //Exe = ".\\bin\\msbuild.cmd",
+                Exe = $"\"{msbuild_exe}\"",
                 Filename = "Jenkins.NET.sln",
                 Configuration = "Release",
                 Platform = "Any CPU",

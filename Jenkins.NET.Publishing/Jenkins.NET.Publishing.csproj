@@ -93,8 +93,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Build_Linux.cs" />
-    <Compile Include="Publish_Win.cs" />
-    <Compile Include="Build_Win.cs" />
+    <Compile Include="Publish_Windows.cs" />
+    <Compile Include="Build_Windows.cs" />
     <Compile Include="Internal\MsBuild.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
