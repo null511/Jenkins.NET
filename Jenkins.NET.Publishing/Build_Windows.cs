@@ -14,7 +14,7 @@ namespace Jenkins.NET.Publishing
         public async Task RunAsync(CancellationToken token)
         {
             await BuildSolution();
-            await UnitTest();
+            //await UnitTest();
         }
 
         private async Task BuildSolution()
