@@ -39,8 +39,8 @@ namespace Jenkins.NET.Publishing
 
             await Context.RunCommandLineAsync(
                 $"\"{nunit_exe}\"",
-                "\"Jenkins.NET.Tests\\bin\\Release\\Jenkins.Net.Tests.dll\"",
-                "--where \"cat = unit\"");
+                "\"Jenkins.NET.Tests\\bin\\Release\\Jenkins.NET.Tests.dll\"",
+                "--where=\"cat == unit\"");
         }
     }
 }
