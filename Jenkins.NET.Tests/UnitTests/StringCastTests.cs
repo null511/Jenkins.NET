@@ -1,9 +1,10 @@
 ﻿using JenkinsNET.Internal;
+using JenkinsNET.Tests.Internal;
 using NUnit.Framework;
 
 namespace JenkinsNET.Tests.UnitTests
 {
-    [TestFixture, Category("unit")]
+    [UnitTestFixture]
     public class StringCastTests
     {
         [Test]
