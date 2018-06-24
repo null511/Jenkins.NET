@@ -14,7 +14,7 @@ namespace Jenkins.NET.Publishing
         public async Task RunAsync(CancellationToken token)
         {
             await BuildSolution();
-            //await UnitTest();
+            await UnitTest();
         }
 
         private async Task BuildSolution()
@@ -37,10 +37,9 @@ namespace Jenkins.NET.Publishing
         {
             var nunit_exe = Context.AgentVariables["global"]["nunit_exe"];
 
-            await Context.RunCommandLineAsync(
-                $"\"{nunit_exe}\"",
+            await Context.RunCommandLineAsync($"\"{nunit_exe}\"",
                 "\"Jenkins.NET.Tests\\bin\\Release\\Jenkins.NET.Tests.dll\"",
-                "--where:cat==unit");
+                "--where=\"cat == 'unit'\"");
         }
     }
 }
