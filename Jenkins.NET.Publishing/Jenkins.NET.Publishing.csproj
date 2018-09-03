@@ -69,11 +69,14 @@
     <Reference Include="NuGet.Versioning, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.Versioning.4.2.0\lib\net45\NuGet.Versioning.dll</HintPath>
     </Reference>
-    <Reference Include="Photon.Framework, Version=0.0.46.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Photon.Framework.0.0.46\lib\net46\Photon.Framework.dll</HintPath>
+    <Reference Include="Photon.Framework, Version=0.0.69.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Photon.Framework.0.0.69\lib\net46\Photon.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Photon.NuGet, Version=0.0.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Photon.NuGet.0.0.9\lib\net46\Photon.NuGet.dll</HintPath>
+    <Reference Include="Photon.MSBuild, Version=0.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Photon.MSBuild.0.0.4\lib\net46\Photon.MSBuild.dll</HintPath>
+    </Reference>
+    <Reference Include="Photon.NuGet, Version=0.0.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Photon.NuGet.0.0.12\lib\net46\Photon.NuGet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -84,7 +87,6 @@
     <Compile Include="Build_Linux.cs" />
     <Compile Include="Publish_Windows.cs" />
     <Compile Include="Build_Windows.cs" />
-    <Compile Include="Internal\MsBuild.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

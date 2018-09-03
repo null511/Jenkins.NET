@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Jenkins.NET.Publishing.Internal;
-using Photon.Framework.Agent;
+﻿using Photon.Framework.Agent;
 using Photon.Framework.Tasks;
+using Photon.MSBuild;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Jenkins.NET.Publishing
 {
@@ -13,19 +13,27 @@ namespace Jenkins.NET.Publishing
         
         public async Task RunAsync(CancellationToken token)
         {
-            await BuildSolution();
+            await BuildSolution(token);
         }
 
-        private async Task BuildSolution()
+        private async Task BuildSolution(CancellationToken token)
         {
-            var msBuild = new MsBuild(Context) {
+            var msbuild = new MSBuildCommand(Context) {
                 Exe = "msbuild",
-                Filename = "Jenkins.NET.sln",
-                Configuration = "Release",
-                Platform = "Any CPU",
+                WorkingDirectory = Context.ContentDirectory,
             };
 
-            await msBuild.BuildAsync();
+            var buildArgs = new MSBuildArguments {
+                ProjectFile = "Jenkins.NET.sln",
+                Properties = {
+                    ["Configuration"] = "Release",
+                    ["Platform"] = "Any CPU",
+                },
+                Verbosity = MSBuildVerbosityLevel.Minimal,
+                MaxCpuCount = 0,
+            };
+
+            await msbuild.RunAsync(buildArgs, token);
         }
     }
 }

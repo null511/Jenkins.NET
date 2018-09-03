@@ -1,6 +1,6 @@
-﻿using Jenkins.NET.Publishing.Internal;
-using Photon.Framework.Agent;
+﻿using Photon.Framework.Agent;
 using Photon.Framework.Tasks;
+using Photon.MSBuild;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,33 +13,35 @@ namespace Jenkins.NET.Publishing
         
         public async Task RunAsync(CancellationToken token)
         {
-            await BuildSolution();
-            await UnitTest();
+            await BuildSolution(token);
+            await UnitTest(token);
         }
 
-        private async Task BuildSolution()
+        private async Task BuildSolution(CancellationToken token)
         {
-            var msbuild_exe = Context.AgentVariables["global"]["msbuild_exe"];
-
-            var msBuild = new MsBuild(Context) {
-                //Exe = ".\\bin\\msbuild.cmd",
-                Exe = $"\"{msbuild_exe}\"",
-                Filename = "Jenkins.NET.sln",
-                Configuration = "Release",
-                Platform = "Any CPU",
-                Parallel = true,
+            var msbuild = new MSBuildCommand(Context) {
+                Exe = Context.AgentVariables["global"]["msbuild_exe"],
+                WorkingDirectory = Context.ContentDirectory,
             };
 
-            await msBuild.BuildAsync();
+            var buildArgs = new MSBuildArguments {
+                ProjectFile = "Jenkins.NET.sln",
+                Properties = {
+                    ["Configuration"] = "Release",
+                    ["Platform"] = "Any CPU",
+                },
+                Verbosity = MSBuildVerbosityLevel.Minimal,
+                MaxCpuCount = 0,
+            };
+
+            await msbuild.RunAsync(buildArgs, token);
         }
 
-        private async Task UnitTest()
+        private async Task UnitTest(CancellationToken token)
         {
             var nunit_exe = Context.AgentVariables["global"]["nunit_exe"];
 
-            await Context.RunCommandLineAsync($"\"{nunit_exe}\"",
-                "\"Jenkins.NET.Tests\\bin\\Release\\Jenkins.NET.Tests.dll\"",
-                "--where=\"cat == 'unit'\"");
+            await Context.Process.RunAsync($"\"{nunit_exe}\" \"Jenkins.NET.Tests\\bin\\Release\\Jenkins.NET.Tests.dll\" --where=\"cat == 'unit'\"", token);
         }
     }
 }
