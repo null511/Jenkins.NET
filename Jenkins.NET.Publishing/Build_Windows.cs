@@ -1,4 +1,5 @@
 ﻿using Photon.Framework.Agent;
+using Photon.Framework.Process;
 using Photon.Framework.Tasks;
 using Photon.MSBuild;
 using System.Threading;
@@ -39,9 +40,14 @@ namespace Jenkins.NET.Publishing
 
         private async Task UnitTest(CancellationToken token)
         {
-            var nunit_exe = Context.AgentVariables["global"]["nunit_exe"];
+            var info = new ProcessRunInfo {
+                Filename = Context.AgentVariables["global"]["nunit_exe"],
+                Arguments = "\"Jenkins.NET.Tests\\bin\\Release\\Jenkins.NET.Tests.dll\" --where=\"cat == 'unit'\"",
+                WorkingDirectory = Context.ContentDirectory,
+            };
 
-            await Context.Process.RunAsync($"\"{nunit_exe}\" \"Jenkins.NET.Tests\\bin\\Release\\Jenkins.NET.Tests.dll\" --where=\"cat == 'unit'\"", token);
+            var runner = new ProcessRunner(Context);
+            await runner.RunAsync(info, token);
         }
     }
 }
