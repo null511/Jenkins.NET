@@ -1,6 +1,6 @@
 # Jenkins.NET <img src="https://github.com/null511/Jenkins.NET/raw/master/media/icon.png" height="32" />
 
-C# .NET wrapper for Jenkins HTTP/REST API. Supports asynchronous programming model. Package available on [NuGet](https://www.nuget.org/packages/jenkinsnet).
+C# .NET wrapper for Jenkins HTTP/REST API. Supports .NET Framework 4.0; 4.5 and .NET Standard 2.0, as well as the asynchronous programming model. Package available on [NuGet](https://www.nuget.org/packages/jenkinsnet).
 
 This project is now considered stable, and not actively being developed. However, if you find a bug or feature missing please file an Issue here on GitHub and I will adress it as soon as possible. Thank you for your interest!
 
