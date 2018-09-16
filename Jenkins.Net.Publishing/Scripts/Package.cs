@@ -1,13 +1,14 @@
 ﻿using Jenkins.NET.Publishing.Tools;
 using Photon.Framework.Agent;
+using Photon.Framework.Extensions;
 using Photon.Framework.Packages;
 using Photon.Framework.Process;
 using Photon.Framework.Tasks;
+using Photon.Framework.Tools;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Photon.Framework.Extensions;
 
 namespace Jenkins.NET.Publishing.Scripts
 {
@@ -18,14 +19,16 @@ namespace Jenkins.NET.Publishing.Scripts
         
         public async Task RunAsync(CancellationToken token)
         {
-            //var packageDir = Path.Combine(Context.ContentDirectory, "PublishPackages");
-
             await BuildTools.BuildSolution(Context, token);
             await TestTools.UnitTest(Context, token);
 
+            var assemblyFile = Path.Combine(Context.ContentDirectory, "Jenkins.Net", "bin", "Release", "Jenkins.Net.dll");
+            var assemblyVersion = AssemblyTools.GetVersion(assemblyFile);
+            var projectPackageVersion = $"{Context.BuildNumber}.{assemblyVersion}";
+
             await CreateNugetPackage(token);
 
-            await CreateProjectPackage(token);
+            await CreateProjectPackage(projectPackageVersion, token);
         }
 
         private async Task CreateNugetPackage(CancellationToken token)
@@ -52,7 +55,7 @@ namespace Jenkins.NET.Publishing.Scripts
             if (result.ExitCode != 0) throw new ApplicationException($"Build Failed! [{result.ExitCode}]");
         }
 
-        private async Task CreateProjectPackage(CancellationToken token)
+        private async Task CreateProjectPackage(string version, CancellationToken token)
         {
             var projectPath = Path.Combine(Context.ContentDirectory, "Jenkins.Net.Publishing");
             var packageDefFile = Path.Combine(projectPath, "Jenkins.Net.Publishing.json");
@@ -61,7 +64,6 @@ namespace Jenkins.NET.Publishing.Scripts
             try {
                 Context.WriteTagLine("Creating project package...", ConsoleColor.White);
 
-                var version = Context.BuildNumber.ToString();
                 var packageDef = ProjectPackageTools.LoadDefinition(packageDefFile);
 
                 await ProjectPackageTools.CreatePackage(
