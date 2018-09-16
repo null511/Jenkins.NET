@@ -60,7 +60,7 @@ namespace JenkinsNET.Internal.Commands
                 }
             };
 
-        #if !NET40
+        #if NET_ASYNC
             OnWriteAsync = async (request, token) => {
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";

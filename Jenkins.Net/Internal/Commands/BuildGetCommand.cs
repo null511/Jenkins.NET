@@ -35,7 +35,7 @@ namespace JenkinsNET.Internal.Commands
                 Result = Activator.CreateInstance(typeof(T), args) as T;
             };
 
-        #if !NET40
+        #if NET_ASYNC
             OnWriteAsync = async (request, token) => {
                 request.Method = "POST";
             };

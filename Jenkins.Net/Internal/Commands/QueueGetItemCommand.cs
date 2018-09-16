@@ -33,6 +33,23 @@ namespace JenkinsNET.Internal.Commands
                     Result = new JenkinsQueueItem(document.Root);
                 }
             };
+
+        #if NET_ASYNC
+            OnWriteAsync = async (request, token) => {
+                request.Method = "POST";
+            };
+
+            OnReadAsync = async (response, token) => {
+                using (var stream = response.GetResponseStream()) {
+                    if (stream == null) return;
+
+                    var document = XDocument.Load(stream);
+                    if (document.Root == null) throw new ApplicationException("An empty response was returned!");
+
+                    Result = new JenkinsQueueItem(document.Root);
+                }
+            };
+        #endif
         }
     }
 }

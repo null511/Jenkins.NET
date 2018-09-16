@@ -36,7 +36,7 @@ namespace JenkinsNET.Internal.Commands
                 }
             };
 
-        #if !NET40
+        #if NET_ASYNC
             OnReadAsync = async (response, token) => {
                 using (var stream = response.GetResponseStream()) {
                     if (stream == null) return;

@@ -28,7 +28,7 @@ namespace JenkinsNET.Internal.Commands
                 WriteXml(request, job.Node);
             };
 
-        #if !NET40
+        #if NET_ASYNC
             OnWriteAsync = async (request, token) => {
                 request.Method = "POST";
                 request.ContentType = "application/xml";

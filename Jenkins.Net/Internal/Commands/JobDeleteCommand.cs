@@ -22,6 +22,14 @@ namespace JenkinsNET.Internal.Commands
                 request.ContentLength = 0;
                 request.AllowAutoRedirect = false;
             };
+
+        #if NET_ASYNC
+            OnWriteAsync = async (request, token) => {
+                request.Method = "POST";
+                request.ContentLength = 0;
+                request.AllowAutoRedirect = false;
+            };
+        #endif
         }
     }
 }

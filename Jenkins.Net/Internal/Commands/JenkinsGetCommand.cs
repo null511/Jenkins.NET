@@ -28,7 +28,7 @@ namespace JenkinsNET.Internal.Commands
                 Result = new Jenkins(document.Root);
             };
 
-        #if NETFULL
+        #if NET_ASYNC
             OnWriteAsync = async (request, token) => {
                 request.Method = "GET";
             };

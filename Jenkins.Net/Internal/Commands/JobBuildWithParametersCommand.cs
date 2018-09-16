@@ -46,7 +46,7 @@ namespace JenkinsNET.Internal.Commands
                 };
             };
 
-        #if NETFULL
+        #if NET_ASYNC
             OnWriteAsync = async (request, token) => {
                 request.Method = "POST";
             };
