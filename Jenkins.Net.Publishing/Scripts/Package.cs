@@ -24,10 +24,10 @@ namespace Jenkins.NET.Publishing.Scripts
 
             await CreateNugetPackage(packageDir, token);
 
-            await CreateProjectPackage(packageDir, token);
+            await CreateProjectPackage(token);
         }
 
-        private async Task CreateProjectPackage(string packageDir, CancellationToken token)
+        private async Task CreateProjectPackage(CancellationToken token)
         {
             var def = new ProjectPackageDefinition {
                 Id = "jenkinsnet",
@@ -38,7 +38,7 @@ namespace Jenkins.NET.Publishing.Scripts
                 Script = "Publish",
                 Files = {
                     new PackageFileDefinition {
-                        Path = packageDir,
+                        Path = "Packages",
                         Destination = "",
                     }
                 }
@@ -49,7 +49,7 @@ namespace Jenkins.NET.Publishing.Scripts
 
             await ProjectPackageTools.CreatePackage(
                 definition: def,
-                rootPath: Context.ContentDirectory,
+                rootPath: Context.WorkDirectory,
                 version: version,
                 outputFilename: output);
 
