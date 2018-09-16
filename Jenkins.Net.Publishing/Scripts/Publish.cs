@@ -1,7 +1,7 @@
 ﻿using Jenkins.NET.Publishing.Tools;
 using Photon.Framework.Agent;
+using Photon.Framework.Process;
 using Photon.Framework.Tasks;
-using Photon.Framework.Tools;
 using Photon.NuGet.CorePlugin;
 using Photon.NuGetPlugin;
 using System;
@@ -15,7 +15,6 @@ namespace Jenkins.NET.Publishing.Scripts
     public class Publish : IBuildTask
     {
         private NuGetCore nugetCore;
-        private NuGetCommand nugetCmd;
 
         public IAgentBuildContext Context {get; set;}
 
@@ -27,11 +26,6 @@ namespace Jenkins.NET.Publishing.Scripts
             };
             nugetCore.Initialize();
 
-            nugetCmd = new NuGetCommand(Context) {
-                Exe = Path.Combine(Context.ContentDirectory, "bin", "NuGet.exe"), //Context.AgentVariables["global"]["nuget_exe"];
-                WorkingDirectory = Context.ContentDirectory,
-            };
-
             await BuildTools.BuildSolution(Context, token);
             await TestTools.UnitTest(Context, token);
 
@@ -40,40 +34,40 @@ namespace Jenkins.NET.Publishing.Scripts
 
         private async Task PublishPackage(CancellationToken token)
         {
-            const string packageId = "jenkinsnet";
-            var assemblyFilename = Path.Combine(Context.ContentDirectory, "Jenkins.NET", "bin", "Release", "Jenkins.NET.dll");
-            var packageDefinitionFilename = Path.Combine(Context.ContentDirectory, "Jenkins.NET", "Jenkins.NET.csproj");
-            var nugetPackageDir = Path.Combine(Context.WorkDirectory, "Packages");
-            var assemblyVersion = AssemblyTools.GetVersion(assemblyFilename);
+            var packageDir = Path.Combine(Context.WorkDirectory, "Packages");
 
-
-            var versionList = await nugetCore.GetAllPackageVersions(packageId, token);
-            var packageVersion = versionList.Any() ? versionList.Max() : null;
-
-            if (!VersionTools.HasUpdates(packageVersion, assemblyVersion)) {
-                Context.Output.WriteLine($"Package '{packageId}' is up-to-date. Version {packageVersion}", ConsoleColor.DarkCyan);
-                return;
-            }
-
-            await nugetCmd.RunAsync(new NuGetPackArguments {
-                Filename = packageDefinitionFilename,
-                Version = assemblyVersion,
-                OutputDirectory = nugetPackageDir,
-                Properties = {
-                    ["Configuration"] = "Release",
-                    ["Platform"] = "AnyCPU",
-                    ["Version"] = assemblyVersion,
-                },
-            }, token);
+            await Pack(packageDir, token);
 
             var packageFilename = Directory
-                .GetFiles(nugetPackageDir, $"{packageId}.*.nupkg")
+                .GetFiles(packageDir, "jenkinsnet.*.nupkg")
                 .FirstOrDefault();
 
             if (string.IsNullOrEmpty(packageFilename))
-                throw new ApplicationException($"No package found matching package ID '{packageId}'!");
+                throw new ApplicationException("No package found matching package ID 'jenkinsnet'!");
 
             await nugetCore.PushAsync(packageFilename, token);
+        }
+
+        private async Task Pack(string packageDir, CancellationToken token)
+        {
+            var args = new[] {
+                "pack",
+                "\"Jenkins.Net\\Jenkins.Net.csproj\"",
+                "--configuration Release",
+                "--no-build",
+                $"--output \"{packageDir}\"",
+            };
+
+            var info = new ProcessRunInfo {
+                Filename = "dotnet",
+                Arguments = string.Join(" ", args),
+                WorkingDirectory = Context.ContentDirectory,
+            };
+
+            var runner = new ProcessRunner(Context);
+            var result = await runner.RunAsync(info, token);
+
+            if (result.ExitCode != 0) throw new ApplicationException($"Build Failed! [{result.ExitCode}]");
         }
     }
 }
