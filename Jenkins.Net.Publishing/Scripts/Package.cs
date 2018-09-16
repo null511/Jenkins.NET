@@ -22,7 +22,7 @@ namespace Jenkins.NET.Publishing.Scripts
             await BuildTools.BuildSolution(Context, token);
             await TestTools.UnitTest(Context, token);
 
-            var assemblyFile = Path.Combine(Context.ContentDirectory, "Jenkins.Net", "bin", "Release", "Jenkins.Net.dll");
+            var assemblyFile = Path.Combine(Context.ContentDirectory, "Jenkins.Net", "bin", "Release", "net45", "Jenkins.Net.dll");
             var assemblyVersion = AssemblyTools.GetVersion(assemblyFile);
             var projectPackageVersion = $"{Context.BuildNumber}.{assemblyVersion}";
 
