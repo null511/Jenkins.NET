@@ -30,7 +30,7 @@ namespace Jenkins.NET.Publishing.Scripts
 
         private async Task CreateNugetPackage(CancellationToken token)
         {
-            var packageDir = Path.Combine(Context.ContentDirectory, "Jenkins.Net", "bin", "Package");
+            var packageDir = Path.Combine(Context.ContentDirectory, "Jenkins.Net.Publishing", "bin", "Package");
 
             var args = new[] {
                 "pack",
