@@ -84,9 +84,6 @@
     <Reference Include="Photon.Framework, Version=0.0.74.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Photon.Framework.0.0.74\lib\net46\Photon.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Photon.NuGet, Version=0.0.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Photon.NuGet.0.0.14\lib\net46\Photon.NuGet.dll</HintPath>
-    </Reference>
     <Reference Include="Photon.NuGet.Core, Version=0.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Photon.NuGet.Core.0.0.3\lib\net46\Photon.NuGet.Core.dll</HintPath>
     </Reference>

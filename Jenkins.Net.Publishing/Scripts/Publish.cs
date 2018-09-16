@@ -3,7 +3,6 @@ using Photon.Framework.Agent;
 using Photon.Framework.Process;
 using Photon.Framework.Tasks;
 using Photon.NuGet.CorePlugin;
-using Photon.NuGetPlugin;
 using System;
 using System.IO;
 using System.Linq;
