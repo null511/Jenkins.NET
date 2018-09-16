@@ -43,7 +43,7 @@ namespace Jenkins.NET.Publishing.Scripts
                         Destination = "",
                     },
                     new PackageFileDefinition {
-                        Path = "PublishPackages",
+                        Path = "PublishPackages\\**",
                         Destination = "PublishPackages",
                     }
                 }
