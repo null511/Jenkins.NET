@@ -1,7 +1,7 @@
-﻿using Photon.Framework.Agent;
+﻿using Jenkins.NET.Publishing.Tools;
+using Photon.Framework.Agent;
 using Photon.Framework.Tasks;
 using Photon.Framework.Tools;
-using Photon.MSBuildPlugin;
 using Photon.NuGet.CorePlugin;
 using Photon.NuGetPlugin;
 using System;
@@ -10,11 +10,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Jenkins.NET.Publishing
+namespace Jenkins.NET.Publishing.Scripts
 {
-    public class Publish_Windows : IBuildTask
+    public class Publish : IBuildTask
     {
-        private MSBuildCommand msbuild;
         private NuGetCore nugetCore;
         private NuGetCommand nugetCmd;
 
@@ -23,11 +22,6 @@ namespace Jenkins.NET.Publishing
         
         public async Task RunAsync(CancellationToken token)
         {
-            msbuild = new MSBuildCommand(Context) {
-                Exe = Context.AgentVariables["global"]["msbuild_exe"],
-                WorkingDirectory = Context.ContentDirectory,
-            };
-
             nugetCore = new NuGetCore(Context) {
                 ApiKey = Context.ServerVariables["global"]["nuget/apiKey"],
             };
@@ -38,22 +32,10 @@ namespace Jenkins.NET.Publishing
                 WorkingDirectory = Context.ContentDirectory,
             };
 
-            await BuildSolution(token);
+            await BuildTools.BuildSolution(Context, token);
+            await TestTools.UnitTest(Context, token);
 
             await PublishPackage(token);
-        }
-
-        private async Task BuildSolution(CancellationToken token)
-        {
-            await msbuild.RunAsync(new MSBuildArguments {
-                ProjectFile = "Jenkins.NET.sln",
-                Properties = {
-                    ["Configuration"] = "Release",
-                    ["Platform"] = "Any CPU",
-                },
-                Verbosity = MSBuildVerbosityLevels.Minimal,
-                MaxCpuCount = 0,
-            }, token);
         }
 
         private async Task PublishPackage(CancellationToken token)
