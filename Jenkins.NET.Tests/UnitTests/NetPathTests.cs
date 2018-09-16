@@ -9,35 +9,35 @@ namespace JenkinsNET.Tests.UnitTests
         [Trait("Category", "Unit")]
         public void JoinsNoSlash()
         {
-            Assert.Equal(NetPath.Combine("root", "path"), "root/path");
+            Assert.Equal("root/path", NetPath.Combine("root", "path"));
         }
 
         [Fact]
         [Trait("Category", "Unit")]
         public void JoinsLeftSlash()
         {
-            Assert.Equal(NetPath.Combine("root/", "path"), "root/path");
+            Assert.Equal("root/path", NetPath.Combine("root/", "path"));
         }
 
         [Fact]
         [Trait("Category", "Unit")]
         public void JoinsRightSlash()
         {
-            Assert.Equal(NetPath.Combine("root", "/path"), "root/path");
+            Assert.Equal("root/path", NetPath.Combine("root", "/path"));
         }
 
         [Fact]
         [Trait("Category", "Unit")]
         public void JoinsBothSlash()
         {
-            Assert.Equal(NetPath.Combine("root/", "/path"), "root/path");
+            Assert.Equal("root/path", NetPath.Combine("root/", "/path"));
         }
 
         [Fact]
         [Trait("Category", "Unit")]
         public void JoinsMultiple()
         {
-            Assert.Equal(NetPath.Combine("root", "path1", "path2", "path3"), "root/path1/path2/path3");
+            Assert.Equal("root/path1/path2/path3", NetPath.Combine("root", "path1", "path2", "path3"));
         }
     }
 }

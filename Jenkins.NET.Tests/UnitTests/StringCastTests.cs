@@ -16,7 +16,7 @@ namespace JenkinsNET.Tests.UnitTests
         [Trait("Category", "Unit")]
         public void Null_To_Int()
         {
-            Assert.Equal(((string)null).To<int>(), 0);
+            Assert.Equal(0, ((string)null).To<int>());
         }
 
         [Fact]
@@ -30,21 +30,21 @@ namespace JenkinsNET.Tests.UnitTests
         [Trait("Category", "Unit")]
         public void To_String()
         {
-            Assert.Equal("2".To<int>(), 2);
+            Assert.Equal(2, "2".To<int>());
         }
 
         [Fact]
         [Trait("Category", "Unit")]
         public void To_Int()
         {
-            Assert.Equal("2".To<int>(), 2);
+            Assert.Equal(2, "2".To<int>());
         }
 
         [Fact]
         [Trait("Category", "Unit")]
         public void To_Double()
         {
-            Assert.Equal("123.456".To<double>(), 123.456d);
+            Assert.Equal(123.456d, "123.456".To<double>());
         }
     }
 }

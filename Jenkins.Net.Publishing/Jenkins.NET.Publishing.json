@@ -1,0 +1,22 @@
+{
+	"id": "jenkinsnet",
+	"name": "Jenkins.NET",
+	"description": "Publishes a pre-compiled and pre-tested NuGet Package for Jenkins.NET.",
+	"project": "jenkins.net",
+	"assembly": "Jenkins.Net.Publishing.dll",
+	"script": "Publish",
+	"files": [
+		{
+			"path": "bin\\Debug\\**",
+			"destination": "",
+			"exclude": [
+				"**\\*.xml",
+				"**\\*.pdb"
+			]
+		},
+		{
+			"path": "bin\\Package\\**",
+			"destination": "PublishPackage"
+		}
+	]
+}

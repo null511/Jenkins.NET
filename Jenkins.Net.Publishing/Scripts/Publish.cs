@@ -23,7 +23,7 @@ namespace Jenkins.NET.Publishing.Scripts
             };
             nugetCore.Initialize();
 
-            var packageDir = Path.Combine(Context.ContentDirectory, "PublishPackages");
+            var packageDir = Path.Combine(Context.ContentDirectory, "PublishPackage");
 
             var packageFilename = Directory
                 .GetFiles(packageDir, "jenkinsnet.*.nupkg")

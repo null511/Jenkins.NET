@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 #endif
 
 #if NETCORE
-using System.Threading.Tasks;
 using Xunit.Abstractions;
 #else
 using System.IO;
