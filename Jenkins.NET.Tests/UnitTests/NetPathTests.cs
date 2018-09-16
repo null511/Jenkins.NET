@@ -1,40 +1,43 @@
 ﻿using JenkinsNET.Internal;
-using JenkinsNET.Tests.Internal;
-using NUnit.Framework;
+using Xunit;
 
 namespace JenkinsNET.Tests.UnitTests
 {
-    [UnitTestFixture]
     public class NetPathTests
     {
-        [Test]
+        [Fact]
+        [Trait("Category", "Unit")]
         public void JoinsNoSlash()
         {
-            Assert.That(NetPath.Combine("root", "path"), Is.EqualTo("root/path"));
+            Assert.Equal(NetPath.Combine("root", "path"), "root/path");
         }
 
-        [Test]
+        [Fact]
+        [Trait("Category", "Unit")]
         public void JoinsLeftSlash()
         {
-            Assert.That(NetPath.Combine("root/", "path"), Is.EqualTo("root/path"));
+            Assert.Equal(NetPath.Combine("root/", "path"), "root/path");
         }
 
-        [Test]
+        [Fact]
+        [Trait("Category", "Unit")]
         public void JoinsRightSlash()
         {
-            Assert.That(NetPath.Combine("root", "/path"), Is.EqualTo("root/path"));
+            Assert.Equal(NetPath.Combine("root", "/path"), "root/path");
         }
 
-        [Test]
+        [Fact]
+        [Trait("Category", "Unit")]
         public void JoinsBothSlash()
         {
-            Assert.That(NetPath.Combine("root/", "/path"), Is.EqualTo("root/path"));
+            Assert.Equal(NetPath.Combine("root/", "/path"), "root/path");
         }
 
-        [Test]
+        [Fact]
+        [Trait("Category", "Unit")]
         public void JoinsMultiple()
         {
-            Assert.That(NetPath.Combine("root", "path1", "path2", "path3"), Is.EqualTo("root/path1/path2/path3"));
+            Assert.Equal(NetPath.Combine("root", "path1", "path2", "path3"), "root/path1/path2/path3");
         }
     }
 }

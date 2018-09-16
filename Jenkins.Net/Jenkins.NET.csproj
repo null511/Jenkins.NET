@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net45;netstandard2.0;net40</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>JenkinsNET</RootNamespace>
+    <PackageId>jenkinsnet</PackageId>
+    <Authors>null511</Authors>
+    <Description>C# .NET wrapper for Jenkins HTTP/REST API.</Description>
+    <Copyright>Copyright 2018</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/null511/Jenkins.NET/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>http://github.com/null511/Jenkins.NET</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/null511/Jenkins.NET/raw/master/media/icon.png</PackageIconUrl>
+    <RepositoryUrl>http://github.com/null511/Jenkins.NET</RepositoryUrl>
+    <PackageTags>jenkins .net automation</PackageTags>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <FileVersion>1.0.1</FileVersion>
+    <Company>Joshua Miller</Company>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0;NET_ASYNC</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
+    <DefineConstants>NETFULL;NET45;NET_ASYNC</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net40'">
+    <DefineConstants>NET40</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+    <!-- Reference Include="mscorlib" /-->
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <!-- Reference Include="mscorlib" /-->
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+</Project>
