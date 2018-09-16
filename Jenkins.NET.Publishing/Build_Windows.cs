@@ -45,7 +45,7 @@ namespace Jenkins.NET.Publishing
 
             var args = new[] {
                 "build",
-                "\"Jenkins.NET.sln\"",
+                "\"Jenkins.Net.sln\"",
                 "--configuration Release",
                 "--no-incremental",
             };
@@ -73,7 +73,7 @@ namespace Jenkins.NET.Publishing
 
             var args = new[] {
                 "test",
-                "\"Jenkins.NET.sln\"",
+                "\"Jenkins.Net.Tests\\Jenkins.Net.Tests.csproj\"",
                 "--configuration Release",
                 "--no-build",
                 "--filter Category=unit",
