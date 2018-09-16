@@ -43,6 +43,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Retrieves an artifact from a completed Job asynchronously.
         /// </summary>
@@ -63,5 +64,6 @@ namespace JenkinsNET
                 throw new JenkinsArtifactGetException($"Failed to retrieve artifact '{filename}'!", error);
             }
         }
+    #endif
     }
 }

@@ -98,6 +98,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Updates the security Crumb attached to this client asynchronously.
         /// </summary>
@@ -114,6 +115,7 @@ namespace JenkinsNET
                 throw new JenkinsNetException("Failed to retrieve crumb!", error);
             }
         }
+    #endif
 
         /// <summary>
         /// Gets the root description of the Jenkins node.
@@ -131,6 +133,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Gets the root description of the Jenkins node asynchronously.
         /// </summary>
@@ -147,5 +150,6 @@ namespace JenkinsNET
                 throw new JenkinsNetException("Failed to retrieve Jenkins description!", error);
             }
         }
+    #endif
     }
 }

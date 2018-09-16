@@ -28,12 +28,25 @@ namespace JenkinsNET.Internal.Commands
                 request.Method = "POST";
             };
 
+            OnRead = response => {
+                var document = ReadXml(response);
+
+                var args = new object[] {document.Root};
+                Result = Activator.CreateInstance(typeof(T), args) as T;
+            };
+
+        #if !NET40
+            OnWriteAsync = async (request, token) => {
+                request.Method = "POST";
+            };
+
             OnReadAsync = async (response, token) => {
                 var document = await ReadXmlAsync(response);
 
                 var args = new object[] {document.Root};
                 Result = Activator.CreateInstance(typeof(T), args) as T;
             };
+        #endif
         }
     }
 }

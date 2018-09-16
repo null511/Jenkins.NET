@@ -1,46 +1,50 @@
 ﻿using JenkinsNET.Internal;
-using JenkinsNET.Tests.Internal;
-using NUnit.Framework;
+using Xunit;
 
 namespace JenkinsNET.Tests.UnitTests
 {
-    [UnitTestFixture]
     public class StringCastTests
     {
-        [Test]
+        [Fact]
+        [Trait("Category", "Unit")]
         public void Null_To_String()
         {
-            Assert.That(((string)null).To<string>(), Is.EqualTo(null));
+            Assert.Null(((string)null).To<string>());
         }
 
-        [Test]
+        [Fact]
+        [Trait("Category", "Unit")]
         public void Null_To_Int()
         {
-            Assert.That(((string)null).To<int>(), Is.EqualTo(0));
+            Assert.Equal(((string)null).To<int>(), 0);
         }
 
-        [Test]
+        [Fact]
+        [Trait("Category", "Unit")]
         public void Null_To_NullableInt()
         {
-            Assert.That(((string)null).To<int?>(), Is.EqualTo(null));
+            Assert.Null(((string)null).To<int?>());
         }
 
-        [Test]
+        [Fact]
+        [Trait("Category", "Unit")]
         public void To_String()
         {
-            Assert.That("2".To<int>(), Is.EqualTo(2));
+            Assert.Equal("2".To<int>(), 2);
         }
 
-        [Test]
+        [Fact]
+        [Trait("Category", "Unit")]
         public void To_Int()
         {
-            Assert.That("2".To<int>(), Is.EqualTo(2));
+            Assert.Equal("2".To<int>(), 2);
         }
 
-        [Test]
+        [Fact]
+        [Trait("Category", "Unit")]
         public void To_Double()
         {
-            Assert.That("123.456".To<double>(), Is.EqualTo(123.456d));
+            Assert.Equal("123.456".To<double>(), 123.456d);
         }
     }
 }

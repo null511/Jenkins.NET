@@ -45,6 +45,21 @@ namespace JenkinsNET.Internal.Commands
                     QueueItemUrl = response.GetResponseHeader("Location"),
                 };
             };
+
+        #if NETFULL
+            OnWriteAsync = async (request, token) => {
+                request.Method = "POST";
+            };
+
+            OnReadAsync = async (response, token) => {
+                if (response.StatusCode != System.Net.HttpStatusCode.Created)
+                    throw new JenkinsJobBuildException($"Expected HTTP status code 201 but found {(int)response.StatusCode}!");
+
+                Result = new JenkinsBuildResult {
+                    QueueItemUrl = response.GetResponseHeader("Location"),
+                };
+            };
+        #endif
         }
 
         private void WriteJobParameters(TextWriter writer, IDictionary<string, string> jobParameters)

@@ -23,10 +23,21 @@ namespace JenkinsNET.Internal.Commands
                 request.Method = "GET";
             };
 
+            OnRead = response => {
+                var document = ReadXml(response);
+                Result = new Jenkins(document.Root);
+            };
+
+        #if NETFULL
+            OnWriteAsync = async (request, token) => {
+                request.Method = "GET";
+            };
+
             OnReadAsync = async (response, token) => {
                 var document = await ReadXmlAsync(response);
                 Result = new Jenkins(document.Root);
             };
+        #endif
         }
     }
 }

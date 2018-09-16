@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jenkins.NET", "Jenkins.NET\Jenkins.NET.csproj", "{C77BD3BC-08AB-4026-89A9-CE3666EC8647}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jenkins.Net.Publishing", "Jenkins.Net.Publishing\Jenkins.Net.Publishing.csproj", "{3FA23981-FAAB-4E6B-AE63-B82AA837E50F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jenkins.NET.Tests", "Jenkins.NET.Tests\Jenkins.NET.Tests.csproj", "{04A910D7-C02F-433F-8B4E-53DF2DB89908}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jenkins.Net", "Jenkins.Net\Jenkins.Net.csproj", "{98AA153A-A40F-4C93-80DF-6B5848FB580F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jenkins.NET.Publishing", "Jenkins.NET.Publishing\Jenkins.NET.Publishing.csproj", "{3FA23981-FAAB-4E6B-AE63-B82AA837E50F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jenkins.Net.Tests", "Jenkins.Net.Tests\Jenkins.Net.Tests.csproj", "{C39D7FDD-F85E-4FEF-8E30-A23B04DD1787}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C77BD3BC-08AB-4026-89A9-CE3666EC8647}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C77BD3BC-08AB-4026-89A9-CE3666EC8647}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C77BD3BC-08AB-4026-89A9-CE3666EC8647}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C77BD3BC-08AB-4026-89A9-CE3666EC8647}.Release|Any CPU.Build.0 = Release|Any CPU
-		{04A910D7-C02F-433F-8B4E-53DF2DB89908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{04A910D7-C02F-433F-8B4E-53DF2DB89908}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{04A910D7-C02F-433F-8B4E-53DF2DB89908}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{04A910D7-C02F-433F-8B4E-53DF2DB89908}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3FA23981-FAAB-4E6B-AE63-B82AA837E50F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3FA23981-FAAB-4E6B-AE63-B82AA837E50F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FA23981-FAAB-4E6B-AE63-B82AA837E50F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FA23981-FAAB-4E6B-AE63-B82AA837E50F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98AA153A-A40F-4C93-80DF-6B5848FB580F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98AA153A-A40F-4C93-80DF-6B5848FB580F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98AA153A-A40F-4C93-80DF-6B5848FB580F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98AA153A-A40F-4C93-80DF-6B5848FB580F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C39D7FDD-F85E-4FEF-8E30-A23B04DD1787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C39D7FDD-F85E-4FEF-8E30-A23B04DD1787}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C39D7FDD-F85E-4FEF-8E30-A23B04DD1787}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C39D7FDD-F85E-4FEF-8E30-A23B04DD1787}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

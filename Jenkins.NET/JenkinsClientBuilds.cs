@@ -41,6 +41,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Gets information describing a Jenkins Job Build asynchronously.
         /// </summary>
@@ -59,6 +60,7 @@ namespace JenkinsNET
                 throw new JenkinsJobGetBuildException($"Failed to retrieve build #{buildNumber} of Jenkins Job '{jobName}'!", error);
             }
         }
+    #endif
 
         /// <summary>
         /// Gets the console output from a Jenkins Job Build.
@@ -78,6 +80,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Gets the console output from a Jenkins Job Build asynchronously.
         /// </summary>
@@ -96,6 +99,7 @@ namespace JenkinsNET
                 throw new JenkinsNetException($"Failed to retrieve console output from build #{buildNumber} of Jenkins Job '{jobName}'!", error);
             }
         }
+    #endif
 
         /// <summary>
         /// Gets the progressive text output from a Jenkins Job Build.
@@ -116,6 +120,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Gets the progressive text output from a Jenkins Job Build asynchronously.
         /// </summary>
@@ -135,6 +140,7 @@ namespace JenkinsNET
                 throw new JenkinsNetException($"Failed to retrieve progressive text from build #{buildNumber} of Jenkins Job '{jobName}'!", error);
             }
         }
+    #endif
 
         /// <summary>
         /// Gets the console output from a Jenkins Job Build.
@@ -155,6 +161,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Gets the console output from a Jenkins Job Build asynchronously.
         /// </summary>
@@ -174,5 +181,6 @@ namespace JenkinsNET
                 throw new JenkinsNetException($"Failed to retrieve progressive HTML from build #{buildNumber} of Jenkins Job '{jobName}'!", error);
             }
         }
+    #endif
     }
 }

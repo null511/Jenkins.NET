@@ -44,12 +44,18 @@ namespace JenkinsNET.Internal
 
         private static IEnumerable<KeyValuePair<string, object>> GetQueryArguments(object arguments)
         {
-            if (arguments is IDictionary<string, object> dictionary)
-                return dictionary;
+            if (arguments is IDictionary<string, object> dictionary) return dictionary;
 
-            return arguments.GetType()
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Select(x => new KeyValuePair<string, object>(x.Name, x.GetValue(arguments)));
+            return arguments.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Select(x => {
+                #if NET40
+                    var value = x.GetValue(arguments, null);
+                #else
+                    var value = x.GetValue(arguments);
+                #endif
+
+                    return new KeyValuePair<string, object>(x.Name, value);
+                });
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 
 namespace JenkinsNET.Internal.Commands
@@ -24,6 +25,18 @@ namespace JenkinsNET.Internal.Commands
             Password = context.Password;
             Crumb = context.Crumb;
 
+            OnRead = response => {
+                using (var stream = response.GetResponseStream()) {
+                    if (stream == null) return;
+
+                    var encoding = TryGetEncoding(response.ContentEncoding, Encoding.UTF8);
+                    using (var reader = new StreamReader(stream, encoding)) {
+                        Result = reader.ReadToEnd();
+                    }
+                }
+            };
+
+        #if !NET40
             OnReadAsync = async (response, token) => {
                 using (var stream = response.GetResponseStream()) {
                     if (stream == null) return;
@@ -32,6 +45,7 @@ namespace JenkinsNET.Internal.Commands
                     Result = await stream.ReadToEndAsync(encoding, token);
                 }
             };
+        #endif
         }
     }
 }

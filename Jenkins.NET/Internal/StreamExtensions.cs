@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if NET_ASYNC
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,3 +32,4 @@ namespace JenkinsNET.Internal
         }
     }
 }
+#endif

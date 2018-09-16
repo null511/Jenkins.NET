@@ -41,6 +41,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Enqueues a Job to be built.
         /// </summary>
@@ -58,6 +59,7 @@ namespace JenkinsNET
                 throw new JenkinsJobBuildException($"Failed to build Jenkins Job '{jobName}'!", error);
             }
         }
+    #endif
 
         /// <summary>
         /// Enqueues a Job with parameters to be built.
@@ -77,6 +79,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Enqueues a Job with parameters to be built.
         /// </summary>
@@ -95,6 +98,7 @@ namespace JenkinsNET
                 throw new JenkinsJobBuildException($"Failed to build Jenkins Job '{jobName}'!", error);
             }
         }
+    #endif
 
         /// <summary>
         /// Gets a Job description from Jenkins.
@@ -113,6 +117,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Gets a Job description from Jenkins asynchronously.
         /// </summary>
@@ -130,6 +135,7 @@ namespace JenkinsNET
                 throw new JenkinsNetException($"Failed to get Jenkins Job '{jobName}'!", error);
             }
         }
+    #endif
 
         /// <summary>
         /// Gets a Job configuration from Jenkins.
@@ -148,6 +154,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Gets a Job configuration from Jenkins asynchronously.
         /// </summary>
@@ -165,6 +172,7 @@ namespace JenkinsNET
                 throw new JenkinsNetException($"Failed to get Jenkins Job Configuration '{jobName}'!", error);
             }
         }
+    #endif
 
         /// <summary>
         /// Creates a new Job in Jenkins.
@@ -182,6 +190,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Creates a new Job in Jenkins asynchronously.
         /// </summary>
@@ -198,6 +207,7 @@ namespace JenkinsNET
                 throw new JenkinsNetException($"Failed to create Jenkins Job '{jobName}'!", error);
             }
         }
+    #endif
 
         /// <summary>
         /// Updates the configuration on an existing Job in Jenkins.
@@ -215,6 +225,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Updates the configuration on an existing Job in Jenkins asynchronously.
         /// </summary>
@@ -231,6 +242,7 @@ namespace JenkinsNET
                 throw new JenkinsNetException($"Failed to update Jenkins Job configuration '{jobName}'!", error);
             }
         }
+    #endif
 
         /// <summary>
         /// Deletes a Job from Jenkins.
@@ -247,6 +259,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Deletes a Job from Jenkins asynchronously.
         /// </summary>
@@ -262,5 +275,6 @@ namespace JenkinsNET
                 throw new JenkinsJobDeleteException($"Failed to delete Jenkins Job '{jobName}'!", error);
             }
         }
+    #endif
     }
 }

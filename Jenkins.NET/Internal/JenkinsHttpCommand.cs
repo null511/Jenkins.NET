@@ -4,10 +4,13 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+
+#if NET_ASYNC
+using System.Threading;
+using System.Threading.Tasks;
+#endif
 
 namespace JenkinsNET.Internal
 {
@@ -19,38 +22,39 @@ namespace JenkinsNET.Internal
         public JenkinsCrumb Crumb {get; set;}
         public Action<HttpWebRequest> OnWrite {get; set;}
         public Action<HttpWebResponse> OnRead {get; set;}
+
+    #if NET_ASYNC
         public Func<HttpWebRequest, CancellationToken, Task> OnWriteAsync {get; set;}
         public Func<HttpWebResponse, CancellationToken, Task> OnReadAsync {get; set;}
+    #endif
 
 
         public void Run()
         {
             var request = CreateRequest();
 
-            if (OnWrite != null) OnWrite.Invoke(request);
-            else OnWriteAsync?.Invoke(request, CancellationToken.None).GetAwaiter().GetResult();
+            OnWrite?.Invoke(request);
 
             using (var response = (HttpWebResponse)request.GetResponse()) {
-                if (OnRead != null) OnRead?.Invoke(response);
-                else OnReadAsync?.Invoke(response, CancellationToken.None).GetAwaiter().GetResult();
+                OnRead?.Invoke(response);
             }
         }
 
+    #if NET_ASYNC
         public async Task RunAsync(CancellationToken token = default(CancellationToken))
         {
             var request = CreateRequest();
 
             if (OnWriteAsync != null) await OnWriteAsync.Invoke(request, token);
-            else OnWrite?.Invoke(request);
 
             using (token.Register(() => request.Abort(), false))
             using (var response = (HttpWebResponse)await request.GetResponseAsync()) {
                 token.ThrowIfCancellationRequested();
 
                 if (OnReadAsync != null) await OnReadAsync.Invoke(response, token);
-                else OnRead?.Invoke(response);
             }
         }
+    #endif
 
         private HttpWebRequest CreateRequest()
         {
@@ -58,7 +62,7 @@ namespace JenkinsNET.Internal
             var hasUser = !string.IsNullOrEmpty(UserName);
             var hasPass = !string.IsNullOrEmpty(Password);
 
-            var request = WebRequest.CreateHttp(_url);
+            var request = (HttpWebRequest)WebRequest.Create(_url);
             request.UserAgent = "Jenkins.NET Client";
             request.AllowAutoRedirect = true;
             request.KeepAlive = true;
@@ -78,22 +82,44 @@ namespace JenkinsNET.Internal
             return request;
         }
 
-        protected async Task<XDocument> ReadXmlAsync(HttpWebResponse response)
+        protected XDocument ReadXml(HttpWebResponse response)
         {
-            string xml;
             using (var stream = response.GetResponseStream()) {
                 if (stream == null) return null;
 
                 using (var reader = new StreamReader(stream)) {
-                    xml = await reader.ReadToEndAsync();
+                    var xml = reader.ReadToEnd();
+                    xml = RemoveXmlDeclaration(xml);
+                    return XDocument.Parse(xml);
                 }
             }
+        }
 
-            // Remove Decleration
-            var pattern = @"<\?xml[^\>]*\?>";
-            xml = Regex.Replace(xml, pattern, string.Empty);
+        protected void WriteXml(HttpWebRequest request, XNode node)
+        {
+            var xmlSettings = new XmlWriterSettings {
+                ConformanceLevel = ConformanceLevel.Fragment,
+                Indent = false,
+            };
 
-            return XDocument.Parse(xml);
+            using (var stream = request.GetRequestStream())
+            using (var writer = XmlWriter.Create(stream, xmlSettings)) {
+                node.WriteTo(writer);
+            }
+        }
+
+    #if NET_ASYNC
+        protected async Task<XDocument> ReadXmlAsync(HttpWebResponse response)
+        {
+            using (var stream = response.GetResponseStream()) {
+                if (stream == null) return null;
+
+                using (var reader = new StreamReader(stream)) {
+                    var xml = await reader.ReadToEndAsync();
+                    xml = RemoveXmlDeclaration(xml);
+                    return XDocument.Parse(xml);
+                }
+            }
         }
 
         protected async Task WriteXmlAsync(HttpWebRequest request, XNode node, CancellationToken token = default(CancellationToken))
@@ -111,6 +137,7 @@ namespace JenkinsNET.Internal
                 node.WriteTo(writer);
             }
         }
+    #endif
 
         protected static Encoding TryGetEncoding(string name, Encoding fallback)
         {
@@ -120,6 +147,12 @@ namespace JenkinsNET.Internal
             catch {
                 return fallback;
             }
+        }
+
+        private static string RemoveXmlDeclaration(string xml)
+        {
+            const string pattern = @"<\?xml[^\>]*\?>";
+            return Regex.Replace(xml, pattern, string.Empty);
         }
     }
 }

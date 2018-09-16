@@ -39,6 +39,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Retrieves all items from the Job-Queue asynchronously.
         /// </summary>
@@ -55,6 +56,7 @@ namespace JenkinsNET
                 throw new JenkinsNetException("Failed to retrieve queue item list!", error);
             }
         }
+    #endif
 
         /// <summary>
         /// Retrieves an item from the Job-Queue.
@@ -73,6 +75,7 @@ namespace JenkinsNET
             }
         }
 
+    #if NET_ASYNC
         /// <summary>
         /// Retrieves an item from the Job-Queue.
         /// </summary>
@@ -90,5 +93,6 @@ namespace JenkinsNET
                 throw new JenkinsJobBuildException($"Failed to retrieve queue item #{itemNumber}!", error);
             }
         }
+    #endif
     }
 }
