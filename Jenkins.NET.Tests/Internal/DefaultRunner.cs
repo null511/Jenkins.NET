@@ -27,7 +27,12 @@ namespace JenkinsNET.Tests.Internal
                 writer.WriteLine($"[{DateTime.Now}] Status: '{jobRunner.Status}'");
             };
 
+        #if NETCORE
+            // Write method not available!
             jobRunner.ConsoleOutputChanged += writer.WriteLine;
+        #else
+            jobRunner.ConsoleOutputChanged += writer.Write;
+        #endif
 
             return jobRunner;
         }
