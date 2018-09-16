@@ -35,6 +35,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Jenkins.NET\Jenkins.Net.csproj" />
+    <ProjectReference Include="..\Jenkins.Net\Jenkins.Net.csproj" />
   </ItemGroup>
 </Project>
