@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Path = System.IO.Path;
 
 namespace Jenkins.NET.Publishing.Scripts
 {
@@ -22,8 +23,10 @@ namespace Jenkins.NET.Publishing.Scripts
             };
             nugetCore.Initialize();
 
+            var packageDir = Path.Combine(Context.ContentDirectory, "PublishPackages");
+
             var packageFilename = Directory
-                .GetFiles(Context.ContentDirectory, "jenkinsnet.*.nupkg")
+                .GetFiles(packageDir, "jenkinsnet.*.nupkg")
                 .FirstOrDefault();
 
             if (string.IsNullOrEmpty(packageFilename))

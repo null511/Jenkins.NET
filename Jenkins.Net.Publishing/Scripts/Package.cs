@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Photon.Framework.Extensions;
 
 namespace Jenkins.NET.Publishing.Scripts
 {
@@ -17,7 +18,7 @@ namespace Jenkins.NET.Publishing.Scripts
         
         public async Task RunAsync(CancellationToken token)
         {
-            var packageDir = Path.Combine(Context.WorkDirectory, "Packages");
+            var packageDir = Path.Combine(Context.ContentDirectory, "PublishPackages");
 
             await BuildTools.BuildSolution(Context, token);
             await TestTools.UnitTest(Context, token);
@@ -38,22 +39,46 @@ namespace Jenkins.NET.Publishing.Scripts
                 Script = "Publish",
                 Files = {
                     new PackageFileDefinition {
-                        Path = "Packages",
+                        Path = "Jenkins.Net.Publishing\\bin\\Debug\\**",
                         Destination = "",
+                    },
+                    new PackageFileDefinition {
+                        Path = "PublishPackages",
+                        Destination = "PublishPackages",
                     }
                 }
             };
 
             var version = Context.BuildNumber.ToString();
-            var output = Path.Combine(Context.BinDirectory, "Jenkins.Net.zip");
+            var output = Path.Combine(Context.ContentDirectory, "PublishPackages", "Jenkins.Net.zip");
 
-            await ProjectPackageTools.CreatePackage(
-                definition: def,
-                rootPath: Context.WorkDirectory,
-                version: version,
-                outputFilename: output);
+            try {
+                Context.WriteTagLine("Creating project package...", ConsoleColor.White);
 
-            await Context.Packages.PushProjectPackageAsync(output, token);
+                await ProjectPackageTools.CreatePackage(
+                    definition: def,
+                    rootPath: Context.ContentDirectory,
+                    version: version,
+                    outputFilename: output);
+
+                Context.WriteTagLine("Created project package successfully.", ConsoleColor.White);
+            }
+            catch (Exception error) {
+                Context.WriteErrorBlock("Failed to create project package!", error.UnfoldMessages());
+                throw;
+            }
+
+            try {
+                Context.WriteTagLine("Publishing project package...", ConsoleColor.White);
+
+                await Context.Packages.PushProjectPackageAsync(output, token);
+
+                Context.WriteTagLine("Published project package successfully.", ConsoleColor.White);
+            }
+            catch (Exception error) {
+                Context.WriteErrorBlock("Failed to publish project package!", error.UnfoldMessages());
+                throw;
+            }
         }
 
         private async Task CreateNugetPackage(string packageDir, CancellationToken token)
