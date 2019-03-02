@@ -10,7 +10,7 @@ namespace JenkinsNET
     /// <summary>
     /// HTTP-Client for interacting with Jenkins API.
     /// </summary>
-    public class JenkinsClient : IJenkinsContext
+    public class JenkinsClient : IJenkinsContext, IJenkinsClient
     {
         /// <summary>
         /// The address of the Jenkins instance.
