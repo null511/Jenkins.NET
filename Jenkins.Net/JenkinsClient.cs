@@ -83,6 +83,17 @@ namespace JenkinsNET
         }
 
         /// <summary>
+        /// Creates a new Jenkins Client using the provided <see cref="IJenkinsContext"/>.
+        /// </summary>
+        public JenkinsClient(IJenkinsContext context) : this(context.BaseUrl)
+        {
+            this.UserName = context.UserName;
+            this.ApiToken = context.ApiToken;
+            this.Password = context.Password;
+            this.Crumb = context.Crumb;
+        }
+
+        /// <summary>
         /// Updates the security Crumb attached to this client.
         /// </summary>
         /// <exception cref="JenkinsNetException"></exception>
