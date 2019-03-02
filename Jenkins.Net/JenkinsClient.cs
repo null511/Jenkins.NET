@@ -10,7 +10,7 @@ namespace JenkinsNET
     /// <summary>
     /// HTTP-Client for interacting with Jenkins API.
     /// </summary>
-    public class JenkinsClient : IJenkinsContext
+    public class JenkinsClient : IJenkinsContext, IJenkinsClient
     {
         /// <summary>
         /// The address of the Jenkins instance.
@@ -80,6 +80,17 @@ namespace JenkinsNET
         public JenkinsClient(string baseUrl) : this()
         {
             this.BaseUrl = baseUrl;
+        }
+
+        /// <summary>
+        /// Creates a new Jenkins Client using the provided <see cref="IJenkinsContext"/>.
+        /// </summary>
+        public JenkinsClient(IJenkinsContext context) : this(context.BaseUrl)
+        {
+            this.UserName = context.UserName;
+            this.ApiToken = context.ApiToken;
+            this.Password = context.Password;
+            this.Crumb = context.Crumb;
         }
 
         /// <summary>

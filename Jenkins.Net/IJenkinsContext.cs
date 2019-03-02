@@ -1,4 +1,5 @@
-﻿using JenkinsNET.Models;
+﻿using System;
+using JenkinsNET.Models;
 
 namespace JenkinsNET
 {
@@ -21,7 +22,13 @@ namespace JenkinsNET
         /// <summary>
         /// [optional] Jenkins Password.
         /// </summary>
+        [Obsolete("This property will be removed in future versions; please use 'JenkinsContext.ApiToken' instead.")]
         string Password {get;}
+
+        /// <summary>
+        /// [optional] Jenkins ApiToken for the <see cref="UserName"/>.
+        /// </summary>
+        string ApiToken {get; set;}
 
         /// <summary>
         /// [optional] Jenkins CSRF Crumb.
