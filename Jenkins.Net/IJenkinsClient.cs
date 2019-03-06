@@ -35,26 +35,27 @@ namespace JenkinsNET
         /// <exception cref="JenkinsNetException"></exception>
         void UpdateSecurityCrumb();
 
-
+    #if NET_ASYNC
         /// <summary>
         /// Updates the security Crumb attached to this client asynchronously.
         /// </summary>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
         Task UpdateSecurityCrumbAsync(CancellationToken token = default(CancellationToken));
-
+    #endif
         /// <summary>
         /// Gets the root description of the Jenkins node.
         /// </summary>
         /// <exception cref="JenkinsNetException"></exception>
         Jenkins Get();
 
-
+    #if NET_ASYNC
         /// <summary>
         /// Gets the root description of the Jenkins node asynchronously.
         /// </summary>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
         Task<Jenkins> GetAsync(CancellationToken token = default(CancellationToken));
+    #endif
     }
 }
