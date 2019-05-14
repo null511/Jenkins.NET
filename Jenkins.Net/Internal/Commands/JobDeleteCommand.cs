@@ -15,6 +15,7 @@ namespace JenkinsNET.Internal.Commands
             Url = NetPath.Combine(context.BaseUrl, "job", jobName, "doDelete");
             UserName = context.UserName;
             Password = context.Password;
+            ExtraHeaders = context.ExtraHeaders;
             Crumb = context.Crumb;
 
             OnWrite = request => {

@@ -2,6 +2,7 @@
 using JenkinsNET.Internal.Commands;
 using JenkinsNET.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,6 +28,11 @@ namespace JenkinsNET
         /// [optional] Jenkins ApiToken for the <see cref="UserName"/>.
         /// </summary>
         public string ApiToken {get; set;}
+
+        /// <summary>
+        /// [optional] Extra HTTP headers to include on every request
+        /// </summary>
+        public Dictionary<string, string> ExtraHeaders {get; set;}
 
         /// <summary>
         /// Gets or sets the security Crumb to use on API requests.
@@ -90,6 +96,7 @@ namespace JenkinsNET
             this.UserName = context.UserName;
             this.ApiToken = context.ApiToken;
             this.Password = context.Password;
+            this.ExtraHeaders = context.ExtraHeaders;
             this.Crumb = context.Crumb;
         }
 

@@ -26,6 +26,7 @@ namespace JenkinsNET.Internal.Commands
             Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "artifact", urlFilename);
             UserName = context.UserName;
             Password = context.Password;
+            ExtraHeaders = context.ExtraHeaders;
             Crumb = context.Crumb;
 
             OnWrite = request => {

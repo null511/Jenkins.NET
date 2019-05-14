@@ -17,6 +17,7 @@ namespace JenkinsNET.Internal.Commands
             Url = NetPath.Combine(context.BaseUrl, "crumbIssuer/api/xml");
             UserName = context.UserName;
             Password = context.Password;
+            ExtraHeaders = context.ExtraHeaders;
 
             OnWrite = request => {
                 request.Method = "GET";

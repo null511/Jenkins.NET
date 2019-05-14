@@ -17,6 +17,7 @@ namespace JenkinsNET.Internal.Commands
 
             UserName = context.UserName;
             Password = context.Password;
+            ExtraHeaders = context.ExtraHeaders;
             Crumb = context.Crumb;
 
             OnWrite = request => {

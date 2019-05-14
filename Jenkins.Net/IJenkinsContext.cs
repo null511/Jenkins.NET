@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JenkinsNET.Models;
 
 namespace JenkinsNET
@@ -29,6 +30,11 @@ namespace JenkinsNET
         /// [optional] Jenkins ApiToken for the <see cref="UserName"/>.
         /// </summary>
         string ApiToken {get; set;}
+
+        /// <summary>
+        /// [optional] Extra HTTP headers to include on every request
+        /// </summary>
+        Dictionary<string, string> ExtraHeaders {get; set;}
 
         /// <summary>
         /// [optional] Jenkins CSRF Crumb.

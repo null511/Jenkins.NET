@@ -1,5 +1,6 @@
 ﻿using JenkinsNET.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -19,6 +20,7 @@ namespace JenkinsNET.Internal
         public string Url {get; set;}
         public string UserName {get; set;}
         public string Password {get; set;}
+        public Dictionary<string, string> ExtraHeaders {get; set;}
         public JenkinsCrumb Crumb {get; set;}
         public Action<HttpWebRequest> OnWrite {get; set;}
         public Action<HttpWebResponse> OnRead {get; set;}
@@ -66,6 +68,10 @@ namespace JenkinsNET.Internal
             request.UserAgent = "Jenkins.NET Client";
             request.AllowAutoRedirect = true;
             request.KeepAlive = true;
+
+            if (ExtraHeaders != null)
+                foreach (var (key, value) in ExtraHeaders)
+                    request.Headers.Add(key, value);
 
             if (Crumb != null)
                 request.Headers.Add(Crumb.CrumbRequestField, Crumb.Crumb);
