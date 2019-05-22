@@ -70,8 +70,8 @@ namespace JenkinsNET.Internal
             request.KeepAlive = true;
 
             if (ExtraHeaders != null)
-                foreach (var (key, value) in ExtraHeaders)
-                    request.Headers.Add(key, value);
+                foreach (var header in ExtraHeaders)
+                    request.Headers.Add(header.Key, header.Value);
 
             if (Crumb != null)
                 request.Headers.Add(Crumb.CrumbRequestField, Crumb.Crumb);
