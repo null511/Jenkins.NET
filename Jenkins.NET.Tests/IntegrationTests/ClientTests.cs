@@ -2,7 +2,7 @@
 using JenkinsNET.Tests.Internal;
 using System;
 using Xunit;
-
+using Assert = Xunit.Assert;
 #if NET_ASYNC
 using System.Threading.Tasks;
 #endif
@@ -103,5 +103,44 @@ namespace JenkinsNET.Tests.IntegrationTests
             output.WriteLine($"Duration: {duration}");
         }
     #endif
+
+        [Fact]
+        [Trait("Category", "Integration")]
+        public void GetConsoleText()
+        {
+            var jobRunner = DefaultRunner.Create(output, quiet: true);
+
+            output.WriteLine("Running job...");
+            var build = jobRunner.Run(jobName);
+            output.WriteLine("Job complete.");
+
+            Assert.Equal("SUCCESS", build.Result);
+            Assert.True(jobRunner.BuildNumber.HasValue);
+
+            var text = jobRunner.Client.Builds.GetConsoleText(jobName, jobRunner.BuildNumber.Value.ToString());
+            output.WriteLine(text);
+
+            Assert.Contains("[Hello World!]", text);
+        }
+
+        [Fact]
+        [Trait("Category", "Integration")]
+        public void GetConsoleHtml()
+        {
+            var jobRunner = DefaultRunner.Create(output, quiet: true);
+
+            output.WriteLine("Running job...");
+            var build = jobRunner.Run(jobName);
+            output.WriteLine("Job complete.");
+
+            Assert.Equal("SUCCESS", build.Result);
+            Assert.True(jobRunner.BuildNumber.HasValue);
+
+            var text = jobRunner.Client.Builds.GetConsoleHtml(jobName, jobRunner.BuildNumber.Value.ToString());
+            output.WriteLine(text);
+
+            Assert.Contains("<html>", text);
+            Assert.Contains("[Hello World!]", text);
+        }
     }
 }

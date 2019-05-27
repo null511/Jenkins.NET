@@ -4,12 +4,12 @@ using System.Text;
 
 namespace JenkinsNET.Internal.Commands
 {
-    internal class BuildOutputCommand : JenkinsHttpCommand
+    internal class BuildHtmlCommand : JenkinsHttpCommand
     {
         public string Result {get; private set;}
 
 
-        public BuildOutputCommand(IJenkinsContext context, string jobName, string buildNumber)
+        public BuildHtmlCommand(IJenkinsContext context, string jobName, string buildNumber)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -20,7 +20,7 @@ namespace JenkinsNET.Internal.Commands
             if (string.IsNullOrEmpty(buildNumber))
                 throw new ArgumentException("'buildNumber' cannot be empty!");
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "consoleText");
+            Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "consoleFull");
             UserName = context.UserName;
             Password = context.Password;
             Crumb = context.Crumb;

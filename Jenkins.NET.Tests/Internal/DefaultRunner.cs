@@ -12,27 +12,29 @@ namespace JenkinsNET.Tests.Internal
     internal static class DefaultRunner
     {
     #if NETCORE
-        public static JenkinsJobRunner Create(ITestOutputHelper writer, JenkinsClient client = null)
+        public static JenkinsJobRunner Create(ITestOutputHelper writer, JenkinsClient client = null, bool quiet = false)
     #else
-        public static JenkinsJobRunner Create(TextWriter writer, JenkinsClient client = null)
+        public static JenkinsJobRunner Create(TextWriter writer, JenkinsClient client = null, bool quiet = false)
     #endif
         {
             client = client ?? DefaultClient.Create();
 
             var jobRunner = new JenkinsJobRunner(client) {
-                MonitorConsoleOutput = true,
+                MonitorConsoleOutput = !quiet,
             };
 
-            jobRunner.StatusChanged += () => {
-                writer.WriteLine($"[{DateTime.Now}] Status: '{jobRunner.Status}'");
-            };
+            if (!quiet) {
+                jobRunner.StatusChanged += () => {
+                    writer.WriteLine($"[{DateTime.Now}] Status: '{jobRunner.Status}'");
+                };
 
-        #if NETCORE
-            // Write method not available!
-            jobRunner.ConsoleOutputChanged += writer.WriteLine;
-        #else
-            jobRunner.ConsoleOutputChanged += writer.Write;
-        #endif
+            #if NETCORE
+                // Write method not available!
+                jobRunner.ConsoleOutputChanged += writer.WriteLine;
+            #else
+                jobRunner.ConsoleOutputChanged += writer.Write;
+            #endif
+            }
 
             return jobRunner;
         }
