@@ -1,6 +1,6 @@
+using JenkinsNET.Models;
 using System.Threading;
 using System.Threading.Tasks;
-using JenkinsNET.Models;
 
 namespace JenkinsNET
 {
@@ -32,29 +32,29 @@ namespace JenkinsNET
         /// <summary>
         /// Updates the security Crumb attached to this client.
         /// </summary>
-        /// <exception cref="JenkinsNetException"></exception>
+        /// <exception cref="Exceptions.JenkinsNetException"></exception>
         void UpdateSecurityCrumb();
-
-
-        /// <summary>
-        /// Updates the security Crumb attached to this client asynchronously.
-        /// </summary>
-        /// <param name="token">An optional token for aborting the request.</param>
-        /// <exception cref="JenkinsNetException"></exception>
-        Task UpdateSecurityCrumbAsync(CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Gets the root description of the Jenkins node.
         /// </summary>
-        /// <exception cref="JenkinsNetException"></exception>
+        /// <exception cref="Exceptions.JenkinsNetException"></exception>
         Jenkins Get();
 
+    #if NET_ASYNC
+        /// <summary>
+        /// Updates the security Crumb attached to this client asynchronously.
+        /// </summary>
+        /// <param name="token">An optional token for aborting the request.</param>
+        /// <exception cref="Exceptions.JenkinsNetException"></exception>
+        Task UpdateSecurityCrumbAsync(CancellationToken token = default);
 
         /// <summary>
         /// Gets the root description of the Jenkins node asynchronously.
         /// </summary>
         /// <param name="token">An optional token for aborting the request.</param>
-        /// <exception cref="JenkinsNetException"></exception>
-        Task<Jenkins> GetAsync(CancellationToken token = default(CancellationToken));
+        /// <exception cref="Exceptions.JenkinsNetException"></exception>
+        Task<Jenkins> GetAsync(CancellationToken token = default);
+    #endif
     }
 }

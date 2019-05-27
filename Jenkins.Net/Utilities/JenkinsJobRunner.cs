@@ -28,9 +28,9 @@ namespace JenkinsNET.Utilities
     /// </summary>
     public class JenkinsJobRunner
     {
-        private readonly JenkinsClient client;
-        private ProgressiveTextReader textReader;
-        private bool isJobStarted;
+        public JenkinsClient Client {get;}
+        protected ProgressiveTextReader textReader;
+        protected bool isJobStarted;
 
         /// <summary>
         /// Occurs when the status of the running Jenkins Job changes.
@@ -46,7 +46,7 @@ namespace JenkinsNET.Utilities
         /// <summary>
         /// Gets the status of the running Jenkins Job.
         /// </summary>
-        public JenkinsJobStatus Status {get; private set;}
+        public JenkinsJobStatus Status {get; protected set;}
 
         /// <summary>
         /// Gets or sets whether the Jobs Console Output
@@ -77,13 +77,23 @@ namespace JenkinsNET.Utilities
         /// </summary>
         public string ConsoleOutput => textReader?.Text;
 
+        /// <summary>
+        /// Gets the number of the current Queue item.
+        /// </summary>
+        public int? QueueItemNumber {get; protected set;}
+
+        /// <summary>
+        /// Gets the number of the current Build.
+        /// </summary>
+        public int? BuildNumber {get; protected set;}
+
 
         /// <summary>
         /// Creates a new JobRunner using the provided Jenkins-Client.
         /// </summary>
         public JenkinsJobRunner(JenkinsClient client)
         {
-            this.client = client ?? throw new ArgumentNullException(nameof(client));
+            this.Client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
         /// <summary>
@@ -101,7 +111,7 @@ namespace JenkinsNET.Utilities
             SetStatus(JenkinsJobStatus.Pending);
             var queueStartTime = DateTime.Now;
 
-            var buildResult = client.Jobs.Build(jobName);
+            var buildResult = Client.Jobs.Build(jobName);
 
             if (buildResult == null)
                 throw new JenkinsJobBuildException("An empty build response was returned!");
@@ -125,7 +135,7 @@ namespace JenkinsNET.Utilities
             SetStatus(JenkinsJobStatus.Pending);
             var queueStartTime = DateTime.Now;
 
-            var buildResult = await client.Jobs.BuildAsync(jobName);
+            var buildResult = await Client.Jobs.BuildAsync(jobName);
 
             if (buildResult == null)
                 throw new JenkinsJobBuildException("An empty build response was returned!");
@@ -150,7 +160,7 @@ namespace JenkinsNET.Utilities
             SetStatus(JenkinsJobStatus.Pending);
             var queueStartTime = DateTime.Now;
 
-            var buildResult = client.Jobs.BuildWithParameters(jobName, jobParameters);
+            var buildResult = Client.Jobs.BuildWithParameters(jobName, jobParameters);
 
             if (buildResult == null)
                 throw new JenkinsJobBuildException("An empty build response was returned!");
@@ -175,7 +185,7 @@ namespace JenkinsNET.Utilities
             SetStatus(JenkinsJobStatus.Pending);
             var queueStartTime = DateTime.Now;
 
-            var buildResult = await client.Jobs.BuildWithParametersAsync(jobName, jobParameters);
+            var buildResult = await Client.Jobs.BuildWithParametersAsync(jobName, jobParameters);
 
             if (buildResult == null)
                 throw new JenkinsJobBuildException("An empty build response was returned!");
@@ -189,16 +199,17 @@ namespace JenkinsNET.Utilities
         /// <exception cref="JenkinsJobGetBuildException"></exception>
         private JenkinsBuildBase Process(string jobName, JenkinsBuildResult buildResult, DateTime queueStartTime)
         {
-            var queueItemNumber = buildResult.GetQueueItemNumber();
-            if (!queueItemNumber.HasValue) throw new JenkinsNetException("Queue-Item number not found!");
+            QueueItemNumber = buildResult.GetQueueItemNumber();
+            if (!QueueItemNumber.HasValue) throw new JenkinsNetException("Queue-Item number not found!");
 
             SetStatus(JenkinsJobStatus.Queued);
 
-            int? buildNumber;
             while (true) {
-                var queueItem = client.Queue.GetItem(queueItemNumber.Value);
-                buildNumber = queueItem?.Executable?.Number;
-                if (buildNumber.HasValue) break;
+                if (!QueueItemNumber.HasValue) throw new JenkinsNetException("Queue-Item number not found!");
+
+                var queueItem = Client.Queue.GetItem(QueueItemNumber.Value);
+                BuildNumber = queueItem?.Executable?.Number;
+                if (BuildNumber.HasValue) break;
 
                 if (QueueTimeout > 0 && DateTime.Now.Subtract(queueStartTime).TotalSeconds > QueueTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to start!");
@@ -209,12 +220,14 @@ namespace JenkinsNET.Utilities
             SetStatus(JenkinsJobStatus.Building);
             var buildStartTime = DateTime.Now;
 
-            textReader = new ProgressiveTextReader(client, jobName, buildNumber.ToString());
+            textReader = new ProgressiveTextReader(Client, jobName, BuildNumber.ToString());
             textReader.TextChanged += TextReader_TextChanged;
 
             JenkinsBuildBase buildItem = null;
             while (string.IsNullOrEmpty(buildItem?.Result)) {
-                buildItem = client.Builds.Get<JenkinsBuildBase>(jobName, buildNumber.Value.ToString());
+                if (!BuildNumber.HasValue) throw new JenkinsNetException("Build number not found!");
+
+                buildItem = Client.Builds.Get<JenkinsBuildBase>(jobName, BuildNumber.Value.ToString());
                 if (!string.IsNullOrEmpty(buildItem?.Result)) break;
 
                 if (BuildTimeout > 0 && DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
@@ -240,16 +253,17 @@ namespace JenkinsNET.Utilities
         /// <exception cref="JenkinsJobGetBuildException"></exception>
         private async Task<JenkinsBuildBase> ProcessAsync(string jobName, JenkinsBuildResult buildResult, DateTime queueStartTime)
         {
-            var queueItemNumber = buildResult.GetQueueItemNumber();
-            if (!queueItemNumber.HasValue) throw new JenkinsNetException("Queue-Item number not found!");
+            QueueItemNumber = buildResult.GetQueueItemNumber();
+            if (!QueueItemNumber.HasValue) throw new JenkinsNetException("Queue-Item number not found!");
 
             SetStatus(JenkinsJobStatus.Queued);
 
-            int? buildNumber;
             while (true) {
-                var queueItem = await client.Queue.GetItemAsync(queueItemNumber.Value);
-                buildNumber = queueItem?.Executable?.Number;
-                if (buildNumber.HasValue) break;
+                if (!QueueItemNumber.HasValue) throw new JenkinsNetException("Queue-Item number not found!");
+
+                var queueItem = await Client.Queue.GetItemAsync(QueueItemNumber.Value);
+                BuildNumber = queueItem?.Executable?.Number;
+                if (BuildNumber.HasValue) break;
 
                 if (QueueTimeout > 0 && DateTime.Now.Subtract(queueStartTime).TotalSeconds > QueueTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to start!");
@@ -260,12 +274,14 @@ namespace JenkinsNET.Utilities
             SetStatus(JenkinsJobStatus.Building);
             var buildStartTime = DateTime.Now;
 
-            textReader = new ProgressiveTextReader(client, jobName, buildNumber.ToString());
+            textReader = new ProgressiveTextReader(Client, jobName, BuildNumber.ToString());
             textReader.TextChanged += TextReader_TextChanged;
 
             JenkinsBuildBase buildItem = null;
             while (string.IsNullOrEmpty(buildItem?.Result)) {
-                buildItem = await client.Builds.GetAsync<JenkinsBuildBase>(jobName, buildNumber.Value.ToString());
+                if (!BuildNumber.HasValue) throw new JenkinsNetException("Build number not found!");
+
+                buildItem = await Client.Builds.GetAsync<JenkinsBuildBase>(jobName, BuildNumber.Value.ToString());
                 if (!string.IsNullOrEmpty(buildItem?.Result)) break;
 
                 if (BuildTimeout > 0 && DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)

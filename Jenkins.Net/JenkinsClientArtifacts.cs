@@ -53,7 +53,7 @@ namespace JenkinsNET
         /// <param name="token">An optional token for aborting the request.</param>
         /// <returns>A memory-stream containing the contents of the artifact.</returns>
         /// <exception cref="JenkinsArtifactGetException"></exception>
-        public async Task<MemoryStream> GetAsync(string jobName, string buildNumber, string filename, CancellationToken token = default(CancellationToken))
+        public async Task<MemoryStream> GetAsync(string jobName, string buildNumber, string filename, CancellationToken token = default)
         {
             try {
                 var cmd = new ArtifactGetCommand(context, jobName, buildNumber, filename);

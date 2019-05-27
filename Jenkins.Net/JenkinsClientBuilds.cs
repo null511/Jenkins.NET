@@ -49,7 +49,7 @@ namespace JenkinsNET
         /// <param name="buildNumber">The number of the build.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsJobGetBuildException"></exception>
-        public async Task<T> GetAsync<T>(string jobName, string buildNumber, CancellationToken token = default(CancellationToken)) where T : class, IJenkinsBuild
+        public async Task<T> GetAsync<T>(string jobName, string buildNumber, CancellationToken token = default) where T : class, IJenkinsBuild
         {
             try {
                 var cmd = new BuildGetCommand<T>(context, jobName, buildNumber);
@@ -68,10 +68,10 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public string GetConsoleOutput(string jobName, string buildNumber)
+        public string GetConsoleText(string jobName, string buildNumber)
         {
             try {
-                var cmd = new BuildOutputCommand(context, jobName, buildNumber);
+                var cmd = new BuildTextCommand(context, jobName, buildNumber);
                 cmd.Run();
                 return cmd.Result;
             }
@@ -88,10 +88,49 @@ namespace JenkinsNET
         /// <param name="buildNumber">The number of the build.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<string> GetConsoleOutputAsync(string jobName, string buildNumber, CancellationToken token = default(CancellationToken))
+        public async Task<string> GetConsoleTextAsync(string jobName, string buildNumber, CancellationToken token = default)
         {
             try {
-                var cmd = new BuildOutputCommand(context, jobName, buildNumber);
+                var cmd = new BuildTextCommand(context, jobName, buildNumber);
+                await cmd.RunAsync(token);
+                return cmd.Result;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to retrieve console output from build #{buildNumber} of Jenkins Job '{jobName}'!", error);
+            }
+        }
+    #endif
+
+        /// <summary>
+        /// Gets the console output from a Jenkins Job Build.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        /// <param name="buildNumber">The number of the build.</param>
+        /// <exception cref="JenkinsNetException"></exception>
+        public string GetConsoleHtml(string jobName, string buildNumber)
+        {
+            try {
+                var cmd = new BuildHtmlCommand(context, jobName, buildNumber);
+                cmd.Run();
+                return cmd.Result;
+            }
+            catch (Exception error) {
+                throw new JenkinsNetException($"Failed to retrieve console output from build #{buildNumber} of Jenkins Job '{jobName}'!", error);
+            }
+        }
+
+    #if NET_ASYNC
+        /// <summary>
+        /// Gets the console output from a Jenkins Job Build asynchronously.
+        /// </summary>
+        /// <param name="jobName">The name of the Job.</param>
+        /// <param name="buildNumber">The number of the build.</param>
+        /// <param name="token">An optional token for aborting the request.</param>
+        /// <exception cref="JenkinsNetException"></exception>
+        public async Task<string> GetConsoleHtmlAsync(string jobName, string buildNumber, CancellationToken token = default)
+        {
+            try {
+                var cmd = new BuildHtmlCommand(context, jobName, buildNumber);
                 await cmd.RunAsync(token);
                 return cmd.Result;
             }
@@ -129,7 +168,7 @@ namespace JenkinsNET
         /// <param name="start">The character position to begin reading from.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<JenkinsProgressiveTextResponse> GetProgressiveTextAsync(string jobName, string buildNumber, int start, CancellationToken token = default(CancellationToken))
+        public async Task<JenkinsProgressiveTextResponse> GetProgressiveTextAsync(string jobName, string buildNumber, int start, CancellationToken token = default)
         {
             try {
                 var cmd = new BuildProgressiveTextCommand(context, jobName, buildNumber, start);
@@ -170,7 +209,7 @@ namespace JenkinsNET
         /// <param name="start">The character position to begin reading from.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<JenkinsProgressiveHtmlResponse> GetProgressiveHtmlAsync(string jobName, string buildNumber, int start, CancellationToken token = default(CancellationToken))
+        public async Task<JenkinsProgressiveHtmlResponse> GetProgressiveHtmlAsync(string jobName, string buildNumber, int start, CancellationToken token = default)
         {
             try {
                 var cmd = new BuildProgressiveHtmlCommand(context, jobName, buildNumber, start);

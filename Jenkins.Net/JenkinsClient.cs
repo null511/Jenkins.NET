@@ -115,7 +115,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task UpdateSecurityCrumbAsync(CancellationToken token = default(CancellationToken))
+        public async Task UpdateSecurityCrumbAsync(CancellationToken token = default)
         {
             try {
                 var cmd = new CrumbGetCommand(this);
@@ -150,7 +150,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<Jenkins> GetAsync(CancellationToken token = default(CancellationToken))
+        public async Task<Jenkins> GetAsync(CancellationToken token = default)
         {
             try {
                 var cmd = new JenkinsGetCommand(this);

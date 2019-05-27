@@ -1,0 +1,20 @@
+language: csharp
+mono: none
+dotnet: 2.0.0
+
+install:
+  - curl -L -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+  - dotnet restore
+
+script:
+  - dotnet build -c Debug
+  - dotnet test Jenkins.Net.Tests/Jenkins.Net.Tests.csproj -c Debug --no-build --filter Category=Unit
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script:
+    - dotnet pack Jenkins.Net/Jenkins.Net.csproj -c Debug --no-build
+    - nuget push Jenkins.Net/bin/Jenkins.Net.*.nupkg -Source "$NUGET_SOURCE" -ApiKey "$NUGET_APIKEY"
+  on:
+    branch: master

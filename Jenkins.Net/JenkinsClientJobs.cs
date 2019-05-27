@@ -48,7 +48,7 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsJobBuildException"></exception>
-        public async Task<JenkinsBuildResult> BuildAsync(string jobName, CancellationToken token = default(CancellationToken))
+        public async Task<JenkinsBuildResult> BuildAsync(string jobName, CancellationToken token = default)
         {
             try {
                 var cmd = new JobBuildCommand(context, jobName);
@@ -87,7 +87,7 @@ namespace JenkinsNET
         /// <param name="jobParameters">The collection of parameters for building the job.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsJobBuildException"></exception>
-        public async Task<JenkinsBuildResult> BuildWithParametersAsync(string jobName, IDictionary<string, string> jobParameters, CancellationToken token = default(CancellationToken))
+        public async Task<JenkinsBuildResult> BuildWithParametersAsync(string jobName, IDictionary<string, string> jobParameters, CancellationToken token = default)
         {
             try {
                 var cmd = new JobBuildWithParametersCommand(context, jobName, jobParameters);
@@ -124,7 +124,7 @@ namespace JenkinsNET
         /// <param name="jobName">The Name of the Job to retrieve.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<T> GetAsync<T>(string jobName, CancellationToken token = default(CancellationToken)) where T : class, IJenkinsJob
+        public async Task<T> GetAsync<T>(string jobName, CancellationToken token = default) where T : class, IJenkinsJob
         {
             try {
                 var cmd = new JobGetCommand<T>(context, jobName);
@@ -161,7 +161,7 @@ namespace JenkinsNET
         /// <param name="jobName">The Name of the Job to retrieve.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<JenkinsProject> GetConfigurationAsync(string jobName, CancellationToken token = default(CancellationToken))
+        public async Task<JenkinsProject> GetConfigurationAsync(string jobName, CancellationToken token = default)
         {
             try {
                 var cmd = new JobGetConfigCommand(context, jobName);
@@ -198,7 +198,7 @@ namespace JenkinsNET
         /// <param name="job">The description of the Job to create.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task CreateAsync(string jobName, JenkinsProject job, CancellationToken token = default(CancellationToken))
+        public async Task CreateAsync(string jobName, JenkinsProject job, CancellationToken token = default)
         {
             try {
                 await new JobCreateCommand(context, jobName, job).RunAsync(token);
@@ -233,7 +233,7 @@ namespace JenkinsNET
         /// <param name="job">The updated description of the Job.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task UpdateConfigurationAsync(string jobName, JenkinsProject job, CancellationToken token = default(CancellationToken))
+        public async Task UpdateConfigurationAsync(string jobName, JenkinsProject job, CancellationToken token = default)
         {
             try {
                 await new JobUpdateConfigurationCommand(context, jobName, job).RunAsync(token);
@@ -266,7 +266,7 @@ namespace JenkinsNET
         /// <param name="jobName">The name of the Job to delete.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsJobDeleteException"></exception>
-        public async Task DeleteAsync(string jobName, CancellationToken token = default(CancellationToken))
+        public async Task DeleteAsync(string jobName, CancellationToken token = default)
         {
             try {
                 await new JobDeleteCommand(context, jobName).RunAsync(token);

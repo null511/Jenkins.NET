@@ -12,7 +12,7 @@ namespace JenkinsNET.Internal
             var isNullable = nullType != null;
 
             if (string.IsNullOrEmpty(value))
-                return isNullable ? (T)(object)null : default(T);
+                return isNullable ? (T)(object)null : default;
 
             try {
                 return (T)value.Cast(isNullable ? nullType : tType);

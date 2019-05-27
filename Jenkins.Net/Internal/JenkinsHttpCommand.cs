@@ -41,7 +41,7 @@ namespace JenkinsNET.Internal
         }
 
     #if NET_ASYNC
-        public async Task RunAsync(CancellationToken token = default(CancellationToken))
+        public async Task RunAsync(CancellationToken token = default)
         {
             var request = CreateRequest();
 
@@ -122,7 +122,7 @@ namespace JenkinsNET.Internal
             }
         }
 
-        protected async Task WriteXmlAsync(HttpWebRequest request, XNode node, CancellationToken token = default(CancellationToken))
+        protected async Task WriteXmlAsync(HttpWebRequest request, XNode node, CancellationToken token = default)
         {
             var xmlSettings = new XmlWriterSettings {
                 ConformanceLevel = ConformanceLevel.Fragment,

@@ -45,7 +45,7 @@ namespace JenkinsNET
         /// </summary>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsNetException"></exception>
-        public async Task<JenkinsQueueItem[]> GetAllItemsAsync(CancellationToken token = default(CancellationToken))
+        public async Task<JenkinsQueueItem[]> GetAllItemsAsync(CancellationToken token = default)
         {
             try {
                 var cmd = new QueueItemListCommand(context);
@@ -82,7 +82,7 @@ namespace JenkinsNET
         /// <param name="itemNumber">The ID of the queue-item.</param>
         /// <param name="token">An optional token for aborting the request.</param>
         /// <exception cref="JenkinsJobBuildException"></exception>
-        public async Task<JenkinsQueueItem> GetItemAsync(int itemNumber, CancellationToken token = default(CancellationToken))
+        public async Task<JenkinsQueueItem> GetItemAsync(int itemNumber, CancellationToken token = default)
         {
             try {
                 var cmd = new QueueGetItemCommand(context, itemNumber);

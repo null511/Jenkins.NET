@@ -20,7 +20,7 @@ namespace JenkinsNET.Internal
             return value.To<T>();
         }
 
-        public static T TryGetValue<T>(this XNode parentNode, string expression, T defaultValue = default(T))
+        public static T TryGetValue<T>(this XNode parentNode, string expression, T defaultValue = default)
         {
             var node = parentNode.XPathEvaluate(expression);
             var value = GetNodeValue(node);
@@ -31,7 +31,7 @@ namespace JenkinsNET.Internal
         public static T Wrap<T>(this XNode parentNode, string expression, Func<XElement, T> wrapFunc)
         {
             var node = parentNode.XPathSelectElement(expression);
-            if (node == null) return default(T);
+            if (node == null) return default;
 
             return wrapFunc(node);
         }
