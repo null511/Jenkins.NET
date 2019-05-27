@@ -10,13 +10,11 @@ install:
 script:
   - dotnet build -c Debug --no-restore -v m
   #- dotnet test Jenkins.Net.Tests/Jenkins.Net.Tests.csproj -c Debug --no-build --filter Category=Unit
+  - dotnet pack Jenkins.Net/Jenkins.Net.csproj -c Debug --no-build --no-restore -o bin
 
 deploy:
   skip_cleanup: true
-  provider: script
   script:
-    - cd Jenkins.Net
-    - dotnet pack Jenkins.Net.csproj -c Debug --no-build --no-restore -o bin
-    - nuget push bin/Jenkins.Net.*.nupkg -Source "$NUGET_SOURCE" -ApiKey "$NUGET_APIKEY"
+    - dotnet nuget push Jenkins.Net/bin/Release/Jenkins.Net.*.nupkg --api-key $NUGET_APIKEY
   on:
     branch: master
