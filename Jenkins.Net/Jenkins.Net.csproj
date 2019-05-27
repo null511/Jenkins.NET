@@ -20,6 +20,7 @@
     <Version>1.0.3</Version>
     <FileVersion>1.0.3</FileVersion>
     <AssemblyVersion>1.0.3</AssemblyVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
     <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0;NET_ASYNC</DefineConstants>
