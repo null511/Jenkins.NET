@@ -14,7 +14,7 @@ script:
 
 deploy:
   skip_cleanup: true
-  script:
-    - dotnet nuget push Jenkins.Net/bin/Release/Jenkins.Net.*.nupkg --api-key $NUGET_APIKEY
+  provider: script
+  script: dotnet nuget push Jenkins.Net/bin/Release/Jenkins.Net.*.nupkg --api-key $NUGET_APIKEY
   on:
     branch: master
