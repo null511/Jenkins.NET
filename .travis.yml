@@ -4,7 +4,7 @@ dotnet: 2.0.0
 
 install:
   - export FrameworkPathOverride=$(dirname $(which mono))/../lib/mono/4.5/
-  - curl -L -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+  #- curl -L -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
   - dotnet restore
 
 script:
@@ -15,6 +15,6 @@ script:
 deploy:
   skip_cleanup: true
   provider: script
-  script: dotnet nuget push Jenkins.Net/bin/Release/Jenkins.Net.*.nupkg --source $NUGET_SOURCE --api-key $NUGET_APIKEY
+  script: dotnet nuget push Jenkins.Net/bin/Release/Jenkins.Net.*.nupkg -k $NUGET_APIKEY -s $NUGET_SOURCE
   on:
     branch: master
