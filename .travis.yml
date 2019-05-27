@@ -8,8 +8,8 @@ install:
   - dotnet restore
 
 script:
-  - dotnet build -c Debug
-  - dotnet test Jenkins.Net.Tests/Jenkins.Net.Tests.csproj -c Debug --no-build --filter Category=Unit
+  - dotnet build -c Debug --no-restore -v m
+  #- dotnet test Jenkins.Net.Tests/Jenkins.Net.Tests.csproj -c Debug --no-build --filter Category=Unit
 
 deploy:
   skip_cleanup: true

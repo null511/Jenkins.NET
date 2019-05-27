@@ -3,6 +3,7 @@ using JenkinsNET.Tests.Internal;
 using System;
 using Xunit;
 using Assert = Xunit.Assert;
+
 #if NET_ASYNC
 using System.Threading.Tasks;
 #endif
