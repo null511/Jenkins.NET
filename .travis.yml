@@ -15,7 +15,8 @@ deploy:
   skip_cleanup: true
   provider: script
   script:
-    - dotnet pack Jenkins.Net/Jenkins.Net.csproj -c Debug --no-build
-    - nuget push Jenkins.Net/bin/Jenkins.Net.*.nupkg -Source "$NUGET_SOURCE" -ApiKey "$NUGET_APIKEY"
+    - cd Jenkins.Net
+    - dotnet pack Jenkins.Net.csproj -c Debug --no-build --no-restore -o bin
+    - nuget push bin/Jenkins.Net.*.nupkg -Source "$NUGET_SOURCE" -ApiKey "$NUGET_APIKEY"
   on:
     branch: master
