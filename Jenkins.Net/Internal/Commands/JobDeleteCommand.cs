@@ -4,18 +4,12 @@ namespace JenkinsNET.Internal.Commands
 {
     internal class JobDeleteCommand : JenkinsHttpCommand
     {
-        public JobDeleteCommand(IJenkinsContext context, string jobName)
+        public JobDeleteCommand(JenkinsClient client, string jobName) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("'jobName' cannot be empty!");
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "doDelete");
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            Path = $"job/{jobName}/doDelete";
 
             OnWrite = request => {
                 request.Method = "POST";

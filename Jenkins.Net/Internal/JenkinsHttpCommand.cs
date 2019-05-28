@@ -1,5 +1,4 @@
-﻿using JenkinsNET.Models;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -16,10 +15,9 @@ namespace JenkinsNET.Internal
 {
     internal class JenkinsHttpCommand
     {
-        public string Url {get; set;}
-        public string UserName {get; set;}
-        public string Password {get; set;}
-        public JenkinsCrumb Crumb {get; set;}
+        private readonly JenkinsClient client;
+
+        public string Path {get; set;}
         public Action<HttpWebRequest> OnWrite {get; set;}
         public Action<HttpWebResponse> OnRead {get; set;}
 
@@ -29,11 +27,18 @@ namespace JenkinsNET.Internal
     #endif
 
 
+        public JenkinsHttpCommand(JenkinsClient client)
+        {
+            this.client = client ?? throw new ArgumentNullException(nameof(client));
+        }
+
         public void Run()
         {
             var request = CreateRequest();
 
             OnWrite?.Invoke(request);
+
+            client.OnBeforeRequestSend(request);
 
             using (var response = (HttpWebResponse)request.GetResponse()) {
                 OnRead?.Invoke(response);
@@ -58,23 +63,24 @@ namespace JenkinsNET.Internal
 
         private HttpWebRequest CreateRequest()
         {
-            var _url = Url;
-            var hasUser = !string.IsNullOrEmpty(UserName);
-            var hasPass = !string.IsNullOrEmpty(Password);
+            var _url = NetPath.Combine(client.BaseUrl, Path);
+            var _password = client.ApiToken ?? client.Password;
+            var hasUser = !string.IsNullOrEmpty(client.UserName);
+            var hasPass = !string.IsNullOrEmpty(_password);
 
             var request = (HttpWebRequest)WebRequest.Create(_url);
             request.UserAgent = "Jenkins.NET Client";
             request.AllowAutoRedirect = true;
             request.KeepAlive = true;
 
-            if (Crumb != null)
-                request.Headers.Add(Crumb.CrumbRequestField, Crumb.Crumb);
+            if (client.Crumb != null)
+                request.Headers.Add(client.Crumb.CrumbRequestField, client.Crumb.Crumb);
 
             if (hasUser && hasPass) {
                 request.PreAuthenticate = true;
                 request.UseDefaultCredentials = false;
 
-                var data = Encoding.UTF8.GetBytes($"{UserName}:{Password}");
+                var data = Encoding.UTF8.GetBytes($"{client.UserName}:{_password}");
                 var basicAuthToken = Convert.ToBase64String(data);
                 request.Headers["Authorization"] = $"Basic {basicAuthToken}";
             }

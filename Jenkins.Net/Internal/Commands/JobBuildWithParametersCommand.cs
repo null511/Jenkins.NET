@@ -10,11 +10,8 @@ namespace JenkinsNET.Internal.Commands
     {
         public JenkinsBuildResult Result {get; internal set;}
 
-        public JobBuildWithParametersCommand(IJenkinsContext context, string jobName, IDictionary<string, string> jobParameters)
+        public JobBuildWithParametersCommand(JenkinsClient client, string jobName, IDictionary<string, string> jobParameters) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("'jobName' cannot be empty!");
 
@@ -28,10 +25,7 @@ namespace JenkinsNET.Internal.Commands
             var query = new StringWriter();
             WriteJobParameters(query, _params);
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, $"buildWithParameters?{query}");
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            Path = $"job/{jobName}/buildWithParameters?{query}";
 
             OnWrite = request => {
                 request.Method = "POST";

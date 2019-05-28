@@ -2,6 +2,7 @@
 using JenkinsNET.Internal.Commands;
 using JenkinsNET.Models;
 using System;
+using System.Net;
 
 #if NET_ASYNC
 using System.Threading;
@@ -10,11 +11,15 @@ using System.Threading.Tasks;
 
 namespace JenkinsNET
 {
+    public delegate void BeforeRequestSendEventHandler(WebRequest request);
+
     /// <summary>
     /// HTTP-Client for interacting with Jenkins API.
     /// </summary>
     public class JenkinsClient : IJenkinsContext, IJenkinsClient
     {
+        public event BeforeRequestSendEventHandler BeforeRequestSend;
+
         /// <summary>
         /// The address of the Jenkins instance.
         /// ie: http://localhost:8080
@@ -165,5 +170,10 @@ namespace JenkinsNET
             }
         }
     #endif
+
+        internal void OnBeforeRequestSend(WebRequest request)
+        {
+            BeforeRequestSend?.Invoke(request);
+        }
     }
 }

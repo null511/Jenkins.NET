@@ -9,15 +9,9 @@ namespace JenkinsNET.Internal.Commands
         public JenkinsQueueItem Result {get; private set;}
 
 
-        public QueueGetItemCommand(IJenkinsContext context, int itemNumber)
+        public QueueGetItemCommand(JenkinsClient client, int itemNumber) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            Url = NetPath.Combine(context.BaseUrl, "queue/item", itemNumber.ToString(), "api/xml");
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            Path = $"queue/item/{itemNumber}/api/xml";
 
             OnWrite = request => {
                 request.Method = "POST";

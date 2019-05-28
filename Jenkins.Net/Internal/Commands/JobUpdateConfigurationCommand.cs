@@ -5,22 +5,15 @@ namespace JenkinsNET.Internal.Commands
 {
     internal class JobUpdateConfigurationCommand : JenkinsHttpCommand
     {
-        public JobUpdateConfigurationCommand(IJenkinsContext context, string jobName, JenkinsProject job)
+        public JobUpdateConfigurationCommand(JenkinsClient client, string jobName, JenkinsProject job) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("Value cannot be empty!", nameof(jobName));
 
             if (job == null)
                 throw new ArgumentNullException(nameof(job));
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "config.xml");
-
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            Path = $"job/{jobName}/config.xml";
 
             OnWrite = request => {
                 request.Method = "POST";

@@ -16,6 +16,7 @@ deploy:
   provider: releases
   api_key: $GITHUB_APIKEY
   file: "Jenkins.Net/bin/jenkinsnet.*.nupkg"
+  file_glob: true
   skip_cleanup: true
   on:
     tags: true

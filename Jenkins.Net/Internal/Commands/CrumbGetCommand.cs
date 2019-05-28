@@ -9,14 +9,9 @@ namespace JenkinsNET.Internal.Commands
         public JenkinsCrumb Result {get; private set;}
 
 
-        public CrumbGetCommand(IJenkinsContext context)
+        public CrumbGetCommand(JenkinsClient client) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            Url = NetPath.Combine(context.BaseUrl, "crumbIssuer/api/xml");
-            UserName = context.UserName;
-            Password = context.Password;
+            Path = $"crumbIssuer/api/xml";
 
             OnWrite = request => {
                 request.Method = "GET";

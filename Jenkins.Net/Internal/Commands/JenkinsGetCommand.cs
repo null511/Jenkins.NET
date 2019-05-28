@@ -1,5 +1,4 @@
 ﻿using JenkinsNET.Models;
-using System;
 
 namespace JenkinsNET.Internal.Commands
 {
@@ -8,16 +7,9 @@ namespace JenkinsNET.Internal.Commands
         public Jenkins Result {get; private set;}
 
 
-        public JenkinsGetCommand(IJenkinsContext context)
+        public JenkinsGetCommand(JenkinsClient client) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            Url = NetPath.Combine(context.BaseUrl, "api/xml");
-
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            Path = "api/xml";
 
             OnWrite = request => {
                 request.Method = "GET";
