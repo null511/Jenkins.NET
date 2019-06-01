@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jenkins.Net", "Jenkins.Net\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jenkins.Net.Tests", "Jenkins.Net.Tests\Jenkins.Net.Tests.csproj", "{C39D7FDD-F85E-4FEF-8E30-A23B04DD1787}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jenkins.Net.Console", "Jenkins.Net.Console\Jenkins.Net.Console.csproj", "{DC01C670-176F-4587-B574-7FA73795F335}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C39D7FDD-F85E-4FEF-8E30-A23B04DD1787}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C39D7FDD-F85E-4FEF-8E30-A23B04DD1787}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C39D7FDD-F85E-4FEF-8E30-A23B04DD1787}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC01C670-176F-4587-B574-7FA73795F335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC01C670-176F-4587-B574-7FA73795F335}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC01C670-176F-4587-B574-7FA73795F335}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC01C670-176F-4587-B574-7FA73795F335}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
