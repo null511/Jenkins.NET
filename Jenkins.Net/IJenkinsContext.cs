@@ -1,5 +1,5 @@
-﻿using System;
-using JenkinsNET.Models;
+﻿using JenkinsNET.Models;
+using System;
 
 namespace JenkinsNET
 {

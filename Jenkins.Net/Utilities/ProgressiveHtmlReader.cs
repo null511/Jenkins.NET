@@ -1,6 +1,6 @@
 ﻿using System;
 
-#if !NET40
+#if NET_ASYNC
 using System.Threading.Tasks;
 #endif
 
@@ -73,7 +73,7 @@ namespace JenkinsNET.Utilities
                 IsComplete = true;
         }
 
-    #if !NET40
+    #if NET_ASYNC
         /// <summary>
         /// Retrieves and appends any additional text returned
         /// by the running Jenkins Job asynchronously.

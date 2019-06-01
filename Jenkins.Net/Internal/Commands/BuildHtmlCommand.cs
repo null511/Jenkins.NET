@@ -9,21 +9,15 @@ namespace JenkinsNET.Internal.Commands
         public string Result {get; private set;}
 
 
-        public BuildHtmlCommand(IJenkinsContext context, string jobName, string buildNumber)
+        public BuildHtmlCommand(JenkinsClient client, string jobName, string buildNumber) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("'jobName' cannot be empty!");
 
             if (string.IsNullOrEmpty(buildNumber))
                 throw new ArgumentException("'buildNumber' cannot be empty!");
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "consoleFull");
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            Path = $"job/{jobName}/{buildNumber}/consoleFull";
 
             OnRead = response => {
                 using (var stream = response.GetResponseStream()) {

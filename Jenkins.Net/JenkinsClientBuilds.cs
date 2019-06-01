@@ -2,8 +2,11 @@
 using JenkinsNET.Internal.Commands;
 using JenkinsNET.Models;
 using System;
+
+#if NET_ASYNC
 using System.Threading;
 using System.Threading.Tasks;
+#endif
 
 namespace JenkinsNET
 {
@@ -15,12 +18,12 @@ namespace JenkinsNET
     /// </remarks>
     public sealed class JenkinsClientBuilds
     {
-        private readonly IJenkinsContext context;
+        private readonly JenkinsClient client;
 
 
-        internal JenkinsClientBuilds(IJenkinsContext context)
+        internal JenkinsClientBuilds(JenkinsClient client)
         {
-            this.context = context;
+            this.client = client;
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace JenkinsNET
         public T Get<T>(string jobName, string buildNumber) where T : class, IJenkinsBuild
         {
             try {
-                var cmd = new BuildGetCommand<T>(context, jobName, buildNumber);
+                var cmd = new BuildGetCommand<T>(client, jobName, buildNumber);
                 cmd.Run();
                 return cmd.Result;
             }
@@ -52,7 +55,7 @@ namespace JenkinsNET
         public async Task<T> GetAsync<T>(string jobName, string buildNumber, CancellationToken token = default) where T : class, IJenkinsBuild
         {
             try {
-                var cmd = new BuildGetCommand<T>(context, jobName, buildNumber);
+                var cmd = new BuildGetCommand<T>(client, jobName, buildNumber);
                 await cmd.RunAsync(token);
                 return cmd.Result;
             }
@@ -71,7 +74,7 @@ namespace JenkinsNET
         public string GetConsoleText(string jobName, string buildNumber)
         {
             try {
-                var cmd = new BuildTextCommand(context, jobName, buildNumber);
+                var cmd = new BuildTextCommand(client, jobName, buildNumber);
                 cmd.Run();
                 return cmd.Result;
             }
@@ -91,7 +94,7 @@ namespace JenkinsNET
         public async Task<string> GetConsoleTextAsync(string jobName, string buildNumber, CancellationToken token = default)
         {
             try {
-                var cmd = new BuildTextCommand(context, jobName, buildNumber);
+                var cmd = new BuildTextCommand(client, jobName, buildNumber);
                 await cmd.RunAsync(token);
                 return cmd.Result;
             }
@@ -110,7 +113,7 @@ namespace JenkinsNET
         public string GetConsoleHtml(string jobName, string buildNumber)
         {
             try {
-                var cmd = new BuildHtmlCommand(context, jobName, buildNumber);
+                var cmd = new BuildHtmlCommand(client, jobName, buildNumber);
                 cmd.Run();
                 return cmd.Result;
             }
@@ -130,7 +133,7 @@ namespace JenkinsNET
         public async Task<string> GetConsoleHtmlAsync(string jobName, string buildNumber, CancellationToken token = default)
         {
             try {
-                var cmd = new BuildHtmlCommand(context, jobName, buildNumber);
+                var cmd = new BuildHtmlCommand(client, jobName, buildNumber);
                 await cmd.RunAsync(token);
                 return cmd.Result;
             }
@@ -150,7 +153,7 @@ namespace JenkinsNET
         public JenkinsProgressiveTextResponse GetProgressiveText(string jobName, string buildNumber, int start)
         {
             try {
-                var cmd = new BuildProgressiveTextCommand(context, jobName, buildNumber, start);
+                var cmd = new BuildProgressiveTextCommand(client, jobName, buildNumber, start);
                 cmd.Run();
                 return cmd.Result;
             }
@@ -171,7 +174,7 @@ namespace JenkinsNET
         public async Task<JenkinsProgressiveTextResponse> GetProgressiveTextAsync(string jobName, string buildNumber, int start, CancellationToken token = default)
         {
             try {
-                var cmd = new BuildProgressiveTextCommand(context, jobName, buildNumber, start);
+                var cmd = new BuildProgressiveTextCommand(client, jobName, buildNumber, start);
                 await cmd.RunAsync(token);
                 return cmd.Result;
             }
@@ -191,7 +194,7 @@ namespace JenkinsNET
         public JenkinsProgressiveHtmlResponse GetProgressiveHtml(string jobName, string buildNumber, int start)
         {
             try {
-                var cmd = new BuildProgressiveHtmlCommand(context, jobName, buildNumber, start);
+                var cmd = new BuildProgressiveHtmlCommand(client, jobName, buildNumber, start);
                 cmd.Run();
                 return cmd.Result;
             }
@@ -212,7 +215,7 @@ namespace JenkinsNET
         public async Task<JenkinsProgressiveHtmlResponse> GetProgressiveHtmlAsync(string jobName, string buildNumber, int start, CancellationToken token = default)
         {
             try {
-                var cmd = new BuildProgressiveHtmlCommand(context, jobName, buildNumber, start);
+                var cmd = new BuildProgressiveHtmlCommand(client, jobName, buildNumber, start);
                 await cmd.RunAsync(token);
                 return cmd.Result;
             }

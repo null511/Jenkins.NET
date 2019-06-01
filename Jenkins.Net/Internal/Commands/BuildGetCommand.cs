@@ -8,21 +8,15 @@ namespace JenkinsNET.Internal.Commands
         public T Result {get; private set;}
 
 
-        public BuildGetCommand(IJenkinsContext context, string jobName, string buildNumber)
+        public BuildGetCommand(JenkinsClient client, string jobName, string buildNumber) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("'jobName' cannot be empty!");
 
             if (string.IsNullOrEmpty(buildNumber))
                 throw new ArgumentException("'buildNumber' cannot be empty!");
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "api/xml");
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            Path = $"job/{jobName}/{buildNumber}/api/xml";
 
             OnWrite = request => {
                 request.Method = "POST";
