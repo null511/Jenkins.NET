@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Jenkins.Net.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "run -job=\"Test Job\" -p:Arg1=Hello -p:Arg2=\"World!\""
+    }
+  }
+}

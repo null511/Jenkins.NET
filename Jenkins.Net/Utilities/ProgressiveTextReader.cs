@@ -1,6 +1,7 @@
 ﻿using System;
 
 #if NET_ASYNC
+using System.Threading;
 using System.Threading.Tasks;
 #endif
 
@@ -78,11 +79,11 @@ namespace JenkinsNET.Utilities
         /// Retrieves and appends any additional text returned
         /// by the running Jenkins Job asynchronously.
         /// </summary>
-        public async Task UpdateAsync()
+        public async Task UpdateAsync(CancellationToken token = default)
         {
             if (IsComplete) return;
 
-            var result = await client.Builds.GetProgressiveTextAsync(jobName, buildNumber, readPos);
+            var result = await client.Builds.GetProgressiveTextAsync(jobName, buildNumber, readPos, token);
 
             if (result.Size > 0) {
                 Text += result.Text;

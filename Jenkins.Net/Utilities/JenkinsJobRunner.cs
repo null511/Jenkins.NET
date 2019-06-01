@@ -28,9 +28,10 @@ namespace JenkinsNET.Utilities
     /// </summary>
     public class JenkinsJobRunner
     {
-        public JenkinsClient Client {get;}
         protected ProgressiveTextReader textReader;
         protected bool isJobStarted;
+
+        public JenkinsClient Client {get;}
 
         /// <summary>
         /// Occurs when the status of the running Jenkins Job changes.
@@ -127,7 +128,7 @@ namespace JenkinsNET.Utilities
         /// <exception cref="JenkinsNetException"></exception>
         /// <exception cref="JenkinsJobBuildException"></exception>
         /// <exception cref="JenkinsJobGetBuildException"></exception>
-        public async Task<JenkinsBuildBase> RunAsync(string jobName)
+        public async Task<JenkinsBuildBase> RunAsync(string jobName, CancellationToken token = default)
         {
             if (isJobStarted) throw new JenkinsNetException("This JobRunner instance has already been started! Separate JenkinsJobRunner instances are required to run multiple jobs.");
             isJobStarted = true;
@@ -135,12 +136,10 @@ namespace JenkinsNET.Utilities
             SetStatus(JenkinsJobStatus.Pending);
             var queueStartTime = DateTime.Now;
 
-            var buildResult = await Client.Jobs.BuildAsync(jobName);
+            var buildResult = await Client.Jobs.BuildAsync(jobName, token);
+            if (buildResult == null) throw new JenkinsJobBuildException("An empty build response was returned!");
 
-            if (buildResult == null)
-                throw new JenkinsJobBuildException("An empty build response was returned!");
-
-            return await ProcessAsync(jobName, buildResult, queueStartTime);
+            return await ProcessAsync(jobName, buildResult, queueStartTime, token);
         }
     #endif
 
@@ -161,9 +160,7 @@ namespace JenkinsNET.Utilities
             var queueStartTime = DateTime.Now;
 
             var buildResult = Client.Jobs.BuildWithParameters(jobName, jobParameters);
-
-            if (buildResult == null)
-                throw new JenkinsJobBuildException("An empty build response was returned!");
+            if (buildResult == null) throw new JenkinsJobBuildException("An empty build response was returned!");
 
             return Process(jobName, buildResult, queueStartTime);
         }
@@ -177,7 +174,7 @@ namespace JenkinsNET.Utilities
         /// <exception cref="JenkinsNetException"></exception>
         /// <exception cref="JenkinsJobBuildException"></exception>
         /// <exception cref="JenkinsJobGetBuildException"></exception>
-        public async Task<JenkinsBuildBase> RunWithParametersAsync(string jobName, IDictionary<string, string> jobParameters)
+        public async Task<JenkinsBuildBase> RunWithParametersAsync(string jobName, IDictionary<string, string> jobParameters, CancellationToken token = default)
         {
             if (isJobStarted) throw new JenkinsNetException("This JobRunner instance has already been started! Separate JenkinsJobRunner instances are required to run multiple jobs.");
             isJobStarted = true;
@@ -185,12 +182,10 @@ namespace JenkinsNET.Utilities
             SetStatus(JenkinsJobStatus.Pending);
             var queueStartTime = DateTime.Now;
 
-            var buildResult = await Client.Jobs.BuildWithParametersAsync(jobName, jobParameters);
+            var buildResult = await Client.Jobs.BuildWithParametersAsync(jobName, jobParameters, token);
+            if (buildResult == null) throw new JenkinsJobBuildException("An empty build response was returned!");
 
-            if (buildResult == null)
-                throw new JenkinsJobBuildException("An empty build response was returned!");
-
-            return await ProcessAsync(jobName, buildResult, queueStartTime);
+            return await ProcessAsync(jobName, buildResult, queueStartTime, token);
         }
     #endif
 
@@ -251,7 +246,7 @@ namespace JenkinsNET.Utilities
         /// <exception cref="JenkinsNetException"></exception>
         /// <exception cref="JenkinsJobBuildException"></exception>
         /// <exception cref="JenkinsJobGetBuildException"></exception>
-        private async Task<JenkinsBuildBase> ProcessAsync(string jobName, JenkinsBuildResult buildResult, DateTime queueStartTime)
+        private async Task<JenkinsBuildBase> ProcessAsync(string jobName, JenkinsBuildResult buildResult, DateTime queueStartTime, CancellationToken token = default)
         {
             QueueItemNumber = buildResult.GetQueueItemNumber();
             if (!QueueItemNumber.HasValue) throw new JenkinsNetException("Queue-Item number not found!");
@@ -259,16 +254,17 @@ namespace JenkinsNET.Utilities
             SetStatus(JenkinsJobStatus.Queued);
 
             while (true) {
+                token.ThrowIfCancellationRequested();
                 if (!QueueItemNumber.HasValue) throw new JenkinsNetException("Queue-Item number not found!");
 
-                var queueItem = await Client.Queue.GetItemAsync(QueueItemNumber.Value);
+                var queueItem = await Client.Queue.GetItemAsync(QueueItemNumber.Value, token);
                 BuildNumber = queueItem?.Executable?.Number;
                 if (BuildNumber.HasValue) break;
 
                 if (QueueTimeout > 0 && DateTime.Now.Subtract(queueStartTime).TotalSeconds > QueueTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to start!");
 
-                await Task.Delay(PollInterval);
+                await Task.Delay(PollInterval, token);
             }
 
             SetStatus(JenkinsJobStatus.Building);
@@ -279,22 +275,25 @@ namespace JenkinsNET.Utilities
 
             JenkinsBuildBase buildItem = null;
             while (string.IsNullOrEmpty(buildItem?.Result)) {
+                token.ThrowIfCancellationRequested();
                 if (!BuildNumber.HasValue) throw new JenkinsNetException("Build number not found!");
 
-                buildItem = await Client.Builds.GetAsync<JenkinsBuildBase>(jobName, BuildNumber.Value.ToString());
+                buildItem = await Client.Builds.GetAsync<JenkinsBuildBase>(jobName, BuildNumber.Value.ToString(), token);
                 if (!string.IsNullOrEmpty(buildItem?.Result)) break;
 
                 if (BuildTimeout > 0 && DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to complete!");
 
                 if (MonitorConsoleOutput && !textReader.IsComplete)
-                    await textReader.UpdateAsync();
+                    await textReader.UpdateAsync(token);
 
-                await Task.Delay(PollInterval);
+                await Task.Delay(PollInterval, token);
             }
 
             while (MonitorConsoleOutput && !textReader.IsComplete) {
-                await textReader.UpdateAsync();
+                token.ThrowIfCancellationRequested();
+
+                await textReader.UpdateAsync(token);
             }
 
             SetStatus(JenkinsJobStatus.Complete);
