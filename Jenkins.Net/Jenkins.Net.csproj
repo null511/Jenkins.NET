@@ -17,9 +17,9 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Version>1.0.4</Version>
-    <FileVersion>1.0.4</FileVersion>
-    <AssemblyVersion>1.0.4</AssemblyVersion>
+    <Version>1.0.5</Version>
+    <FileVersion>1.0.5</FileVersion>
+    <AssemblyVersion>1.0.5</AssemblyVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">

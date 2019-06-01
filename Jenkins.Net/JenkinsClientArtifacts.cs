@@ -2,8 +2,11 @@
 using JenkinsNET.Internal.Commands;
 using System;
 using System.IO;
+
+#if NET_ASYNC
 using System.Threading;
 using System.Threading.Tasks;
+#endif
 
 namespace JenkinsNET
 {
