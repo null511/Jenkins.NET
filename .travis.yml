@@ -7,10 +7,10 @@ install:
   - dotnet restore
 
 script:
-  - dotnet build -c Debug --no-restore -v m
+  #- dotnet build -c Debug --no-restore -v m
   #- dotnet test Jenkins.Net.Tests/Jenkins.Net.Tests.csproj -c Debug --no-build --filter Category=Unit
-  - dotnet pack Jenkins.Net/Jenkins.Net.csproj -c Debug --no-build --no-restore -o bin
-  - dotnet publish Jenkins.Net.Console/Jenkins.Net.Console.csproj -c Release -f net45 -o bin -v m --no-restore -p:PublishSingleFile=true
+  - dotnet pack Jenkins.Net/Jenkins.Net.csproj -c Debug -o bin -v m
+  - dotnet publish Jenkins.Net.Console/Jenkins.Net.Console.csproj -c Release -f net45 -o bin -v m -p:PublishSingleFile=true
 
 deploy:
   provider: releases
