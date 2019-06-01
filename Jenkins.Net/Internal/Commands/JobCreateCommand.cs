@@ -5,23 +5,16 @@ namespace JenkinsNET.Internal.Commands
 {
     internal class JobCreateCommand : JenkinsHttpCommand
     {
-        public JobCreateCommand(IJenkinsContext context, string jobName, JenkinsProject job)
+        public JobCreateCommand(JenkinsClient client, string jobName, JenkinsProject job) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("Value cannot be empty!", nameof(jobName));
 
             if (job == null)
                 throw new ArgumentNullException(nameof(job));
 
-            Url = NetPath.Combine(context.BaseUrl, "createItem")
-                + NetPath.Query(new {name = jobName});
-
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            var query = NetPath.Query(new {name = jobName});
+            Path = $"createItem{query}";
 
             OnWrite = request => {
                 request.Method = "POST";

@@ -8,19 +8,12 @@ namespace JenkinsNET.Internal.Commands
         public T Result {get; private set;}
 
 
-        public JobGetCommand(IJenkinsContext context, string jobName)
+        public JobGetCommand(JenkinsClient client, string jobName) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("Value cannot be empty!", nameof(jobName));
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "api/xml");
-
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            Path = $"job/{jobName}/api/xml";
 
             OnWrite = request => {
                 request.Method = "GET";

@@ -10,21 +10,15 @@ namespace JenkinsNET.Internal.Commands
         public JenkinsProgressiveTextResponse Result {get; private set;}
 
 
-        public BuildProgressiveTextCommand(IJenkinsContext context, string jobName, string buildNumber, int start)
+        public BuildProgressiveTextCommand(JenkinsClient client, string jobName, string buildNumber, int start) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("'jobName' cannot be empty!");
 
             if (string.IsNullOrEmpty(buildNumber))
                 throw new ArgumentException("'buildNumber' cannot be empty!");
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "logText/progressiveText");
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            Path = $"job/{jobName}/{buildNumber}/logText/progressiveText";
 
             OnWrite = request => {
                 request.Method = "POST";

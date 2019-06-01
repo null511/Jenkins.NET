@@ -8,11 +8,8 @@ namespace JenkinsNET.Internal.Commands
         public MemoryStream Result {get; private set;}
 
 
-        public ArtifactGetCommand(IJenkinsContext context, string jobName, string buildNumber, string filename)
+        public ArtifactGetCommand(JenkinsClient client, string jobName, string buildNumber, string filename) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("'jobName' cannot be empty!");
 
@@ -23,10 +20,7 @@ namespace JenkinsNET.Internal.Commands
                 throw new ArgumentException("'filename' cannot be empty!");
 
             var urlFilename = filename.Replace('\\', '/');
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "artifact", urlFilename);
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            Path = $"job/{jobName}/{buildNumber}/artifact/{urlFilename}";
 
             OnWrite = request => {
                 request.Method = "POST";

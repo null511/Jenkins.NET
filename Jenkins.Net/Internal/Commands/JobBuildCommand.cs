@@ -7,18 +7,12 @@ namespace JenkinsNET.Internal.Commands
     {
         public JenkinsBuildResult Result {get; internal set;}
 
-        public JobBuildCommand(IJenkinsContext context, string jobName)
+        public JobBuildCommand(JenkinsClient client, string jobName) : base(client)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
             if (string.IsNullOrEmpty(jobName))
                 throw new ArgumentException("'jobName' cannot be empty!");
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, "build?delay=0sec");
-            UserName = context.UserName;
-            Password = context.Password;
-            Crumb = context.Crumb;
+            Path = $"job/{jobName}/build?delay=0sec";
 
             OnWrite = request => {
                 request.Method = "POST";

@@ -18,12 +18,12 @@ namespace JenkinsNET
     /// </remarks>
     public sealed class JenkinsClientArtifacts
     {
-        private readonly IJenkinsContext context;
+        private readonly JenkinsClient client;
 
 
-        internal JenkinsClientArtifacts(IJenkinsContext context)
+        internal JenkinsClientArtifacts(JenkinsClient client)
         {
-            this.context = context;
+            this.client = client;
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace JenkinsNET
         public MemoryStream Get(string jobName, string buildNumber, string filename)
         {
             try {
-                var cmd = new ArtifactGetCommand(context, jobName, buildNumber, filename);
+                var cmd = new ArtifactGetCommand(client, jobName, buildNumber, filename);
                 cmd.Run();
                 return cmd.Result;
             }
@@ -59,7 +59,7 @@ namespace JenkinsNET
         public async Task<MemoryStream> GetAsync(string jobName, string buildNumber, string filename, CancellationToken token = default)
         {
             try {
-                var cmd = new ArtifactGetCommand(context, jobName, buildNumber, filename);
+                var cmd = new ArtifactGetCommand(client, jobName, buildNumber, filename);
                 await cmd.RunAsync(token);
                 return cmd.Result;
             }

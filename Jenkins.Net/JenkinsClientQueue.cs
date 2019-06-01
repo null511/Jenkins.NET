@@ -18,12 +18,12 @@ namespace JenkinsNET
     /// </remarks>
     public sealed class JenkinsClientQueue
     {
-        private readonly IJenkinsContext context;
+        private readonly JenkinsClient client;
 
 
-        internal JenkinsClientQueue(IJenkinsContext context)
+        internal JenkinsClientQueue(JenkinsClient client)
         {
-            this.context = context;
+            this.client = client;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace JenkinsNET
         public JenkinsQueueItem[] GetAllItems()
         {
             try {
-                var cmd = new QueueItemListCommand(context);
+                var cmd = new QueueItemListCommand(client);
                 cmd.Run();
                 return cmd.Result;
             }
@@ -51,7 +51,7 @@ namespace JenkinsNET
         public async Task<JenkinsQueueItem[]> GetAllItemsAsync(CancellationToken token = default)
         {
             try {
-                var cmd = new QueueItemListCommand(context);
+                var cmd = new QueueItemListCommand(client);
                 await cmd.RunAsync(token);
                 return cmd.Result;
             }
@@ -69,7 +69,7 @@ namespace JenkinsNET
         public JenkinsQueueItem GetItem(int itemNumber)
         {
             try {
-                var cmd = new QueueGetItemCommand(context, itemNumber);
+                var cmd = new QueueGetItemCommand(client, itemNumber);
                 cmd.Run();
                 return cmd.Result;
             }
@@ -88,7 +88,7 @@ namespace JenkinsNET
         public async Task<JenkinsQueueItem> GetItemAsync(int itemNumber, CancellationToken token = default)
         {
             try {
-                var cmd = new QueueGetItemCommand(context, itemNumber);
+                var cmd = new QueueGetItemCommand(client, itemNumber);
                 await cmd.RunAsync(token);
                 return cmd.Result;
             }
