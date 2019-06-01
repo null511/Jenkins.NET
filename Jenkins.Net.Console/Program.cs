@@ -1,7 +1,11 @@
 ﻿using System;
 using SysConsole = System.Console;
 
-namespace Jenkins.Net.Console
+#if NET_ASYNC
+using System.Threading.Tasks;
+#endif
+
+namespace JenkinsNET.Console
 {
     internal static class Program
     {

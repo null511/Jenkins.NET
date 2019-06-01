@@ -1,4 +1,4 @@
-﻿namespace Jenkins.Net.Console.Internal
+﻿namespace JenkinsNET.Console.Internal
 {
     internal class ArgumentsGroup
     {

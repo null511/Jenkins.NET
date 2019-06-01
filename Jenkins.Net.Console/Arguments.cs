@@ -1,4 +1,4 @@
-﻿namespace Jenkins.Net.Console
+﻿namespace JenkinsNET.Console
 {
     internal class Arguments
     {
