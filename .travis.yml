@@ -4,25 +4,20 @@ dotnet: 2.0.0
 
 install:
   - export FrameworkPathOverride=$(dirname $(which mono))/../lib/mono/4.5/
-  #- curl -L -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
   - dotnet restore
 
 script:
   - dotnet build -c Debug --no-restore -v m
   #- dotnet test Jenkins.Net.Tests/Jenkins.Net.Tests.csproj -c Debug --no-build --filter Category=Unit
   - dotnet pack Jenkins.Net/Jenkins.Net.csproj -c Debug --no-build --no-restore -o bin
+  - dotnet publish Jenkins.Net.Console/Jenkins.Net.Console.csproj -c Release -f net45 -o bin -v m --no-restore -p:PublishSingleFile=true
 
 deploy:
   provider: releases
   api_key: $GITHUB_APIKEY
-  file: "Jenkins.Net/bin/jenkinsnet.*.nupkg"
+  file:
+    - "Jenkins.Net/bin/jenkinsnet.*.nupkg"
+    - "Jenkins.Net.Console/bin/Jenkins.Net.Console.exe"
   skip_cleanup: true
   on:
     tags: true
-
-# deploy:
-#   skip_cleanup: true
-#   provider: script
-#   script: dotnet nuget push Jenkins.Net/bin/jenkinsnet.*.nupkg -k $NUGET_APIKEY -s $NUGET_SOURCE
-#   on:
-#     branch: master
