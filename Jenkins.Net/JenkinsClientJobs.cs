@@ -17,8 +17,7 @@ namespace JenkinsNET
     public sealed class JenkinsClientJobs
     {
         private readonly IJenkinsContext context;
-
-
+        
         internal JenkinsClientJobs(IJenkinsContext context)
         {
             this.context = context;
