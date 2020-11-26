@@ -199,6 +199,7 @@ namespace JenkinsNET.Utilities
         /// <exception cref="JenkinsJobGetBuildException"></exception>
         private JenkinsBuildBase Process(string jobName, JenkinsBuildResult buildResult, DateTime queueStartTime)
         {
+            Console.WriteLine(buildResult.QueueItemUrl);
             QueueItemNumber = buildResult.GetQueueItemNumber();
             if (!QueueItemNumber.HasValue) throw new JenkinsNetException("Queue-Item number not found!");
 
@@ -217,6 +218,8 @@ namespace JenkinsNET.Utilities
                 Thread.Sleep(PollInterval);
             }
 
+            if (!BuildNumber.HasValue) throw new JenkinsNetException("Build number not found!");
+            
             SetStatus(JenkinsJobStatus.Building);
             var buildStartTime = DateTime.Now;
 
@@ -224,20 +227,19 @@ namespace JenkinsNET.Utilities
             textReader.TextChanged += TextReader_TextChanged;
 
             JenkinsBuildBase buildItem = null;
-            while (string.IsNullOrEmpty(buildItem?.Result)) {
-                if (!BuildNumber.HasValue) throw new JenkinsNetException("Build number not found!");
-
-                buildItem = Client.Builds.Get<JenkinsBuildBase>(jobName, BuildNumber.Value.ToString());
-                if (!string.IsNullOrEmpty(buildItem?.Result)) break;
-
+            do
+            {
+                Thread.Sleep(PollInterval);
+                
                 if (BuildTimeout > 0 && DateTime.Now.Subtract(buildStartTime).TotalSeconds > BuildTimeout)
                     throw new JenkinsNetException("Timeout occurred while waiting for build to complete!");
-
+                
                 if (MonitorConsoleOutput && !textReader.IsComplete)
                     textReader.Update();
 
-                Thread.Sleep(PollInterval);
-            }
+                buildItem = Client.Builds.Get<JenkinsBuildBase>(jobName, BuildNumber.Value.ToString());
+                
+            } while (buildItem.Building == null || (bool) buildItem.Building);
 
             while (MonitorConsoleOutput && !textReader.IsComplete) {
                 textReader.Update();
