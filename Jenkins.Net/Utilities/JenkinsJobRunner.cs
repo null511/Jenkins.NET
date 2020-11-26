@@ -199,7 +199,6 @@ namespace JenkinsNET.Utilities
         /// <exception cref="JenkinsJobGetBuildException"></exception>
         private JenkinsBuildBase Process(string jobName, JenkinsBuildResult buildResult, DateTime queueStartTime)
         {
-            Console.WriteLine(buildResult.QueueItemUrl);
             QueueItemNumber = buildResult.GetQueueItemNumber();
             if (!QueueItemNumber.HasValue) throw new JenkinsNetException("Queue-Item number not found!");
 
