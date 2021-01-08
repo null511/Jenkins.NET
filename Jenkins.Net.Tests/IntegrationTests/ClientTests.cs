@@ -143,5 +143,26 @@ namespace JenkinsNET.Tests.IntegrationTests
             Assert.Contains("<html>", text);
             Assert.Contains("[Hello World!]", text);
         }
+
+        [Fact]
+        [Trait("Category", "Integration")]
+        public void GetNodesList()
+        {
+            var client = DefaultClient.Create();
+            var nodes = client.Nodes.GetNodes();
+            Assert.NotEmpty(nodes);
+        }
+
+#if NET_ASYNC
+        [Fact]
+        [Trait("Category", "Integration")]
+        public async Task GetNodesListAsync()
+        {
+            var client = DefaultClient.Create();
+            var nodes = await client.Nodes.GetNodesAsync();
+            Assert.NotEmpty(nodes);
+        }
+#endif
+
     }
 }
