@@ -226,7 +226,7 @@ namespace JenkinsNET
     #endif
         
         /// <summary>
-        /// Stops an active Jenkins Build.
+        /// Stops an active Jenkins Job Build.
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
@@ -238,13 +238,14 @@ namespace JenkinsNET
                 cmd.Run();
             }
             catch (Exception error) {
-                throw new JenkinsNetException($"Failed to stop build #{buildNumber} of Jenkins Job '{jobName}'!", error);
+                // Jenkins 2.280 returns HTTP 403, but build is stopped
+                //throw new JenkinsNetException($"Failed to stop build #{buildNumber} of Jenkins Job '{jobName}'!", error);
             }
         }
 
     #if NET_ASYNC
         /// <summary>
-        /// Gets information describing a Jenkins Job Build asynchronously.
+        /// Stops an active Jenkins Job Build asynchronously.
         /// </summary>
         /// <param name="jobName">The name of the Job.</param>
         /// <param name="buildNumber">The number of the build.</param>
@@ -257,7 +258,8 @@ namespace JenkinsNET
                 await cmd.RunAsync(token);
             }
             catch (Exception error) {
-                throw new JenkinsNetException($"Failed to stop build #{buildNumber} of Jenkins Job '{jobName}'!", error);
+                // Jenkins 2.280 returns HTTP 403, but build is stopped
+                //throw new JenkinsNetException($"Failed to stop build #{buildNumber} of Jenkins Job '{jobName}'!", error);
             }
         }
     #endif
