@@ -60,6 +60,41 @@ namespace JenkinsNET
             }
         }
     #endif
+        
+        /// <summary>
+        /// Cancels an item from the Job-Queue.
+        /// </summary>
+        /// <param name="itemNumber">The ID of the queue-item.</param>
+        /// <exception cref="JenkinsJobBuildException"></exception>
+        public void CancelItem(int itemNumber)
+        {
+            try {
+                var cmd = new QueueCancelItemCommand(client, itemNumber);
+                cmd.Run();
+            }
+            catch (Exception error) {
+                throw new JenkinsJobBuildException($"Failed to cancel queue item #{itemNumber}!", error);
+            }
+        }
+
+    #if NET_ASYNC
+        /// <summary>
+        /// Cancels an item from the Job-Queue.
+        /// </summary>
+        /// <param name="itemNumber">The ID of the queue-item.</param>
+        /// <param name="token">An optional token for aborting the request.</param>
+        /// <exception cref="JenkinsJobBuildException"></exception>
+        public async Task CancelItemAsync(int itemNumber, CancellationToken token = default)
+        {
+            try {
+                var cmd = new QueueCancelItemCommand(client, itemNumber);
+                await cmd.RunAsync(token);
+            }
+            catch (Exception error) {
+                throw new JenkinsJobBuildException($"Failed to cancel queue item #{itemNumber}!", error);
+            }
+        }
+    #endif
 
         /// <summary>
         /// Retrieves an item from the Job-Queue.
