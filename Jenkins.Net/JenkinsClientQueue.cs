@@ -73,7 +73,7 @@ namespace JenkinsNET
                 cmd.Run();
             }
             catch (Exception error) {
-                throw new JenkinsJobBuildException($"Failed to cancel queue item #{itemNumber}!", error);
+                throw new JenkinsNetException($"Failed to cancel queue item #{itemNumber}!", error);
             }
         }
 
@@ -91,7 +91,7 @@ namespace JenkinsNET
                 await cmd.RunAsync(token);
             }
             catch (Exception error) {
-                throw new JenkinsJobBuildException($"Failed to cancel queue item #{itemNumber}!", error);
+                throw new JenkinsNetException($"Failed to cancel queue item #{itemNumber}!", error);
             }
         }
     #endif
@@ -109,7 +109,7 @@ namespace JenkinsNET
                 return cmd.Result;
             }
             catch (Exception error) {
-                throw new JenkinsJobBuildException($"Failed to retrieve queue item #{itemNumber}!", error);
+                throw new JenkinsQueueGetItemException($"Failed to retrieve queue item #{itemNumber}!", error);
             }
         }
 
@@ -128,7 +128,7 @@ namespace JenkinsNET
                 return cmd.Result;
             }
             catch (Exception error) {
-                throw new JenkinsJobBuildException($"Failed to retrieve queue item #{itemNumber}!", error);
+                throw new JenkinsQueueGetItemException($"Failed to retrieve queue item #{itemNumber}!", error);
             }
         }
     #endif
