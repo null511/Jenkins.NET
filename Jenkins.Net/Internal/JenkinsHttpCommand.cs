@@ -99,6 +99,7 @@ namespace JenkinsNET.Internal
         {
             var xmlSettings = new XmlWriterSettings {
                 ConformanceLevel = ConformanceLevel.Fragment,
+                Encoding = Encoding.ASCII,
                 Indent = false,
             };
 
