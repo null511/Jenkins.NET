@@ -33,6 +33,11 @@ namespace JenkinsNET
         JenkinsClientArtifacts Artifacts {get;}
 
         /// <summary>
+        /// Group of methods for interacting with Jenkins Views.
+        /// </summary>
+        JenkinsClientViews Views { get; }
+
+        /// <summary>
         /// Updates the security Crumb attached to this client.
         /// </summary>
         /// <exception cref="Exceptions.JenkinsNetException"></exception>

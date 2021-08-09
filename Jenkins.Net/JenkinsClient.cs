@@ -65,6 +65,10 @@ namespace JenkinsNET
         /// </summary>
         public JenkinsClientArtifacts Artifacts {get;}
 
+        /// <summary>
+        /// Group of methods for interacting with Jenkins Views.
+        /// </summary>
+        public JenkinsClientViews Views { get; }
 
         /// <summary>
         /// Creates a new Jenkins Client.
@@ -75,6 +79,7 @@ namespace JenkinsNET
             Builds = new JenkinsClientBuilds(this);
             Queue = new JenkinsClientQueue(this);
             Artifacts = new JenkinsClientArtifacts(this);
+            Views = new JenkinsClientViews(this);
         }
 
         /// <summary>
