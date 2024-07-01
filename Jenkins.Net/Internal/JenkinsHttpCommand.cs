@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
+using System.Collections.Generic;
+
 
 #if NET_ASYNC
 using System.Threading;
@@ -154,5 +156,24 @@ namespace JenkinsNET.Internal
             const string pattern = @"<\?xml[^\>]*\?>";
             return Regex.Replace(xml, pattern, string.Empty);
         }
+
+        internal string ConstructUrl(string baseUrl, string jobName, string buildNumber,string postfix)
+        {
+            var jobParts = jobName.Split(['/'], StringSplitOptions.RemoveEmptyEntries);
+            var urlParts = new List<string> { baseUrl };
+
+            foreach (var part in jobParts)
+            {
+                urlParts.Add("job");
+                urlParts.Add(part);
+            }
+
+            urlParts.Add(buildNumber);
+            urlParts.Add(postfix);
+
+            return NetPath.Combine(urlParts.ToArray());
+        }
+
+
     }
 }
