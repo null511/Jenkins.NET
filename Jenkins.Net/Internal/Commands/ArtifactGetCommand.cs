@@ -23,7 +23,9 @@ namespace JenkinsNET.Internal.Commands
                 throw new ArgumentException("'filename' cannot be empty!");
 
             var urlFilename = filename.Replace('\\', '/');
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "artifact", urlFilename);
+            var postfix = $"artifact/{urlFilename}";
+
+            Url = ConstructUrl(context.BaseUrl, jobName, buildNumber, postfix);
             UserName = context.UserName;
             Password = context.Password;
             Crumb = context.Crumb;

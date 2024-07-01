@@ -19,7 +19,7 @@ namespace JenkinsNET.Internal.Commands
             if (string.IsNullOrEmpty(buildNumber))
                 throw new ArgumentException("'buildNumber' cannot be empty!");
 
-            Url = NetPath.Combine(context.BaseUrl, "job", jobName, buildNumber, "api/xml");
+            Url = ConstructUrl(context.BaseUrl, jobName, buildNumber, "api/xml");
             UserName = context.UserName;
             Password = context.Password;
             Crumb = context.Crumb;
