@@ -28,7 +28,7 @@ namespace JenkinsNET.Utilities
     /// </summary>
     public class JenkinsJobRunner
     {
-        public JenkinsClient Client {get;}
+        public IJenkinsClient Client {get;}
         protected ProgressiveTextReader textReader;
         protected bool isJobStarted;
 
@@ -91,7 +91,7 @@ namespace JenkinsNET.Utilities
         /// <summary>
         /// Creates a new JobRunner using the provided Jenkins-Client.
         /// </summary>
-        public JenkinsJobRunner(JenkinsClient client)
+        public JenkinsJobRunner(IJenkinsClient client)
         {
             this.Client = client ?? throw new ArgumentNullException(nameof(client));
         }
