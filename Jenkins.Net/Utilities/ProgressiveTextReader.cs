@@ -18,7 +18,7 @@ namespace JenkinsNET.Utilities
     /// </summary>
     public class ProgressiveTextReader
     {
-        private readonly JenkinsClient client;
+        private readonly IJenkinsClient client;
         private readonly string jobName;
         private readonly string buildNumber;
         private int readPos;
@@ -46,7 +46,7 @@ namespace JenkinsNET.Utilities
         /// <param name="client">The Jenkins client to use for network operations.</param>
         /// <param name="jobName">The name of the Jenkins Job.</param>
         /// <param name="buildNumber">The build-number of the running Jenkins Job.</param>
-        public ProgressiveTextReader(JenkinsClient client, string jobName, string buildNumber)
+        public ProgressiveTextReader(IJenkinsClient client, string jobName, string buildNumber)
         {
             this.client = client ?? throw new ArgumentNullException(nameof(client));
             this.jobName = jobName ?? throw new ArgumentNullException(nameof(jobName));
